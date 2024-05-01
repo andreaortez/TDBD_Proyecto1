@@ -32,10 +32,12 @@ public class Main extends javax.swing.JFrame {
         Fondo = new javax.swing.JPanel();
         MenuBar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_buscar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(1280, 800));
+        setPreferredSize(new java.awt.Dimension(1280, 800));
 
         Fondo.setBackground(new java.awt.Color(239, 238, 236));
         Fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -46,9 +48,17 @@ public class Main extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo 2.png"))); // NOI18N
         MenuBar.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 240, -1));
 
-        jTextField1.setBackground(new java.awt.Color(233, 240, 246));
-        jTextField1.setText("Buscar");
-        MenuBar.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 210, 30));
+        tf_buscar.setBackground(new java.awt.Color(233, 240, 246));
+        tf_buscar.setText("Buscar");
+        tf_buscar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tf_buscarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                tf_buscarMouseExited(evt);
+            }
+        });
+        MenuBar.add(tf_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 210, 30));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lupa.png"))); // NOI18N
         MenuBar.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
@@ -63,11 +73,23 @@ public class Main extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tf_buscarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_buscarMouseEntered
+        if ("Buscar".equals(tf_buscar.getText())) {
+            tf_buscar.setText("");
+        }
+    }//GEN-LAST:event_tf_buscarMouseEntered
+
+    private void tf_buscarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_buscarMouseExited
+        if (tf_buscar.getText().isEmpty()) {
+            tf_buscar.setText("Buscar");
+        }
+    }//GEN-LAST:event_tf_buscarMouseExited
 
     /**
      * @param args the command line arguments
@@ -109,6 +131,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel MenuBar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField tf_buscar;
     // End of variables declaration//GEN-END:variables
 }
