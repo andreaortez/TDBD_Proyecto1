@@ -24,6 +24,7 @@ public class Main extends javax.swing.JFrame {
         pn_DatosDelPostulante.setVisible(false);
         pn_EmpleosDisponibles.setVisible(false);
         pn_EmpleosPostulados.setVisible(false);
+        System.out.println("");
     }
 
     /**
