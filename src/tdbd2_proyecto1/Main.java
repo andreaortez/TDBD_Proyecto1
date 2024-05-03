@@ -4,6 +4,8 @@
  */
 package tdbd2_proyecto1;
 
+import java.awt.Color;
+
 /**
  *
  * @author Andrea
@@ -18,6 +20,10 @@ public class Main extends javax.swing.JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setResizable(true);
+        
+        pn_DatosDelPostulante.setVisible(false);
+        pn_EmpleosDisponibles.setVisible(false);
+        pn_EmpleosPostulados.setVisible(false);
     }
 
     /**
@@ -34,10 +40,43 @@ public class Main extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         tf_buscar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        MiPerfilButton = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        EDisponiblesButton = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        EPostuladosButton = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        jl_name = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        pn_DatosDelPostulante = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        pn_EmpleosDisponibles = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jt_EmpleosDisponibles = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        pn_EmpleosPostulados = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jt_EmpleosPostulados = new javax.swing.JTable();
+        jLabel12 = new javax.swing.JLabel();
+        Login = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1280, 800));
-        setPreferredSize(new java.awt.Dimension(1280, 800));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         Fondo.setBackground(new java.awt.Color(239, 238, 236));
         Fondo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -46,7 +85,7 @@ public class Main extends javax.swing.JFrame {
         MenuBar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo 2.png"))); // NOI18N
-        MenuBar.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 240, -1));
+        MenuBar.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, 240, -1));
 
         tf_buscar.setBackground(new java.awt.Color(233, 240, 246));
         tf_buscar.setText("Buscar");
@@ -58,23 +97,306 @@ public class Main extends javax.swing.JFrame {
                 tf_buscarMouseExited(evt);
             }
         });
-        MenuBar.add(tf_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 210, 30));
+        MenuBar.add(tf_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 250, 30));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lupa.png"))); // NOI18N
-        MenuBar.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 20, -1, -1));
+        MenuBar.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, -1, -1));
+
+        MiPerfilButton.setBackground(new java.awt.Color(255, 255, 255));
+        MiPerfilButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MiPerfilButtonMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                MiPerfilButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                MiPerfilButtonMouseExited(evt);
+            }
+        });
+        MiPerfilButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel7.setBackground(new java.awt.Color(55, 55, 55));
+        jLabel7.setForeground(new java.awt.Color(55, 55, 55));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("Mi Perfil");
+        MiPerfilButton.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 80, -1));
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/usuario.png"))); // NOI18N
+        MiPerfilButton.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 90, -1));
+
+        MenuBar.add(MiPerfilButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1160, 0, 90, 70));
+
+        EDisponiblesButton.setBackground(new java.awt.Color(255, 255, 255));
+        EDisponiblesButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EDisponiblesButtonMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                EDisponiblesButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                EDisponiblesButtonMouseExited(evt);
+            }
+        });
+        EDisponiblesButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel8.setBackground(new java.awt.Color(55, 55, 55));
+        jLabel8.setForeground(new java.awt.Color(55, 55, 55));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Empleos Disponibles");
+        EDisponiblesButton.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 130, -1));
+
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edificio.png"))); // NOI18N
+        EDisponiblesButton.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 130, -1));
+
+        MenuBar.add(EDisponiblesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 0, 130, 70));
+
+        EPostuladosButton.setBackground(new java.awt.Color(255, 255, 255));
+        EPostuladosButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EPostuladosButtonMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                EPostuladosButtonMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                EPostuladosButtonMouseExited(evt);
+            }
+        });
+        EPostuladosButton.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel10.setBackground(new java.awt.Color(55, 55, 55));
+        jLabel10.setForeground(new java.awt.Color(55, 55, 55));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Empleos Postulados");
+        EPostuladosButton.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 50, 120, -1));
+
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/maletin.png"))); // NOI18N
+        EPostuladosButton.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 10, 130, -1));
+
+        MenuBar.add(EPostuladosButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 130, 70));
+
+        jSeparator1.setBackground(new java.awt.Color(55, 55, 55));
+        jSeparator1.setForeground(new java.awt.Color(55, 55, 55));
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        MenuBar.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 10, 10, 53));
+
+        jSeparator2.setBackground(new java.awt.Color(55, 55, 55));
+        jSeparator2.setForeground(new java.awt.Color(55, 55, 55));
+        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        MenuBar.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 10, 10, 53));
 
         Fondo.add(MenuBar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 70));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jl_name.setBackground(new java.awt.Color(55, 55, 55));
+        jl_name.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jl_name.setForeground(new java.awt.Color(55, 55, 55));
+        jl_name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_name.setText("NOMBRE");
+        jl_name.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jl_name.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(jl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 182, 280, -1));
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/perfil.png"))); // NOI18N
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(-2, 40, 280, -1));
+
+        Fondo.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 280, 330));
+
+        pn_DatosDelPostulante.setBackground(new java.awt.Color(239, 238, 236));
+        pn_DatosDelPostulante.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jTabbedPane1.setForeground(new java.awt.Color(55, 55, 55));
+        jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fondo, javax.swing.GroupLayout.DEFAULT_SIZE, 800, Short.MAX_VALUE)
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 589, Short.MAX_VALUE)
         );
+
+        jTabbedPane1.addTab("Datos Personales", jPanel4);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 589, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Datos Familiares", jPanel3);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setFocusable(false);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 589, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Datos Sanitarios", jPanel2);
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 589, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Datos Legales", jPanel5);
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 589, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Datos Académicos", jPanel6);
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel8.setForeground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 549, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Datos Profesionales", jPanel7);
+
+        pn_DatosDelPostulante.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 930, 620));
+
+        Fondo.add(pn_DatosDelPostulante, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 980, 640));
+
+        pn_EmpleosDisponibles.setBackground(new java.awt.Color(239, 238, 236));
+        pn_EmpleosDisponibles.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jt_EmpleosDisponibles.setBackground(new java.awt.Color(255, 255, 255));
+        jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Puesto", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jt_EmpleosDisponibles);
+
+        pn_EmpleosDisponibles.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 940, 570));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(55, 55, 55));
+        jLabel3.setText("EMPLEOS DISPONIBLES");
+        pn_EmpleosDisponibles.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        Fondo.add(pn_EmpleosDisponibles, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 980, 640));
+
+        pn_EmpleosPostulados.setBackground(new java.awt.Color(239, 238, 236));
+        pn_EmpleosPostulados.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jt_EmpleosPostulados.setBackground(new java.awt.Color(255, 255, 255));
+        jt_EmpleosPostulados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Puesto", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jt_EmpleosPostulados);
+
+        pn_EmpleosPostulados.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 940, 570));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(55, 55, 55));
+        jLabel12.setText("EMPLEOS POSTULADOS");
+        pn_EmpleosPostulados.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        Fondo.add(pn_EmpleosPostulados, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 980, 640));
+
+        getContentPane().add(Fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 800));
+
+        Login.setBackground(new java.awt.Color(239, 238, 236));
+        Login.setMinimumSize(new java.awt.Dimension(1280, 800));
+        Login.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel4.setBackground(new java.awt.Color(102, 102, 0));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(153, 102, 0));
+        jLabel4.setText("¡Te damos la bienvenida a tu comunidad profesional!");
+        Login.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 1160, 230));
+
+        getContentPane().add(Login, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 800));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -91,6 +413,63 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_tf_buscarMouseExited
 
+    private void EDisponiblesButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EDisponiblesButtonMouseEntered
+        EDisponiblesButton.setBackground(new Color(54,156,225));
+    }//GEN-LAST:event_EDisponiblesButtonMouseEntered
+
+    private void EDisponiblesButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EDisponiblesButtonMouseExited
+        EDisponiblesButton.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_EDisponiblesButtonMouseExited
+
+    private void EPostuladosButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EPostuladosButtonMouseEntered
+        EPostuladosButton.setBackground(new Color(54,156,225));
+    }//GEN-LAST:event_EPostuladosButtonMouseEntered
+
+    private void EPostuladosButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EPostuladosButtonMouseExited
+        EPostuladosButton.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_EPostuladosButtonMouseExited
+
+    private void MiPerfilButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MiPerfilButtonMouseEntered
+        MiPerfilButton.setBackground(new Color(54,156,225));
+    }//GEN-LAST:event_MiPerfilButtonMouseEntered
+
+    private void MiPerfilButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MiPerfilButtonMouseExited
+        MiPerfilButton.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_MiPerfilButtonMouseExited
+
+    private void MiPerfilButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MiPerfilButtonMouseClicked
+        pn_EmpleosPostulados.setVisible(false);
+        pn_EmpleosDisponibles.setVisible(false);
+
+        if (pn_DatosDelPostulante.isVisible()) {
+            pn_DatosDelPostulante.setVisible(false);
+        } else {
+            pn_DatosDelPostulante.setVisible(true);
+        }
+    }//GEN-LAST:event_MiPerfilButtonMouseClicked
+
+    private void EDisponiblesButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EDisponiblesButtonMouseClicked
+        pn_EmpleosPostulados.setVisible(false);
+        pn_DatosDelPostulante.setVisible(false);
+
+        if (pn_EmpleosDisponibles.isVisible()) {
+            pn_EmpleosDisponibles.setVisible(false);
+        } else {
+            pn_EmpleosDisponibles.setVisible(true);
+        }
+    }//GEN-LAST:event_EDisponiblesButtonMouseClicked
+
+    private void EPostuladosButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EPostuladosButtonMouseClicked
+        pn_EmpleosDisponibles.setVisible(false);
+        pn_DatosDelPostulante.setVisible(false);
+
+        if (pn_EmpleosPostulados.isVisible()) {
+            pn_EmpleosPostulados.setVisible(false);
+        } else {
+            pn_EmpleosPostulados.setVisible(true);
+        }
+    }//GEN-LAST:event_EPostuladosButtonMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -102,7 +481,7 @@ public class Main extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -127,10 +506,43 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel EDisponiblesButton;
+    private javax.swing.JPanel EPostuladosButton;
     private javax.swing.JPanel Fondo;
+    private javax.swing.JPanel Login;
     private javax.swing.JPanel MenuBar;
+    private javax.swing.JPanel MiPerfilButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel jl_name;
+    private javax.swing.JTable jt_EmpleosDisponibles;
+    private javax.swing.JTable jt_EmpleosPostulados;
+    private javax.swing.JPanel pn_DatosDelPostulante;
+    private javax.swing.JPanel pn_EmpleosDisponibles;
+    private javax.swing.JPanel pn_EmpleosPostulados;
     private javax.swing.JTextField tf_buscar;
     // End of variables declaration//GEN-END:variables
 }
