@@ -7,6 +7,10 @@ package tdbd2_proyecto1;
 import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.model.ScanRequest;
+import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 /**
  *
@@ -14,6 +18,8 @@ import javax.swing.JOptionPane;
  */
 public class Main extends javax.swing.JFrame {
 
+    Admin admin = new Admin();
+    String userid = "";
     Usuario reclutante = new Usuario("rec1", "1234", "Reclutador");
     Usuario postulante = new Usuario("post1", "1234", "Postulante");
     ArrayList<Usuario> usuarios = new ArrayList();
@@ -22,6 +28,7 @@ public class Main extends javax.swing.JFrame {
 
     public Main() {
         initComponents();
+      
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
         this.setResizable(true);
@@ -1038,21 +1045,21 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_entrarMouseClicked
 
     private void bt_iniciarSesiónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_iniciarSesiónMouseClicked
-        if (ValidarUsuario(tf_usuario.getText(), pf_contra.getText())) {
-            switch (tipo) {
-                case 1:
-                    Login.setVisible(false);
-                    Reclutador.setVisible(true);
-                    Postulante.setVisible(false);
-//                Canvas.setVisible(false);
-                    break;
-                case 2:
-                    Login.setVisible(false);
-                    Reclutador.setVisible(false);
-                    Postulante.setVisible(true);
-//                Canvas.setVisible(false);
-                    break;
+        userid = admin.login("usr_"+tf_usuario.getText(), pf_contra.getText());
+
+        if (userid != null) {
+            int tipo = 0;
+            String[] split = userid.split("_");
+            if (split[0].equals("user")) {
+                Login.setVisible(false);
+                Reclutador.setVisible(true);
+                Postulante.setVisible(false);
+            } else {
+                Login.setVisible(false);
+                Reclutador.setVisible(false);
+                Postulante.setVisible(true);
             }
+
         } else {
             JOptionPane.showMessageDialog(this, "Usuario y/o contraseña incorrectas");
         }
@@ -1154,7 +1161,7 @@ public class Main extends javax.swing.JFrame {
         return false;
 
     }
-    
+
     private void LimpiarSesion() {
         tf_usuario.setText("");
         pf_contra.setText("");
