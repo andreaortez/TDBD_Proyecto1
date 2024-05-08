@@ -8,8 +8,6 @@ import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.policy.actions.DynamoDBv2Actions;
 import com.amazonaws.regions.Regions;
 
-import com.amazonaws.services.bcmdataexports.model.Table;
-
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
@@ -18,13 +16,23 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.ItemCollection;
+import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
+import com.amazonaws.services.dynamodbv2.document.ScanOutcome;
+import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.spec.ScanSpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.CreateTableResult;
+import com.amazonaws.services.dynamodbv2.model.DeleteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.KeySchemaElement;
 import com.amazonaws.services.dynamodbv2.model.KeyType;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder;
@@ -48,7 +56,7 @@ public class Admin {
 
         client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
         client = AmazonDynamoDBClientBuilder.defaultClient();
-        //"user_12247420"
+
 
         /* ArrayList<String> puestosA = new ArrayList<>();
         puestosA.add("puesto_1");
@@ -56,15 +64,17 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
-        System.out.println(updateJob("user_12241006", 1, new Object[]{"user_12241006", "empleo_2", "emp_76", 2025}));
+        System.out.println(this.getEmpleos("emp_76"));
     }
 
     //CREATES
+    //x == 0 -> crear
+    //x == otro numero -> modificar
     //creates de postulante
-    public boolean createPersonal_pf(String[] values) {
+    public boolean createPersonal_pf(String[] values, int x) {
         //ejemplo de formato
         //String[] values = {"user_12247420", "Andino", "dmafgames@gmail.com", "19","Aleman", "Diego", "Hombre", "(504) 9999-3221"};
-        if (getPersonal_pf(values[0]) != null) {
+        if (getPersonal_pf(values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -87,7 +97,7 @@ public class Admin {
         }
     }
 
-    public boolean createFamiliar_pf(Object[] values) {
+    public boolean createFamiliar_pf(Object[] values, int x) {
         /*
         EJEMPLO DE INPUT VALIDO:
         ArrayList<String> correos = new ArrayList<>();
@@ -96,7 +106,7 @@ public class Admin {
         Object[] values = {"user_12247420", correos, "dmaf casa 1123", "divorciado", "0"};
         System.out.println(createFamiliar_pf(values));
          */
-        if (getFamiliar_pf((String) values[0]) != null) {
+        if (getFamiliar_pf((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -122,7 +132,7 @@ public class Admin {
         }
     }
 
-    public boolean createLegal_pf(Object[] values) {
+    public boolean createLegal_pf(Object[] values, int x) {
         /*
         EJEMPLO DE INPUT VALIDO:
         ArrayList<String> antecedentes = new ArrayList<>();
@@ -131,7 +141,7 @@ public class Admin {
         Object[] values = {"user_12247420", antecedentes, false, "divorciado", "0"};
         System.out.println(createLegal_pf(values));
          */
-        if (getLegal_pf((String) values[0]) != null) {
+        if (getLegal_pf((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -160,7 +170,7 @@ public class Admin {
         }
     }
 
-    public boolean createSanitary_pf(Object[] values) {
+    public boolean createSanitary_pf(Object[] values, int x) {
         /*
         EJEMPLO
         ArrayList<String> alergias = new ArrayList<>();
@@ -169,7 +179,7 @@ public class Admin {
         Object[] values = {"user_12247420", alergias, "tenia cancer", "no toma meds", "prueba positiva covid"};
         System.out.println(createSanitary_pf(values));
          */
-        if (getSanitary_pf((String) values[0]) != null) {
+        if (getSanitary_pf((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -196,7 +206,7 @@ public class Admin {
         }
     }
 
-    public boolean createProfessional_pf(Object[] values) {
+    public boolean createProfessional_pf(Object[] values, int x) {
         /*
         ArrayList<String> certificaciones = new ArrayList<>();
         certificaciones.add("curso cs50");
@@ -212,7 +222,7 @@ public class Admin {
         Object[] values = {"user_12247420", "3", certificaciones, conocimientos, idiomas, logros};
         System.out.println(createProfessional_pf(values));
          */
-        if (getProfesional_pf((String) values[0]) != null) {
+        if (getProfesional_pf((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -240,7 +250,7 @@ public class Admin {
         }
     }
 
-    public boolean createAcademic_pf(Object[] values) {
+    public boolean createAcademic_pf(Object[] values, int x) {
         /*
         EJEMPLO:
         ArrayList<String> estudios = new ArrayList<>();
@@ -254,7 +264,7 @@ public class Admin {
         Object[] values = {"user_12247420", estudios, "Unitec TGU", "Universitario", titulos};
         System.out.println(createAcademic_pf(values));
          */
-        if (getAcademic_pf((String) values[0]) != null) {
+        if (getAcademic_pf((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -281,7 +291,7 @@ public class Admin {
         }
     }
 
-    public boolean createSolicitud(Object[] values) {
+    public boolean createSolicitud(Object[] values, int x) {
         /*
         EJEMPLO:
         
@@ -292,7 +302,7 @@ public class Admin {
         Object[] values = {"user_12247420", puestosA,puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));
          */
-        if (getSolicitud((String) values[0]) != null) {
+        if (getSolicitud((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -319,11 +329,11 @@ public class Admin {
             return false;
         }
     }
-    
-    //create de Empresa
-    public boolean createEmpresa(Object[] values) {
 
-        if (getEmpresa((String) values[0]) != null) {
+    //create de Empresa
+    public boolean createEmpresa(Object[] values, int x) {
+
+        if (getEmpresa((String) values[0]) != null && x == 0) {
             //caso de q el usuario ya exista
             return false;
         }
@@ -346,17 +356,13 @@ public class Admin {
             return false;
         }
     }
-  
-    public int createEmpleo(Object[] values, int jobCount) {
-        if (getEmpleo((String) values[0], (String) ("empleo" + jobCount)) != null) {
 
-            //caso de q el usuario ya exista
-            return -1;
+    public boolean createEmpleo(Object[] values, int x) {
+        if (getEmpleo((String) values[0], (String) values[1]) != null && x == 0) {
+            return false;
         }
-        jobCount++;
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
-        String[] keys = {"PK", "Antecedentes", "AñosExperiencia", "Certificaciones", "Idiomas", "Nivel Educativo", "Nombre", "Puestos", "Requisitos_Personales", "Tipo"};
-        keyValues.put("SK", new AttributeValue("empleo_" + Integer.toString(jobCount)));
+        String[] keys = {"PK", "SK", "Antecedentes", "AñosExperiencia", "Certificaciones", "Idiomas", "Nivel Educativo", "Nombre", "Puestos", "Requisitos_Personales", "Tipo"};
 
         for (int i = 0; i < keys.length; i++) {
             if (i == 1) {
@@ -373,19 +379,18 @@ public class Admin {
         try {
             Item item = new Item();
             client.putItem("Centro_De_Empleo", keyValues);
-            return jobCount;
+            return true;
         } catch (Exception e) {
-            return -1;
+            return false;
         }
     }
 
     //otros creates 
-    
     public int createPuesto(int puestosNumber, String name, String type) {
         puestosNumber++;
-        String pk = "puesto_"+puestosNumber;
+        String pk = "puesto_" + puestosNumber;
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
-        
+
         keyValues.put("PK", new AttributeValue(pk));
         keyValues.put("SK", new AttributeValue("descripcion"));
         keyValues.put("Nombre", new AttributeValue(name));
@@ -393,8 +398,9 @@ public class Admin {
         //ejecutar el create
 
         client.putItem("Centro_De_Empleo", keyValues);
-         return puestosNumber;
+        return puestosNumber;
     }
+
     //UPDATE
     //este funciona como create si es su primer trabajo, y un create de trabajos anteriores
     public int updateJob(String user, int jobNumber, Object[] values) {
@@ -417,7 +423,7 @@ public class Admin {
         orden: empleo (el id), (ignorar), (ignorar), año inicial, empresa (el id tambien)
          */
         keyValues = new HashMap<String, AttributeValue>();
-        String[] keys = {"PK", "empleo_id", "emp_id", "Initial_Year"};
+        String[] keys = {"PK", "empleo_id", "Initial_Year"};
         keyValues.put("SK", new AttributeValue("emp_actual"));
 
         for (int i = 0; i < keys.length; i++) {
@@ -785,7 +791,7 @@ public class Admin {
         }
 
         /*
-        orden: empleo (el id), (ignorar), (ignorar), año inicial, empresa (el id tambien)
+        orden: empleo (el id), (ignorar), (ignorar), año inicial, 
          */
         return datos;
 
@@ -849,11 +855,11 @@ public class Admin {
 
     }
 
-    public String[] getEmpleo(String empresa, String jobNumber) {
+    public String[] getEmpleo(String empresa, String empId) {
         //en este hashmap se pone <nombre de atributo>-<valor>
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(empresa));
-        queue.put("SK", new AttributeValue(jobNumber));
+        queue.put("SK", new AttributeValue(empId));
         System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
@@ -945,6 +951,104 @@ public class Admin {
             return null;
         }
 
+    }
+
+    //DELETES
+    public boolean deletePostulante(String par) {
+        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id").withValueMap(new ValueMap().withString(":v_id", par));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :v_id").withValueMap(new ValueMap().withString(":v_id", par));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+        ItemCollection<QueryOutcome> results = table.query(query);
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+
+        try {
+            for (Item result : results) {
+                System.out.print(result.getJSON("PK") + " ");
+                System.out.println(result.getJSON("SK"));
+                HashMap<String, AttributeValue> map = new HashMap<>();
+                map.put("PK", new AttributeValue(par));
+                map.put("SK", new AttributeValue(result.getJSON("SK").replace("\"", "")));
+
+                client.deleteItem("Centro_De_Empleo", map);
+            }
+
+            for (Item result : results2) {
+
+                HashMap<String, AttributeValue> map = new HashMap<>();
+                map.put("PK", new AttributeValue(par));
+                map.put("SK", new AttributeValue(result.getJSON("SK").replace("\"", "")));
+
+                client.deleteItem("Centro_De_Empleo", map);
+
+            }
+
+            return true;
+        } catch (Exception E) {
+            E.printStackTrace();
+            return false;
+        }
+    }
+
+    //DELETES
+    public boolean delete(String par) {
+        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id").withValueMap(new ValueMap().withString(":v_id", par));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+        ItemCollection<QueryOutcome> results = table.query(query);
+
+        try {
+            for (Item result : results) {
+                System.out.print(result.getJSON("PK") + " ");
+                System.out.println(result.getJSON("SK"));
+                HashMap<String, AttributeValue> map = new HashMap<>();
+                map.put("PK", new AttributeValue(par));
+                map.put("SK", new AttributeValue(result.getJSON("SK").replace("\"", "")));
+
+                client.deleteItem("Centro_De_Empleo", map);
+            }
+
+            return true;
+        } catch (Exception E) {
+            E.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteUser(String user, String pass, String userid) {
+
+        HashMap<String, AttributeValue> map = new HashMap<>();
+        map.put("PK", new AttributeValue(user));
+        map.put("SK", new AttributeValue(pass));
+
+        try {
+            client.deleteItem("Centro_De_Empleo", map);
+            deletePostulante(userid);
+
+            return true;
+        } catch (Exception E) {
+            E.printStackTrace();
+            return false;
+        }
+    }
+
+    //OTROS METODOS
+    public ArrayList<String> getEmpleos(String par) {
+        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id").withValueMap(new ValueMap().withString(":v_id", par));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+        ItemCollection<QueryOutcome> results = table.query(query);
+        ArrayList<String> empleos = new ArrayList<>();
+        try {
+            for (Item result : results) {
+                empleos.add(result.toJSON());
+            }
+
+            return empleos;
+        } catch (Exception E) {
+            E.printStackTrace();
+            return null;
+        }
     }
 
     //metodo print solo para pruebas
