@@ -46,6 +46,14 @@ public class Main extends javax.swing.JFrame {
         pn_vistapostulante.setVisible(false);
     }
 
+    public void llenarDatosPostulante(){
+        System.out.println(userid);
+        String[] datos = admin.getPersonal_pf(userid);
+        for (String dato : datos) {
+            System.out.println(dato);
+        }
+        jl_name.setText(datos[0] + " "+datos[6]);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -81,13 +89,14 @@ public class Main extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         pn_DatosDelPostulante = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel4 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
         pn_EmpleosDisponibles = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jt_EmpleosDisponibles = new javax.swing.JTable();
@@ -362,21 +371,6 @@ public class Main extends javax.swing.JFrame {
         jTabbedPane1.setForeground(new java.awt.Color(55, 55, 55));
         jTabbedPane1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 589, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Datos Personales", jPanel4);
-
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -473,6 +467,30 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Datos Profesionales", jPanel7);
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel30.setBackground(new java.awt.Color(51, 51, 255));
+        jLabel30.setText("Telefono:");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(840, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(531, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Datos Personales", jPanel4);
+
         pn_DatosDelPostulante.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 930, 620));
 
         Postulante.add(pn_DatosDelPostulante, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 980, 640));
@@ -539,7 +557,7 @@ public class Main extends javax.swing.JFrame {
         jl_name.setText("NOMBRE");
         jl_name.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jl_name.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(jl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 182, 280, -1));
+        jPanel1.add(jl_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 280, -1));
 
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/perfil.png"))); // NOI18N
@@ -1046,18 +1064,20 @@ public class Main extends javax.swing.JFrame {
 
     private void bt_iniciarSesiónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_iniciarSesiónMouseClicked
         userid = admin.login("usr_"+tf_usuario.getText(), pf_contra.getText());
-
+        
         if (userid != null) {
             int tipo = 0;
             String[] split = userid.split("_");
+            System.out.println(split[0]);
             if (split[0].equals("user")) {
-                Login.setVisible(false);
-                Reclutador.setVisible(true);
-                Postulante.setVisible(false);
-            } else {
                 Login.setVisible(false);
                 Reclutador.setVisible(false);
                 Postulante.setVisible(true);
+               llenarDatosPostulante();
+            } else {
+                Login.setVisible(false);
+                Reclutador.setVisible(true);
+                Postulante.setVisible(false);
             }
 
         } else {
@@ -1209,6 +1229,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
