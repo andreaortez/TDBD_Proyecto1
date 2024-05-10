@@ -1168,7 +1168,7 @@ public class Admin {
     }
 
     public ArrayList<String> getSolicitudes(String empleoId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",empleoId).withString(":v_id", "usuario"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
