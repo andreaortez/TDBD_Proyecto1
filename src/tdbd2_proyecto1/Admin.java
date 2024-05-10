@@ -477,6 +477,7 @@ public class Admin {
          */
         return datos;
     }
+    //public void Personal_pf_Data(String par){}
 
     public String[] getFamiliar_pf(String par) {
         //en este hashmap se pone <nombre de atributo>-<valor>
