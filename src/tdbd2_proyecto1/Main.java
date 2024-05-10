@@ -605,7 +605,9 @@ public class Main extends javax.swing.JFrame {
         bt_iniciarSesión.setLayout(bt_iniciarSesiónLayout);
         bt_iniciarSesiónLayout.setHorizontalGroup(
             bt_iniciarSesiónLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bt_iniciarSesiónLayout.createSequentialGroup()
+                .addGap(0, 29, Short.MAX_VALUE)
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         bt_iniciarSesiónLayout.setVerticalGroup(
             bt_iniciarSesiónLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1794,7 +1796,7 @@ public class Main extends javax.swing.JFrame {
                 Login.setVisible(false);
                 Reclutador.setVisible(false);
                 Postulante.setVisible(true);
-               llenarDatosPostulante();
+                llenarDatosPostulante();
             } else {
                 Login.setVisible(false);
                 Reclutador.setVisible(true);
