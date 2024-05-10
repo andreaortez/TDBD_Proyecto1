@@ -11,7 +11,9 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
+import javax.swing.JList;
 
 /**
  *
@@ -40,11 +42,53 @@ public class Main extends javax.swing.JFrame {
 
     public void llenarDatosPostulante(){
         System.out.println(userid);
-        String[] datos = admin.getPersonal_pf(userid);
-        for (String dato : datos) {
-            System.out.println(dato);
-        }
-        jl_name.setText(datos[0] + " "+datos[6]);
+        
+        //Datos Personales (dp)
+        String[] dp = admin.getPersonal_pf(userid);
+        jl_name.setText(dp[0] + " "+dp[6]);
+        jl_email.setText(dp[1]);
+        jl_age.setText(dp[2]);
+        jl_phone.setText(dp[3]);
+        jl_nation.setText(dp[5]);
+        jl_gender.setText(dp[8]);
+//        for (String dato : dp) {
+//            System.out.println("DP:"+dato);
+//        }
+        
+        //Datos Familiares (df)
+        String[] df = admin.getFamiliar_pf(userid);
+        lb_EcivilP.setText(df[0]);
+        llenarJList(jl_correoDP,df[1]);
+        lb_hijosP.setText(df[2]);
+        lb_dirrecionP.setText(df[0]);
+        
+        //Datos Sanitarios (ds)
+        String [] ds = admin.getSanitary_pf(userid);
+        lb_infoMed.setText(ds[0]);
+        llenarJList(jl_alergias,ds[1]);
+        llenarJList(jl_HM,ds[3]);
+        lb_resultadoP.setText(ds[5]);
+        
+        //Datos Legales (dl)
+        String [] dl = admin.getLegal_pf(userid);
+        llenarJList(jl_aPenales,dl[2]);
+        lb_SM.setText(df[3]);
+        lb_SSN.setText(df[4]);
+        
+        //Datos Academicos (da)
+        String [] da = admin.getAcademic_pf(userid);
+        lb_institucion.setText(da[0]);
+        lb_NU.setText(da[1]);
+        lb_Estudios.setText(da[2]);
+        lb_titulos.setText(da[4]);
+        
+        //Datos Laborales (dlp)
+        String [] dlp = admin.getProfesional_pf(userid);
+        lb_AñosE.setText(dlp[0]);
+        lb_LogrosP.setText(dlp[1]);
+        lb_Idiomas.setText(dlp[3]);
+        lb_Certificaciones.setText(dlp[4]);
+        lb_ConEsp.setText(dlp[6]);       
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -157,7 +201,7 @@ public class Main extends javax.swing.JFrame {
         jSeparator13 = new javax.swing.JSeparator();
         jLabel47 = new javax.swing.JLabel();
         lb_dirrecionP = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        jSP_correoDP = new javax.swing.JScrollPane();
         jl_correoDP = new javax.swing.JList<>();
         pn_dSanitariosP = new javax.swing.JPanel();
         jLabel42 = new javax.swing.JLabel();
@@ -222,21 +266,21 @@ public class Main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jl_name = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel31 = new javax.swing.JLabel();
+        jl_email = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
-        jLabel34 = new javax.swing.JLabel();
+        jl_age = new javax.swing.JLabel();
         jSeparator8 = new javax.swing.JSeparator();
         jLabel35 = new javax.swing.JLabel();
-        jLabel36 = new javax.swing.JLabel();
+        jl_phone = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
         jLabel37 = new javax.swing.JLabel();
-        jLabel38 = new javax.swing.JLabel();
+        jl_nation = new javax.swing.JLabel();
         jSeparator10 = new javax.swing.JSeparator();
         jLabel39 = new javax.swing.JLabel();
-        jLabel40 = new javax.swing.JLabel();
+        jl_gender = new javax.swing.JLabel();
         Reclutador = new javax.swing.JPanel();
         MenuBar1 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -605,7 +649,9 @@ public class Main extends javax.swing.JFrame {
         bt_iniciarSesión.setLayout(bt_iniciarSesiónLayout);
         bt_iniciarSesiónLayout.setHorizontalGroup(
             bt_iniciarSesiónLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bt_iniciarSesiónLayout.createSequentialGroup()
+                .addGap(0, 29, Short.MAX_VALUE)
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         bt_iniciarSesiónLayout.setVerticalGroup(
             bt_iniciarSesiónLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -868,14 +914,10 @@ public class Main extends javax.swing.JFrame {
         pn_dFamiliaresP.add(lb_dirrecionP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, 280, -1));
 
         jl_correoDP.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_correoDP.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane5.setViewportView(jl_correoDP);
+        jl_correoDP.setModel(new DefaultListModel ());
+        jSP_correoDP.setViewportView(jl_correoDP);
 
-        pn_dFamiliaresP.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 880, 200));
+        pn_dFamiliaresP.add(jSP_correoDP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 880, 200));
 
         jTabbedPane1.addTab("Datos Familiares", pn_dFamiliaresP);
 
@@ -1193,10 +1235,10 @@ public class Main extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/perfil.png"))); // NOI18N
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 280, -1));
 
-        jLabel31.setForeground(new java.awt.Color(55, 55, 55));
-        jLabel31.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel31.setText("Correo del usuario");
-        jPanel1.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 280, -1));
+        jl_email.setForeground(new java.awt.Color(55, 55, 55));
+        jl_email.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_email.setText("Correo del usuario");
+        jPanel1.add(jl_email, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 280, -1));
         jPanel1.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 260, 10));
         jPanel1.add(jSeparator7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 260, 10));
 
@@ -1212,10 +1254,10 @@ public class Main extends javax.swing.JFrame {
         jLabel33.setText("Edad");
         jPanel1.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 290, 280, -1));
 
-        jLabel34.setForeground(new java.awt.Color(55, 55, 55));
-        jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel34.setText("Edad del usuario");
-        jPanel1.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 280, -1));
+        jl_age.setForeground(new java.awt.Color(55, 55, 55));
+        jl_age.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_age.setText("Edad del usuario");
+        jPanel1.add(jl_age, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 280, -1));
         jPanel1.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 260, 10));
 
         jLabel35.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -1224,10 +1266,10 @@ public class Main extends javax.swing.JFrame {
         jLabel35.setText("Teléfono");
         jPanel1.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 280, -1));
 
-        jLabel36.setForeground(new java.awt.Color(55, 55, 55));
-        jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel36.setText("Teléfono del usuario");
-        jPanel1.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 280, -1));
+        jl_phone.setForeground(new java.awt.Color(55, 55, 55));
+        jl_phone.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_phone.setText("Teléfono del usuario");
+        jPanel1.add(jl_phone, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 390, 280, -1));
         jPanel1.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 260, 10));
 
         jLabel37.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -1236,10 +1278,10 @@ public class Main extends javax.swing.JFrame {
         jLabel37.setText("Nacionalidad");
         jPanel1.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 280, -1));
 
-        jLabel38.setForeground(new java.awt.Color(55, 55, 55));
-        jLabel38.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel38.setText("Nacionalidad del usuario");
-        jPanel1.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 460, 280, -1));
+        jl_nation.setForeground(new java.awt.Color(55, 55, 55));
+        jl_nation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_nation.setText("Nacionalidad del usuario");
+        jPanel1.add(jl_nation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 460, 280, -1));
         jPanel1.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 260, 10));
 
         jLabel39.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -1248,10 +1290,10 @@ public class Main extends javax.swing.JFrame {
         jLabel39.setText("Género");
         jPanel1.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 280, -1));
 
-        jLabel40.setForeground(new java.awt.Color(55, 55, 55));
-        jLabel40.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel40.setText("Género del usuario");
-        jPanel1.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 280, -1));
+        jl_gender.setForeground(new java.awt.Color(55, 55, 55));
+        jl_gender.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jl_gender.setText("Género del usuario");
+        jPanel1.add(jl_gender, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 280, -1));
 
         Postulante.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 280, 570));
 
@@ -1794,7 +1836,7 @@ public class Main extends javax.swing.JFrame {
                 Login.setVisible(false);
                 Reclutador.setVisible(false);
                 Postulante.setVisible(true);
-               llenarDatosPostulante();
+                llenarDatosPostulante();
             } else {
                 Login.setVisible(false);
                 Reclutador.setVisible(true);
@@ -1985,6 +2027,15 @@ public class Main extends javax.swing.JFrame {
         JD.setResizable(false);
         JD.setVisible(true);
     }
+    public void llenarJList(JList list,String cadena){
+        String[]mails = cadena.split(",");
+        DefaultListModel modelo
+                = (DefaultListModel) list.getModel();
+        for (String mail : mails) {
+            modelo.addElement((String)mail);
+        }
+        list.setModel(modelo);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Login;
@@ -2036,17 +2087,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
@@ -2116,11 +2162,11 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jSP_correoDP;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
@@ -2177,12 +2223,17 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JList<String> jl_EDisponibles;
     private javax.swing.JList<String> jl_HM;
     private javax.swing.JList<String> jl_aPenales;
+    private javax.swing.JLabel jl_age;
     private javax.swing.JList<String> jl_alergias;
     private javax.swing.JList<String> jl_correoDP;
     private javax.swing.JLabel jl_direccionR;
+    private javax.swing.JLabel jl_email;
+    private javax.swing.JLabel jl_gender;
     private javax.swing.JLabel jl_name;
     private javax.swing.JLabel jl_name1;
     private javax.swing.JLabel jl_name2;
+    private javax.swing.JLabel jl_nation;
+    private javax.swing.JLabel jl_phone;
     private javax.swing.JList<String> jl_postulantes;
     private javax.swing.JLabel jl_telR;
     private javax.swing.JTable jt_EmpleosDisponibles;

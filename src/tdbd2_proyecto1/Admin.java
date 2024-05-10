@@ -496,6 +496,7 @@ public class Admin {
          */
         return datos;
     }
+    //public void Personal_pf_Data(String par){}
 
     public String[] getFamiliar_pf(String par) {
         //en este hashmap se pone <nombre de atributo>-<valor>
@@ -1072,7 +1073,7 @@ public class Admin {
             return null;
         }
     }
-
+   
     public ArrayList<String> getEmpleos() {
 
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
