@@ -64,7 +64,6 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
-  
         print(this.getPuestos());
     }
 
@@ -364,7 +363,7 @@ public class Admin {
         }
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
         String[] keys = {"PK", "SK", "Antecedentes", "AñosExperiencia", "Certificaciones", "Idiomas", "Nivel Educativo", "Nombre", "Puestos", "Requisitos_Personales", "Tipo"};
-        
+
         for (int i = 0; i < keys.length; i++) {
             if (i == 1) {
                 keyValues.put(keys[i], (new AttributeValue()).withBOOL((Boolean) values[i]));
@@ -949,7 +948,7 @@ public class Admin {
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results != null) {
             //System.out.println(results.get(results.keySet().toArray()[0]).getS());
-            
+
             return results.get(results.keySet().toArray()[0]).getS();
         } else {
             return null;
@@ -1054,17 +1053,16 @@ public class Admin {
             return null;
         }
     }
-    
-     public ArrayList<String> getEmpleos() {
-        
+
+    public ArrayList<String> getEmpleos() {
+
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
 
         Table table = new Table(client, "Centro_De_Empleo");
- 
+
         ItemCollection<ScanOutcome> results2 = table.scan(query2);
         ArrayList<String> respuesta = new ArrayList<>();
         try {
-           
 
             for (Item result : results2) {
 
@@ -1074,22 +1072,21 @@ public class Admin {
 
         } catch (Exception E) {
             E.printStackTrace();
-    
+
         }
-        
-           return respuesta;
+
+        return respuesta;
     }
-    
-      public ArrayList<String> getPuestos() {
-        
+
+    public ArrayList<String> getPuestos() {
+
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "puesto"));
 
         Table table = new Table(client, "Centro_De_Empleo");
- 
+
         ItemCollection<ScanOutcome> results2 = table.scan(query2);
         ArrayList<String> respuesta = new ArrayList<>();
         try {
-           
 
             for (Item result : results2) {
 
@@ -1099,18 +1096,19 @@ public class Admin {
 
         } catch (Exception E) {
             E.printStackTrace();
-    
+
         }
-        
-           return respuesta;
+
+        return respuesta;
     }
-    
+
     //metodo print solo para pruebas
     public void print(String[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
         }
     }
+
     public void print(ArrayList<String> arr) {
         for (int i = 0; i < arr.size(); i++) {
             System.out.println(arr.get(i));
