@@ -64,7 +64,8 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
-        System.out.println(this.getEmpleos("emp_76"));
+  
+        print(this.getPuestos());
     }
 
     //CREATES
@@ -363,7 +364,7 @@ public class Admin {
         }
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
         String[] keys = {"PK", "SK", "Antecedentes", "AñosExperiencia", "Certificaciones", "Idiomas", "Nivel Educativo", "Nombre", "Puestos", "Requisitos_Personales", "Tipo"};
-
+        
         for (int i = 0; i < keys.length; i++) {
             if (i == 1) {
                 keyValues.put(keys[i], (new AttributeValue()).withBOOL((Boolean) values[i]));
@@ -374,6 +375,7 @@ public class Admin {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
             }
         }
+        keyValues.put("Obj", new AttributeValue("empleo"));
 
         //ejecutar el create
         try {
@@ -393,6 +395,7 @@ public class Admin {
 
         keyValues.put("PK", new AttributeValue(pk));
         keyValues.put("SK", new AttributeValue("descripcion"));
+        keyValues.put("Obj", new AttributeValue("puesto"));
         keyValues.put("Nombre", new AttributeValue(name));
         keyValues.put("Tipo", new AttributeValue(type));
         //ejecutar el create
@@ -902,7 +905,7 @@ public class Admin {
         /*
         ok, preparense que este es largo
         orden: 
-        Nombre (osea titulo de empleo), nivel educativo, Tipo de empleo, años de experiencia necesarios, (ignorar), idiomas(string),
+        Nombre (osea titulo de empleo), nivel educativo, Tipo de empleo, años de experiencia necesarios, (ingorar), (ignorar), idiomas(string),
         Certificaciones (string), puestos (String, otra vez solo almacena el id), (ignorar), requisitos personales (String), 
         Antecedentes(si es un no, osea false, el postulante no debe tener antecedentes. si es si, (osea true), al empleador no le importa si los tiene)
          */
@@ -932,7 +935,7 @@ public class Admin {
         }
 
         /*
-        orden: nombre, tipo, (ignorar), (ignorar)
+        orden: nombre, tipo, (ignorar), (ignorar), (ignorar)
          */
         return datos;
 
@@ -946,7 +949,8 @@ public class Admin {
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results != null) {
             //System.out.println(results.get(results.keySet().toArray()[0]).getS());
-            return results.get(results.keySet().toArray()[1]).getS();
+            
+            return results.get(results.keySet().toArray()[0]).getS();
         } else {
             return null;
         }
@@ -1050,11 +1054,66 @@ public class Admin {
             return null;
         }
     }
+    
+     public ArrayList<String> getEmpleos() {
+        
+        ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
 
+        Table table = new Table(client, "Centro_De_Empleo");
+ 
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+           
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+    
+        }
+        
+           return respuesta;
+    }
+    
+      public ArrayList<String> getPuestos() {
+        
+        ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "puesto"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+ 
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+           
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+    
+        }
+        
+           return respuesta;
+    }
+    
     //metodo print solo para pruebas
     public void print(String[] arr) {
         for (int i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
+        }
+    }
+    public void print(ArrayList<String> arr) {
+        for (int i = 0; i < arr.size(); i++) {
+            System.out.println(arr.get(i));
         }
     }
 
