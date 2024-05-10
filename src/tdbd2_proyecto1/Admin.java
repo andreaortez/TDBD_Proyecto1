@@ -64,8 +64,10 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
+
        
         //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
+
     }
 
     //CREATES
@@ -1113,7 +1115,6 @@ public class Admin {
 
         } catch (Exception E) {
             E.printStackTrace();
-
         }
 
         return respuesta;
@@ -1236,6 +1237,7 @@ public class Admin {
             return false;
         }
     }
+
 
     //metodo print solo para pruebas
     public void print(String[] arr) {
