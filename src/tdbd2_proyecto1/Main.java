@@ -47,6 +47,27 @@ public class Main extends javax.swing.JFrame {
         jd_Persona.setTitle("Crear Nueva Persona");
     }
 
+    public void llenarEmpleosDisponibles(){
+        DefaultListModel modelito = new DefaultListModel();
+        String [] businessData = admin.getEmpresa(userid);
+        
+        String[] empleosEmpresa = admin.getEmpleo(businessData[0], userid);
+        
+        for (int i = 0; i < empleosEmpresa.length; i++) {
+            modelito.addElement(empleosEmpresa[i]);
+        }
+        
+        jl_EDisponibles.setModel(modelito);
+    }
+    public void llenarDatosEmpresa(){
+        String [] businessData = admin.getEmpresa(userid);
+        jl_name.setText(businessData[0]);
+        jl_CIF.setText(businessData[1]);
+        jl_telE.setText(businessData[2]);
+        jl_Director.setText(businessData[4]);
+        jl_direccionE.setText(businessData[5]);
+    }
+    
     public void llenarDatosPostulante(){
         //System.out.println(userid);
         
@@ -1237,13 +1258,21 @@ public class Main extends javax.swing.JFrame {
         pn_dSanitariosP.add(lb_resultadoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 280, -1));
 
         jl_HM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_HM.setModel(new DefaultListModel ());
+        jl_HM.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
         jScrollPane7.setViewportView(jl_HM);
 
         pn_dSanitariosP.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 880, 120));
 
         jl_alergias.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_alergias.setModel(new DefaultListModel ());
+        jl_alergias.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
         jScrollPane8.setViewportView(jl_alergias);
 
         pn_dSanitariosP.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 880, 120));
@@ -1261,7 +1290,11 @@ public class Main extends javax.swing.JFrame {
         jPanel5.add(jSeparator17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 880, 10));
 
         jl_aPenales.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_aPenales.setModel(new DefaultListModel ());
+        jl_aPenales.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
         jScrollPane6.setViewportView(jl_aPenales);
 
         jPanel5.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 880, 220));
@@ -1716,6 +1749,11 @@ public class Main extends javax.swing.JFrame {
 
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/maletin.png"))); // NOI18N
+        jLabel20.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel20MouseClicked(evt);
+            }
+        });
         bt_PDisponibles.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 10, 130, -1));
 
         MenuBar1.add(bt_PDisponibles, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 0, 130, 70));
@@ -2174,6 +2212,7 @@ public class Main extends javax.swing.JFrame {
                 Reclutador.setVisible(true);
                 Postulante.setVisible(false);
                 bt_regresar.setVisible(false);
+                llenarDatosEmpresa();
             }
 
         } else {
@@ -2357,6 +2396,10 @@ public class Main extends javax.swing.JFrame {
     private void bt_añadirIdiomaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirIdiomaMouseExited
         bt_añadirIdioma.setBackground(new Color(195, 22, 28));
     }//GEN-LAST:event_bt_añadirIdiomaMouseExited
+
+    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel20MouseClicked
+        llenarEmpleosDisponibles();
+    }//GEN-LAST:event_jLabel20MouseClicked
 
     /**
      * @param args the command line arguments
