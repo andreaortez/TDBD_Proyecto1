@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 
 /**
  *
@@ -57,9 +58,9 @@ public class Main extends javax.swing.JFrame {
         //LLenado de Tablas 
         //TablaEmpleosDisponibles();
         String s = admin.getEmpleos().toString();
-        //LlenarTabla(s,jt_EmpleosDisponibles );
-        System.out.println("Emp: "+admin.getEmpleos());
-        System.out.println("&&: "+admin.getSolicitudesDeUsuario(userid));
+        LlenarTabla(s,jt_EmpleosDisponibles );
+//        System.out.println("Emp: "+admin.getEmpleos());
+//        System.out.println("&&: "+admin.getSolicitudesDeUsuario(userid));
         //System.out.println("EMPLEOS: "+getEmpDisp());
         
         //Datos Personales (dp)
@@ -2174,7 +2175,7 @@ public class Main extends javax.swing.JFrame {
 
         if (userid != null) {
             String[] split = userid.split("_");
-            System.out.println(split[0]);
+            //System.out.println(split[0]);
             if (split[0].equals("user")) {
                 Login.setVisible(false);
                 Reclutador.setVisible(false);
@@ -2429,115 +2430,122 @@ public class Main extends javax.swing.JFrame {
         list.setModel(modelo);
     }
     
-    public void TablaEmpleosDisponibles(){
-        ArrayList<String> empleos = admin.getEmpleos();
-        
-        //Datos Para Tabla Empleos Disponibles
-        //int num = empleos.size()*13;
-        try {
-            jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
-                "Puestos", "PK", "Nombre", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
-                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
-            for (String empleo : empleos) {
-                String[]data = empleo.split(":");
-                String s = "";
-                String[]titulos = new String[13];
-                String[]datos = new String[13];
-                int cont_data=0, cont_title=0;
-
-                for (int i = 0; i < data.length; i++) {
-                    switch (i) {
-                        case 0 -> {
-                            s= data[0].substring(2, data[0].length()-1);
-                            System.out.println("s0:"+s);
-                            titulos[cont_title] =s;
-                            cont_title++;
-                        }
-                        case 13 -> {
-                            s= data[i].substring(1,data[i].length()-2);
-                            System.out.println("s13:"+s);
-                            datos[cont_data] = s;
-                            cont_data++;
-                        }
-                        case 2,9,10,12 -> {
-                            String[] sp = data[i].split("\\]");
-                            s = sp[0].substring(1, sp[0].length());
-                            datos[cont_data] = s;
-                            cont_data++;
-                            System.out.println("s2:"+s);
-                            s = sp[1].substring(2,sp[1].length()-1);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                            System.out.println("s2:"+s);
-                        }
-                        case 3 ->{
-                            String[] sp = data[i].split(",");
-                            s= sp[0];
-                            System.out.println("s3:"+s);
-                            datos[cont_data] = s;
-                            cont_data++;
-                            s = sp[1].substring(1,sp[1].length()-1);
-                            System.out.println("s3:"+s);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                        }
-                        case 6 ->{
-                            String[] sp = data[i].split(",");
-                            s = sp[0];
-                            datos[cont_data] = s;
-                            cont_data++;
-                            System.out.println("s6:"+s);
-                        }
-                        case 8 ->{
-                            String[] sp = data[i].split(",");
-                            s = sp[1].substring(1,sp[1].length()-1);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                            System.out.println("s8:"+s);
-                        }
-                        case 7 -> {}
-                        default -> {
-                            String[] sp = data[i].split(",");
-                            s = sp[0].substring(1, sp[0].length()-1);
-                            datos[cont_data] = s;
-                            cont_data++;
-                            System.out.println("s:"+s);
-                            s = sp[1].substring(1,sp[1].length()-1);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                            System.out.println("s:"+s);
-                        }
-                    }
-                }
-                System.out.println("cont"+cont_data);
-                Object[] row = {datos[10],datos[9],datos[0],
-                    datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7],datos[8]};
-                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
-                modelo.addRow(row);
-                jt_EmpleosDisponibles.setModel(modelo);
-                //A la que no le guste, que le ponga flores tarde toda la noche en esto damn
-            }//Fin del For de Datos
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } 
-    }
+//    public void TablaEmpleosDisponibles(){
+//        ArrayList<String> empleos = admin.getEmpleos();
+//        
+//        //Datos Para Tabla Empleos Disponibles
+//        //int num = empleos.size()*13;
+//        try {
+//            jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
+//                "Puestos", "PK", "Nombre", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
+//                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
+//            for (String empleo : empleos) {
+//                String[]data = empleo.split(":");
+//                String s = "";
+//                String[]titulos = new String[13];
+//                String[]datos = new String[13];
+//                int cont_data=0, cont_title=0;
+//
+//                for (int i = 0; i < data.length; i++) {
+//                    switch (i) {
+//                        case 0 -> {
+//                            s= data[0].substring(2, data[0].length()-1);
+//                            System.out.println("s0:"+s);
+//                            titulos[cont_title] =s;
+//                            cont_title++;
+//                        }
+//                        case 13 -> {
+//                            s= data[i].substring(1,data[i].length()-2);
+//                            System.out.println("s13:"+s);
+//                            datos[cont_data] = s;
+//                            cont_data++;
+//                        }
+//                        case 2,9,10,12 -> {
+//                            String[] sp = data[i].split("\\]");
+//                            s = sp[0].substring(1, sp[0].length());
+//                            datos[cont_data] = s;
+//                            cont_data++;
+//                            System.out.println("s2:"+s);
+//                            s = sp[1].substring(2,sp[1].length()-1);
+//                            titulos[cont_title] = s;
+//                            cont_title++;
+//                            System.out.println("s2:"+s);
+//                        }
+//                        case 3 ->{
+//                            String[] sp = data[i].split(",");
+//                            s= sp[0];
+//                            System.out.println("s3:"+s);
+//                            datos[cont_data] = s;
+//                            cont_data++;
+//                            s = sp[1].substring(1,sp[1].length()-1);
+//                            System.out.println("s3:"+s);
+//                            titulos[cont_title] = s;
+//                            cont_title++;
+//                        }
+//                        case 6 ->{
+//                            String[] sp = data[i].split(",");
+//                            s = sp[0];
+//                            datos[cont_data] = s;
+//                            cont_data++;
+//                            System.out.println("s6:"+s);
+//                        }
+//                        case 8 ->{
+//                            String[] sp = data[i].split(",");
+//                            s = sp[1].substring(1,sp[1].length()-1);
+//                            titulos[cont_title] = s;
+//                            cont_title++;
+//                            System.out.println("s8:"+s);
+//                        }
+//                        case 7 -> {}
+//                        default -> {
+//                            String[] sp = data[i].split(",");
+//                            s = sp[0].substring(1, sp[0].length()-1);
+//                            datos[cont_data] = s;
+//                            cont_data++;
+//                            System.out.println("s:"+s);
+//                            s = sp[1].substring(1,sp[1].length()-1);
+//                            titulos[cont_title] = s;
+//                            cont_title++;
+//                            System.out.println("s:"+s);
+//                        }
+//                    }
+//                }
+//                System.out.println("cont"+cont_data);
+//                Object[] row = {datos[10],datos[9],datos[0],
+//                    datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7],datos[8]};
+//                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+//                modelo.addRow(row);
+//                jt_EmpleosDisponibles.setModel(modelo);
+//                //A la que no le guste, que le ponga flores tarde toda la noche en esto damn
+//            }//Fin del For de Datos
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        } 
+//    }
         
     
-    public String getEmpDisp(){
-        String s = admin.getEmpleos().toString();
-        System.out.println("->"+s);
-        JSONArray ar = new JSONArray(s);
-        for (int j = 0; j < ar.length(); j++) {
-            JSONObject o = ar.getJSONObject(j);
-            System.out.println("Nombre: "+o.getString("Nombre"));
-            System.out.println("ID: "+o.getString("PK"));
-            System.out.println("Idiomas: "+o.getJSONArray("Idiomas"));
-            //System.out.println("$:"+o);
-        }
-        return "";
-    }
+//    public String getEmpDisp(){
+//        String s = admin.getEmpleos().toString();
+//        System.out.println("->"+s);
+//        JSONArray ar = new JSONArray(s);
+//        for (int j = 0; j < ar.length(); j++) {
+//            JSONObject o = ar.getJSONObject(j);
+//            System.out.println("Nombre: "+o.getString("Nombre"));
+//            System.out.println("ID: "+o.getString("PK"));
+//            System.out.println("Idiomas: "+o.getJSONArray("Idiomas"));
+//            //System.out.println("$:"+o);
+//        }
+//        return "";
+//    }
     public String ArraytoString(JSONArray ar){
-        return null;
+        String s = "";
+        for (int i = 0; i < ar.length(); i++) {
+            s += ar.getString(i);
+            if (i<ar.length()-1) {
+                s+=",";
+            }
+        }
+        return s;
     }
     
     public void LlenarTabla(String datos, JTable table){
@@ -2548,32 +2556,18 @@ public class Main extends javax.swing.JFrame {
                 "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
             for (int j = 0; j < ar.length(); j++) {
                 JSONObject o = ar.getJSONObject(j);
-                System.out.println("Nombre: "+o.getString("Nombre"));
-                System.out.println("ID: "+o.getString("PK"));
-                System.out.println("Idiomas: "+o.getJSONArray("Idiomas").toString());
-                System.out.println("ANTE: "+o.getBoolean("Antecedentes"));
-                //System.out.println("$:"+o);
                 
-//                Object[] row = {ArraytoString(o.getJSONArray("Puestos")),o.getString("PK"),o.getString("Nombre"),
-//                    o.getJSONArray("Requisitos Personales"),o.getString("Antecedentes"),
-//                    o.getString("Nivel Educativo"),o.getString("Tipo"),o.getString("AñosExperiencia"),
-//                o.getString("Idiomas"),o.getString("Certificados"),o.getString("Modalidad")};
-//                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
-//                modelo.addRow(row);
-//                jt_EmpleosDisponibles.setModel(modelo);
+                Object[] row = {ArraytoString(o.getJSONArray("Puestos")),o.getString("PK"),
+                    o.getString("Nombre"),ArraytoString(o.getJSONArray("Requisitos_Personales")),
+                    o.getBoolean("Antecedentes"),o.getString("Nivel Educativo"),o.getString("Tipo"),
+                    o.getInt("AñosExperiencia"),ArraytoString(o.getJSONArray("Idiomas")),
+                    ArraytoString(o.getJSONArray("Certificaciones")),o.getString("Modalidad")};
+                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+                modelo.addRow(row);
+                jt_EmpleosDisponibles.setModel(modelo);
             }
-            
-            
-                
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        for (int j = 0; j < ar.length(); j++) {
-            JSONObject o = ar.getJSONObject(j);
-            System.out.println("Nombre: "+o.getString("Nombre"));
-            System.out.println("ID: "+o.getString("PK"));
-            System.out.println("Idiomas: "+o.getJSONArray("Idiomas").toString());
-            //System.out.println("$:"+o);
         }
     }
 
