@@ -14,7 +14,10 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -49,8 +52,15 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void llenarDatosPostulante(){
-        //System.out.println(userid);
-        TablaEmpleosDisponibles();
+        System.out.println("UserID: "+userid);
+        
+        //LLenado de Tablas 
+        //TablaEmpleosDisponibles();
+        String s = admin.getEmpleos().toString();
+        //LlenarTabla(s,jt_EmpleosDisponibles );
+        System.out.println("Emp: "+admin.getEmpleos());
+        System.out.println("&&: "+admin.getSolicitudesDeUsuario(userid));
+        //System.out.println("EMPLEOS: "+getEmpDisp());
         
         //Datos Personales (dp)
         String[] dp = admin.getPersonal_pf(userid);
@@ -2509,9 +2519,62 @@ public class Main extends javax.swing.JFrame {
             }//Fin del For de Datos
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-            
+        } 
+    }
         
+    
+    public String getEmpDisp(){
+        String s = admin.getEmpleos().toString();
+        System.out.println("->"+s);
+        JSONArray ar = new JSONArray(s);
+        for (int j = 0; j < ar.length(); j++) {
+            JSONObject o = ar.getJSONObject(j);
+            System.out.println("Nombre: "+o.getString("Nombre"));
+            System.out.println("ID: "+o.getString("PK"));
+            System.out.println("Idiomas: "+o.getJSONArray("Idiomas"));
+            //System.out.println("$:"+o);
+        }
+        return "";
+    }
+    public String ArraytoString(JSONArray ar){
+        return null;
+    }
+    
+    public void LlenarTabla(String datos, JTable table){
+        JSONArray ar = new JSONArray(datos);
+        try {
+            jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
+                "Puestos", "PK", "Nombre", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
+                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
+            for (int j = 0; j < ar.length(); j++) {
+                JSONObject o = ar.getJSONObject(j);
+                System.out.println("Nombre: "+o.getString("Nombre"));
+                System.out.println("ID: "+o.getString("PK"));
+                System.out.println("Idiomas: "+o.getJSONArray("Idiomas").toString());
+                System.out.println("ANTE: "+o.getBoolean("Antecedentes"));
+                //System.out.println("$:"+o);
+                
+//                Object[] row = {ArraytoString(o.getJSONArray("Puestos")),o.getString("PK"),o.getString("Nombre"),
+//                    o.getJSONArray("Requisitos Personales"),o.getString("Antecedentes"),
+//                    o.getString("Nivel Educativo"),o.getString("Tipo"),o.getString("AñosExperiencia"),
+//                o.getString("Idiomas"),o.getString("Certificados"),o.getString("Modalidad")};
+//                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+//                modelo.addRow(row);
+//                jt_EmpleosDisponibles.setModel(modelo);
+            }
+            
+            
+                
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        for (int j = 0; j < ar.length(); j++) {
+            JSONObject o = ar.getJSONObject(j);
+            System.out.println("Nombre: "+o.getString("Nombre"));
+            System.out.println("ID: "+o.getString("PK"));
+            System.out.println("Idiomas: "+o.getJSONArray("Idiomas").toString());
+            //System.out.println("$:"+o);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

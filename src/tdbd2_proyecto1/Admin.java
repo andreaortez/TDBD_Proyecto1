@@ -41,6 +41,8 @@ import com.amazonaws.services.securitytoken.model.Credentials;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -1191,7 +1193,7 @@ public class Admin {
     }
     
     public ArrayList<String> getSolicitudesDeUsuario(String userid) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",userid).withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",userid).withString(":v_id", "solicitud"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
