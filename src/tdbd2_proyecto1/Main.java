@@ -41,7 +41,7 @@ public class Main extends javax.swing.JFrame {
     }
 
     public void llenarDatosPostulante(){
-        System.out.println(userid);
+        //System.out.println(userid);
         
         //Datos Personales (dp)
         String[] dp = admin.getPersonal_pf(userid);
@@ -51,16 +51,14 @@ public class Main extends javax.swing.JFrame {
         jl_phone.setText(dp[3]);
         jl_nation.setText(dp[5]);
         jl_gender.setText(dp[8]);
-//        for (String dato : dp) {
-//            System.out.println("DP:"+dato);
-//        }
+        
         
         //Datos Familiares (df)
         String[] df = admin.getFamiliar_pf(userid);
         lb_EcivilP.setText(df[0]);
-        llenarJList(jl_correoDP,df[1]);
-        lb_hijosP.setText(df[2]);
-        lb_dirrecionP.setText(df[0]);
+        llenarJList(jl_correoDP,df[2]);
+        lb_hijosP.setText(df[3]);
+        lb_dirrecionP.setText(df[4]);
         
         //Datos Sanitarios (ds)
         String [] ds = admin.getSanitary_pf(userid);
@@ -72,8 +70,8 @@ public class Main extends javax.swing.JFrame {
         //Datos Legales (dl)
         String [] dl = admin.getLegal_pf(userid);
         llenarJList(jl_aPenales,dl[2]);
-        lb_SM.setText(df[3]);
-        lb_SSN.setText(df[4]);
+        lb_SM.setText(dl[3]);
+        lb_SSN.setText(dl[4]);
         
         //Datos Academicos (da)
         String [] da = admin.getAcademic_pf(userid);
@@ -88,7 +86,7 @@ public class Main extends javax.swing.JFrame {
         lb_LogrosP.setText(dlp[1]);
         lb_Idiomas.setText(dlp[3]);
         lb_Certificaciones.setText(dlp[4]);
-        lb_ConEsp.setText(dlp[6]);       
+        lb_ConEsp.setText(dlp[6]); 
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -965,21 +963,13 @@ public class Main extends javax.swing.JFrame {
         pn_dSanitariosP.add(lb_resultadoP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 280, -1));
 
         jl_HM.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_HM.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jl_HM.setModel(new DefaultListModel ());
         jScrollPane7.setViewportView(jl_HM);
 
         pn_dSanitariosP.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 880, 120));
 
         jl_alergias.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_alergias.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jl_alergias.setModel(new DefaultListModel ());
         jScrollPane8.setViewportView(jl_alergias);
 
         pn_dSanitariosP.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 880, 120));
@@ -997,11 +987,7 @@ public class Main extends javax.swing.JFrame {
         jPanel5.add(jSeparator17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 880, 10));
 
         jl_aPenales.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jl_aPenales.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        jl_aPenales.setModel(new DefaultListModel ());
         jScrollPane6.setViewportView(jl_aPenales);
 
         jPanel5.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 880, 220));
@@ -2029,6 +2015,7 @@ public class Main extends javax.swing.JFrame {
     }
     public void llenarJList(JList list,String cadena){
         String[]mails = cadena.split(",");
+        
         DefaultListModel modelo
                 = (DefaultListModel) list.getModel();
         for (String mail : mails) {
