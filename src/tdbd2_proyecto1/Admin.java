@@ -41,6 +41,8 @@ import com.amazonaws.services.securitytoken.model.Credentials;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -1057,7 +1059,7 @@ public class Admin {
 
     //OTROS METODOS
     public ArrayList<String> getEmpleos(String par) {
-        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id").withValueMap(new ValueMap().withString(":v_id", par));
+        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id AND Obj = empleo").withValueMap(new ValueMap().withString(":v_id", par));
 
         Table table = new Table(client, "Centro_De_Empleo");
         ItemCollection<QueryOutcome> results = table.query(query);
@@ -1097,7 +1099,7 @@ public class Admin {
 
         return respuesta;
     }
-
+    
     public ArrayList<String> getPuestos() {
 
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "puesto"));
@@ -1120,7 +1122,7 @@ public class Admin {
 
         return respuesta;
     }
-
+    
     public ArrayList<String> getEmpresas() {
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empresa"));
 
@@ -1168,7 +1170,30 @@ public class Admin {
     }
 
     public ArrayList<String> getSolicitudes(String empleoId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",empleoId).withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",empleoId).withString(":v_id", "solicitud"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+
+        }
+
+        return respuesta;
+    }
+    
+    public ArrayList<String> getSolicitudesDeUsuario(String userid) {
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",userid).withString(":v_id", "solicitud"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
