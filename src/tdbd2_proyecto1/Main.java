@@ -2416,6 +2416,87 @@ public class Main extends javax.swing.JFrame {
         }
         list.setModel(modelo);
     }
+    
+    public void TablaEmpleosDisponibles(){
+        ArrayList<String> empleos = admin.getEmpleos();
+        
+        //Datos Para Tabla Empleos Disponibles
+        String[]titulos = new String[13];
+        String[]datos = new String[13];
+        int cont_data=0, cont_title=0;
+        for (String empleo : empleos) {
+            String[]data = empleo.split(":");
+            String s = "";
+            for (int i = 0; i < data.length; i++) {
+                switch (i) {
+                    case 0 -> {
+                        s= data[0].substring(2, data[0].length()-1);
+                        System.out.println("s0:"+s);
+                        titulos[cont_title] =s;
+                        cont_title++;
+                    }
+                    case 13 -> {
+                        s= data[i].substring(1,data[i].length()-2);
+                        System.out.println("s13:"+s);
+                        datos[cont_data] = s;
+                        cont_data++;
+                    }
+                    case 2,9,10,12 -> {
+                        String[] sp = data[i].split("\\]");
+                        s = sp[0].substring(1, sp[0].length());
+                        datos[cont_data] = s;
+                        cont_data++;
+                        System.out.println("s2:"+s);
+                        s = sp[1].substring(2,sp[1].length()-1);
+                        titulos[cont_title] = s;
+                        cont_title++;
+                        System.out.println("s2:"+s);
+                    }
+                    case 3 ->{
+                        String[] sp = data[i].split(",");
+                        s= sp[0];
+                        System.out.println("s3:"+s);
+                        datos[cont_data] = s;
+                        cont_data++;
+                        s = sp[1].substring(1,sp[1].length()-1);
+                        System.out.println("s3:"+s);
+                        titulos[cont_title] = s;
+                        cont_title++;
+                    }
+                    case 6 ->{
+                        String[] sp = data[i].split(",");
+                        s = sp[0];
+                        datos[cont_data] = s;
+                        cont_data++;
+                        System.out.println("s6:"+s);
+                    }
+                    case 8 ->{
+                        String[] sp = data[i].split(",");
+                        s = sp[1].substring(1,sp[1].length()-1);
+                        titulos[cont_title] = s;
+                        cont_title++;
+                        System.out.println("s8:"+s);
+                    }
+                    case 7 -> {}
+                    default -> {
+                        String[] sp = data[i].split(",");
+                        s = sp[0].substring(1, sp[0].length()-1);
+                        datos[cont_data] = s;
+                        cont_data++;
+                        System.out.println("s:"+s);
+                        s = sp[1].substring(1,sp[1].length()-1);
+                        titulos[cont_title] = s;
+                        cont_title++;
+                        System.out.println("s:"+s);
+                    }
+                }
+            }
+        }//Fin del For de Datos
+        
+        //Tabla Modelo
+        
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Login;
