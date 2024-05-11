@@ -2204,6 +2204,7 @@ public class Main extends javax.swing.JFrame {
     private void bt_cerrarSesiónPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_cerrarSesiónPMouseClicked
         LimpiarSesion();
         Postulante.setVisible(false);
+        pn_perfilPersona.setVisible(false);
         pn_DatosDelPostulante.setVisible(false);
     }//GEN-LAST:event_bt_cerrarSesiónPMouseClicked
 
