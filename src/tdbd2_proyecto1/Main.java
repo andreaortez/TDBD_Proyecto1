@@ -14,6 +14,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -49,6 +50,7 @@ public class Main extends javax.swing.JFrame {
 
     public void llenarDatosPostulante(){
         //System.out.println(userid);
+        TablaEmpleosDisponibles();
         
         //Datos Personales (dp)
         String[] dp = admin.getPersonal_pf(userid);
@@ -2421,80 +2423,94 @@ public class Main extends javax.swing.JFrame {
         ArrayList<String> empleos = admin.getEmpleos();
         
         //Datos Para Tabla Empleos Disponibles
-        String[]titulos = new String[13];
-        String[]datos = new String[13];
-        int cont_data=0, cont_title=0;
-        for (String empleo : empleos) {
-            String[]data = empleo.split(":");
-            String s = "";
-            for (int i = 0; i < data.length; i++) {
-                switch (i) {
-                    case 0 -> {
-                        s= data[0].substring(2, data[0].length()-1);
-                        System.out.println("s0:"+s);
-                        titulos[cont_title] =s;
-                        cont_title++;
-                    }
-                    case 13 -> {
-                        s= data[i].substring(1,data[i].length()-2);
-                        System.out.println("s13:"+s);
-                        datos[cont_data] = s;
-                        cont_data++;
-                    }
-                    case 2,9,10,12 -> {
-                        String[] sp = data[i].split("\\]");
-                        s = sp[0].substring(1, sp[0].length());
-                        datos[cont_data] = s;
-                        cont_data++;
-                        System.out.println("s2:"+s);
-                        s = sp[1].substring(2,sp[1].length()-1);
-                        titulos[cont_title] = s;
-                        cont_title++;
-                        System.out.println("s2:"+s);
-                    }
-                    case 3 ->{
-                        String[] sp = data[i].split(",");
-                        s= sp[0];
-                        System.out.println("s3:"+s);
-                        datos[cont_data] = s;
-                        cont_data++;
-                        s = sp[1].substring(1,sp[1].length()-1);
-                        System.out.println("s3:"+s);
-                        titulos[cont_title] = s;
-                        cont_title++;
-                    }
-                    case 6 ->{
-                        String[] sp = data[i].split(",");
-                        s = sp[0];
-                        datos[cont_data] = s;
-                        cont_data++;
-                        System.out.println("s6:"+s);
-                    }
-                    case 8 ->{
-                        String[] sp = data[i].split(",");
-                        s = sp[1].substring(1,sp[1].length()-1);
-                        titulos[cont_title] = s;
-                        cont_title++;
-                        System.out.println("s8:"+s);
-                    }
-                    case 7 -> {}
-                    default -> {
-                        String[] sp = data[i].split(",");
-                        s = sp[0].substring(1, sp[0].length()-1);
-                        datos[cont_data] = s;
-                        cont_data++;
-                        System.out.println("s:"+s);
-                        s = sp[1].substring(1,sp[1].length()-1);
-                        titulos[cont_title] = s;
-                        cont_title++;
-                        System.out.println("s:"+s);
+        //int num = empleos.size()*13;
+        try {
+            jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
+                "Puestos", "PK", "Nombre", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
+                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
+            for (String empleo : empleos) {
+                String[]data = empleo.split(":");
+                String s = "";
+                String[]titulos = new String[13];
+                String[]datos = new String[13];
+                int cont_data=0, cont_title=0;
+
+                for (int i = 0; i < data.length; i++) {
+                    switch (i) {
+                        case 0 -> {
+                            s= data[0].substring(2, data[0].length()-1);
+                            System.out.println("s0:"+s);
+                            titulos[cont_title] =s;
+                            cont_title++;
+                        }
+                        case 13 -> {
+                            s= data[i].substring(1,data[i].length()-2);
+                            System.out.println("s13:"+s);
+                            datos[cont_data] = s;
+                            cont_data++;
+                        }
+                        case 2,9,10,12 -> {
+                            String[] sp = data[i].split("\\]");
+                            s = sp[0].substring(1, sp[0].length());
+                            datos[cont_data] = s;
+                            cont_data++;
+                            System.out.println("s2:"+s);
+                            s = sp[1].substring(2,sp[1].length()-1);
+                            titulos[cont_title] = s;
+                            cont_title++;
+                            System.out.println("s2:"+s);
+                        }
+                        case 3 ->{
+                            String[] sp = data[i].split(",");
+                            s= sp[0];
+                            System.out.println("s3:"+s);
+                            datos[cont_data] = s;
+                            cont_data++;
+                            s = sp[1].substring(1,sp[1].length()-1);
+                            System.out.println("s3:"+s);
+                            titulos[cont_title] = s;
+                            cont_title++;
+                        }
+                        case 6 ->{
+                            String[] sp = data[i].split(",");
+                            s = sp[0];
+                            datos[cont_data] = s;
+                            cont_data++;
+                            System.out.println("s6:"+s);
+                        }
+                        case 8 ->{
+                            String[] sp = data[i].split(",");
+                            s = sp[1].substring(1,sp[1].length()-1);
+                            titulos[cont_title] = s;
+                            cont_title++;
+                            System.out.println("s8:"+s);
+                        }
+                        case 7 -> {}
+                        default -> {
+                            String[] sp = data[i].split(",");
+                            s = sp[0].substring(1, sp[0].length()-1);
+                            datos[cont_data] = s;
+                            cont_data++;
+                            System.out.println("s:"+s);
+                            s = sp[1].substring(1,sp[1].length()-1);
+                            titulos[cont_title] = s;
+                            cont_title++;
+                            System.out.println("s:"+s);
+                        }
                     }
                 }
-            }
-        }//Fin del For de Datos
-        
-        //Tabla Modelo
-        
+                System.out.println("cont"+cont_data);
+                Object[] row = {datos[10],datos[9],datos[0],
+                    datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7],datos[8]};
+                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+                modelo.addRow(row);
+                jt_EmpleosDisponibles.setModel(modelo);
+                //A la que no le guste, que le ponga flores tarde toda la noche en esto damn
+            }//Fin del For de Datos
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+            
         
     }
 
