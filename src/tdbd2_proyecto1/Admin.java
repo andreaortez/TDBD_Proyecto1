@@ -64,13 +64,30 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
-        print(this.getPuestos());
+
+       
+        //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
+
     }
 
     //CREATES
     //x == 0 -> crear
     //x == otro numero -> modificar
     //creates de postulante
+    public boolean createUser(String username, String password, String user_id, String obj){
+        HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
+        values.put("PK", new AttributeValue("usr_"+username));
+        values.put("SK", new AttributeValue(username));
+        values.put("Nombre", new AttributeValue(username));
+        values.put("Obj", new AttributeValue(obj));
+        try{
+            client.putItem("Centro_De_Empleo", values);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+    }
+    
     public boolean createPersonal_pf(String[] values, int x) {
         //ejemplo de formato
         //String[] values = {"user_12247420", "Andino", "dmafgames@gmail.com", "19","Aleman", "Diego", "Hombre", "(504) 9999-3221"};
@@ -338,7 +355,7 @@ public class Admin {
             return false;
         }
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
-        String[] keys = {"PK", "CIF", "Direccion", "Director", "Nombre"};
+        String[] keys = {"PK", "CIF", "Telefono", "Direccion", "Director", "Nombre"};
         keyValues.put("SK", new AttributeValue("perfil"));
 
         for (int i = 0; i < keys.length; i++) {
@@ -427,7 +444,9 @@ public class Admin {
         keyValues = new HashMap<String, AttributeValue>();
         String[] keys = {"PK", "empleo_id", "Initial_Year"};
         keyValues.put("SK", new AttributeValue("emp_actual"));
-
+        HashMap<String, AttributeValue> deletion = new HashMap<String, AttributeValue>();
+        deletion.put("PK", new AttributeValue((String) values[0]));
+        deletion.put("SK", new AttributeValue((String) values[1]));
         for (int i = 0; i < keys.length; i++) {
             if (i != 3) {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
@@ -435,7 +454,7 @@ public class Admin {
                 keyValues.put(keys[i], new AttributeValue(Integer.toString((int) values[i])));
             }
         }
-
+        client.deleteItem("Centro_De_Empleo", deletion);
         //ejecutar el create
         try {
 
@@ -852,7 +871,7 @@ public class Admin {
         }
 
         /*
-        orden: Nombre, CIF, (ignorar), Director, Direccion, (ignorar)
+        orden: Nombre, CIF, Telefono,(ignorar), Director, Direccion, (ignorar)
          */
         return datos;
 
@@ -1054,7 +1073,7 @@ public class Admin {
             return null;
         }
     }
-
+   
     public ArrayList<String> getEmpleos() {
 
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
@@ -1097,11 +1116,129 @@ public class Admin {
 
         } catch (Exception E) {
             E.printStackTrace();
+        }
+
+        return respuesta;
+    }
+
+    public ArrayList<String> getEmpresas() {
+        ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empresa"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
 
         }
 
         return respuesta;
     }
+
+    public ArrayList<String> getUsers() {
+        ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "usuario"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+
+        }
+
+        return respuesta;
+    }
+
+    public ArrayList<String> getSolicitudes(String empleoId) {
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",empleoId).withString(":v_id", "usuario"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+
+        }
+
+        return respuesta;
+    }
+
+    public ArrayList<String> getFalimiares(String userId) {
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "usuario"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+
+        }
+
+        return respuesta;
+    }
+
+    public boolean solicitarEmpleo(String user_id, String empleo_id){
+        HashMap<String, AttributeValue> values = new HashMap<String,AttributeValue>();
+        values.put("PK", new AttributeValue(user_id));
+        values.put("SK", new AttributeValue(empleo_id));
+        values.put("Obj", new AttributeValue("solicitud"));
+        try{
+            client.putItem("Centro_De_Empleo", values);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
+        
+    }
+    public boolean añadirFamiliar(String user1, String user2) {
+        HashMap<String, AttributeValue> datos = new HashMap<String, AttributeValue>();
+        datos.put("PK", new AttributeValue(user1));
+        datos.put("SK", new AttributeValue(user2));
+        datos.put("Obj", new AttributeValue("familia"));
+        try {
+            client.putItem("Centro_De_Empleo", datos);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     //metodo print solo para pruebas
     public void print(String[] arr) {
