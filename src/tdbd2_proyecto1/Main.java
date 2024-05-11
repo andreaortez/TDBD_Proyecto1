@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 
 /**
  *
@@ -2236,7 +2237,7 @@ public class Main extends javax.swing.JFrame {
 
         if (userid != null) {
             String[] split = userid.split("_");
-            System.out.println(split[0]);
+            //System.out.println(split[0]);
             if (split[0].equals("user")) {
                 Login.setVisible(false);
                 Reclutador.setVisible(false);
