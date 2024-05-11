@@ -45,23 +45,25 @@ public class Main extends javax.swing.JFrame {
         pn_perfilPersona.setVisible(false);
 
         jd_ModificarPersona.setTitle("Modificar Persona");
-        jd_crearPuesto.setTitle("Añadir Puesto");
+        jd_crearEmpleo.setTitle("Añadir Puesto");
         jd_crearUsuario.setTitle("Crear Usuario");
         jd_Empresa.setTitle("Crear Nueva Empresa");
         jd_Persona.setTitle("Crear Nueva Persona");
     }
 
-    public void llenarDatosPostulante(){
-        System.out.println("UserID: "+userid);
-        
+    public void llenarDatosPostulante() {
+        System.out.println("UserID: " + userid);
+
         //LLenado de Tablas 
         //TablaEmpleosDisponibles();
         String s = admin.getEmpleos().toString();
-        //LlenarTabla(s,jt_EmpleosDisponibles );
-        System.out.println("Emp: "+admin.getEmpleos());
-        System.out.println("&&: "+admin.getSolicitudesDeUsuario(userid));
-        //System.out.println("EMPLEOS: "+getEmpDisp());
+        LlenarTabla(s,jt_EmpleosDisponibles );
         
+        //LlenarTabla(s,jt_EmpleosDisponibles );
+        System.out.println("Emp: " + admin.getEmpleos());
+        System.out.println("&&: " + admin.getSolicitudesDeUsuario(userid));
+        //System.out.println("EMPLEOS: "+getEmpDisp());
+
         //Datos Personales (dp)
         String[] dp = admin.getPersonal_pf(userid);
         jl_name.setText(dp[0] + " " + dp[6]);
@@ -70,14 +72,14 @@ public class Main extends javax.swing.JFrame {
         jl_phone.setText(dp[3]);
         jl_nation.setText(dp[5]);
         jl_gender.setText(dp[8]);
-        
+
         //Datos Familiares (df)
         String[] df = admin.getFamiliar_pf(userid);
         lb_EcivilP.setText(df[0]);
-        llenarJList(jl_correoDP,df[2]);
+        llenarJList(jl_correoDP, df[2]);
         lb_hijosP.setText(df[3]);
         lb_dirrecionP.setText(df[4]);
-        
+
         //Datos Sanitarios (ds)
         String[] ds = admin.getSanitary_pf(userid);
         lb_infoMed.setText(ds[0]);
@@ -86,11 +88,11 @@ public class Main extends javax.swing.JFrame {
         lb_resultadoP.setText(ds[5]);
 
         //Datos Legales (dl)
-        String [] dl = admin.getLegal_pf(userid);
-        llenarJList(jl_aPenales,dl[2]);
+        String[] dl = admin.getLegal_pf(userid);
+        llenarJList(jl_aPenales, dl[2]);
         lb_SM.setText(dl[3]);
         lb_SSN.setText(dl[4]);
-        
+
         //Datos Academicos (da)
         String[] da = admin.getAcademic_pf(userid);
         lb_institucion.setText(da[0]);
@@ -104,14 +106,14 @@ public class Main extends javax.swing.JFrame {
         lb_LogrosP.setText(dlp[1]);
         lb_Idiomas.setText(dlp[3]);
         lb_Certificaciones.setText(dlp[4]);
-        lb_ConEsp.setText(dlp[6]); 
+        lb_ConEsp.setText(dlp[6]);
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jd_crearPuesto = new javax.swing.JDialog();
+        jd_crearEmpleo = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         tab1 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
@@ -157,6 +159,7 @@ public class Main extends javax.swing.JFrame {
         tf_certificaciones = new javax.swing.JTextField();
         bt_añadirCertificacion = new javax.swing.JPanel();
         jLabel77 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         bt_añadirP = new javax.swing.JPanel();
         jLabel69 = new javax.swing.JLabel();
         jd_crearUsuario = new javax.swing.JDialog();
@@ -328,6 +331,9 @@ public class Main extends javax.swing.JFrame {
         jSeparator22 = new javax.swing.JSeparator();
         jLabel56 = new javax.swing.JLabel();
         lb_ConEsp = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
         Postulante = new javax.swing.JPanel();
         MenuBar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -472,7 +478,7 @@ public class Main extends javax.swing.JFrame {
         jLabel80.setText("Tipo de Empleo");
         jPanel4.add(jLabel80, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, 30));
 
-        cb_modalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Presencial", "Semi Presencial", "Remoto" }));
+        cb_modalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Presencial", "Híbrido", "Remoto" }));
         jPanel4.add(cb_modalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 230, 32));
 
         cb_nivelEducativo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Educación Media", "Grado", "Master", "Doctorado" }));
@@ -485,11 +491,13 @@ public class Main extends javax.swing.JFrame {
 
         jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 290, 90));
 
+        rb_si.setBackground(new java.awt.Color(255, 255, 255));
         bg_antecedentes.add(rb_si);
         rb_si.setForeground(new java.awt.Color(55, 55, 55));
         rb_si.setText("Sí");
         jPanel4.add(rb_si, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 500, -1, -1));
 
+        rb_no.setBackground(new java.awt.Color(255, 255, 255));
         bg_antecedentes.add(rb_no);
         rb_no.setForeground(new java.awt.Color(55, 55, 55));
         rb_no.setText("No");
@@ -607,6 +615,21 @@ public class Main extends javax.swing.JFrame {
 
         tab1.addTab("Idioma/Certificaciones", jPanel6);
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 540, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 539, Short.MAX_VALUE)
+        );
+
+        tab1.addTab("Puestos", jPanel1);
+
         jPanel3.add(tab1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 540, 570));
 
         bt_añadirP.setBackground(new java.awt.Color(195, 22, 28));
@@ -643,15 +666,15 @@ public class Main extends javax.swing.JFrame {
 
         jPanel3.add(bt_añadirP, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 620, 120, 40));
 
-        javax.swing.GroupLayout jd_crearPuestoLayout = new javax.swing.GroupLayout(jd_crearPuesto.getContentPane());
-        jd_crearPuesto.getContentPane().setLayout(jd_crearPuestoLayout);
-        jd_crearPuestoLayout.setHorizontalGroup(
-            jd_crearPuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jd_crearEmpleoLayout = new javax.swing.GroupLayout(jd_crearEmpleo.getContentPane());
+        jd_crearEmpleo.getContentPane().setLayout(jd_crearEmpleoLayout);
+        jd_crearEmpleoLayout.setHorizontalGroup(
+            jd_crearEmpleoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 600, Short.MAX_VALUE)
         );
-        jd_crearPuestoLayout.setVerticalGroup(
-            jd_crearPuestoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jd_crearPuestoLayout.createSequentialGroup()
+        jd_crearEmpleoLayout.setVerticalGroup(
+            jd_crearEmpleoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_crearEmpleoLayout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -1435,6 +1458,45 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Datos Laborales/Profesionales", pn_dProfesionalesP);
 
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 559, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Historial de Trabajo", jPanel9);
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 559, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Cuentas Familiares en la App", jPanel10);
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 559, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Solicitud de Trabajo", jPanel11);
+
         pn_DatosDelPostulante.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 930, 620));
 
         getContentPane().add(pn_DatosDelPostulante, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 980, 640));
@@ -1638,7 +1700,7 @@ public class Main extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(55, 55, 55));
         jLabel3.setText("EMPLEOS DISPONIBLES");
-        pn_EmpleosDisponibles.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 20, 280, -1));
+        pn_EmpleosDisponibles.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 280, -1));
 
         Postulante.add(pn_EmpleosDisponibles, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 70, 980, 640));
 
@@ -1697,7 +1759,7 @@ public class Main extends javax.swing.JFrame {
         jLabel15.setBackground(new java.awt.Color(55, 55, 55));
         jLabel15.setForeground(new java.awt.Color(55, 55, 55));
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel15.setText("Añadir Puesto");
+        jLabel15.setText("Añadir Empleo");
         bt_MiPerfilE.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 90, -1));
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -2113,7 +2175,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_EPostuladosMouseClicked
 
     private void bt_MiPerfilEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_MiPerfilEMouseClicked
-        AbrirJD(jd_crearPuesto);
+        AbrirJD(jd_crearEmpleo);
     }//GEN-LAST:event_bt_MiPerfilEMouseClicked
 
     private void bt_MiPerfilEMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_MiPerfilEMouseEntered
@@ -2250,7 +2312,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_regresarMouseEntered
 
     private void bt_regresarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_regresarMouseExited
-        bt_regresar.setBackground(new Color(1,103,153));
+        bt_regresar.setBackground(new Color(1, 103, 153));
     }//GEN-LAST:event_bt_regresarMouseExited
 
     private void bt_añadirIdiomaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirIdiomaMouseClicked
@@ -2429,116 +2491,30 @@ public class Main extends javax.swing.JFrame {
         }
         list.setModel(modelo);
     }
-    
-    public void TablaEmpleosDisponibles(){
-        ArrayList<String> empleos = admin.getEmpleos();
-        
-        //Datos Para Tabla Empleos Disponibles
-        //int num = empleos.size()*13;
-        try {
-            jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
-                "Puestos", "PK", "Nombre", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
-                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
-            for (String empleo : empleos) {
-                String[]data = empleo.split(":");
-                String s = "";
-                String[]titulos = new String[13];
-                String[]datos = new String[13];
-                int cont_data=0, cont_title=0;
 
-                for (int i = 0; i < data.length; i++) {
-                    switch (i) {
-                        case 0 -> {
-                            s= data[0].substring(2, data[0].length()-1);
-                            System.out.println("s0:"+s);
-                            titulos[cont_title] =s;
-                            cont_title++;
-                        }
-                        case 13 -> {
-                            s= data[i].substring(1,data[i].length()-2);
-                            System.out.println("s13:"+s);
-                            datos[cont_data] = s;
-                            cont_data++;
-                        }
-                        case 2,9,10,12 -> {
-                            String[] sp = data[i].split("\\]");
-                            s = sp[0].substring(1, sp[0].length());
-                            datos[cont_data] = s;
-                            cont_data++;
-                            System.out.println("s2:"+s);
-                            s = sp[1].substring(2,sp[1].length()-1);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                            System.out.println("s2:"+s);
-                        }
-                        case 3 ->{
-                            String[] sp = data[i].split(",");
-                            s= sp[0];
-                            System.out.println("s3:"+s);
-                            datos[cont_data] = s;
-                            cont_data++;
-                            s = sp[1].substring(1,sp[1].length()-1);
-                            System.out.println("s3:"+s);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                        }
-                        case 6 ->{
-                            String[] sp = data[i].split(",");
-                            s = sp[0];
-                            datos[cont_data] = s;
-                            cont_data++;
-                            System.out.println("s6:"+s);
-                        }
-                        case 8 ->{
-                            String[] sp = data[i].split(",");
-                            s = sp[1].substring(1,sp[1].length()-1);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                            System.out.println("s8:"+s);
-                        }
-                        case 7 -> {}
-                        default -> {
-                            String[] sp = data[i].split(",");
-                            s = sp[0].substring(1, sp[0].length()-1);
-                            datos[cont_data] = s;
-                            cont_data++;
-                            System.out.println("s:"+s);
-                            s = sp[1].substring(1,sp[1].length()-1);
-                            titulos[cont_title] = s;
-                            cont_title++;
-                            System.out.println("s:"+s);
-                        }
-                    }
-                }
-                System.out.println("cont"+cont_data);
-                Object[] row = {datos[10],datos[9],datos[0],
-                    datos[1],datos[2],datos[3],datos[4],datos[5],datos[6],datos[7],datos[8]};
-                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
-                modelo.addRow(row);
-                jt_EmpleosDisponibles.setModel(modelo);
-                //A la que no le guste, que le ponga flores tarde toda la noche en esto damn
-            }//Fin del For de Datos
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } 
-    }
-        
-    
-    public String getEmpDisp(){
+    public String getEmpDisp() {
         String s = admin.getEmpleos().toString();
-        System.out.println("->"+s);
+        System.out.println("->" + s);
         JSONArray ar = new JSONArray(s);
         for (int j = 0; j < ar.length(); j++) {
             JSONObject o = ar.getJSONObject(j);
-            System.out.println("Nombre: "+o.getString("Nombre"));
-            System.out.println("ID: "+o.getString("PK"));
-            System.out.println("Idiomas: "+o.getJSONArray("Idiomas"));
+            System.out.println("Nombre: " + o.getString("Nombre"));
+            System.out.println("ID: " + o.getString("PK"));
+            System.out.println("Idiomas: " + o.getJSONArray("Idiomas"));
             //System.out.println("$:"+o);
         }
         return "";
     }
+
     public String ArraytoString(JSONArray ar){
-        return null;
+        String s = "";
+        for (int i = 0; i < ar.length(); i++) {
+            s += ar.getString(i);
+            if (i<ar.length()-1) {
+                s+=",";
+            }
+        }
+        return s;
     }
     
     public void LlenarTabla(String datos, JTable table){
@@ -2549,32 +2525,18 @@ public class Main extends javax.swing.JFrame {
                 "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
             for (int j = 0; j < ar.length(); j++) {
                 JSONObject o = ar.getJSONObject(j);
-                System.out.println("Nombre: "+o.getString("Nombre"));
-                System.out.println("ID: "+o.getString("PK"));
-                System.out.println("Idiomas: "+o.getJSONArray("Idiomas").toString());
-                System.out.println("ANTE: "+o.getBoolean("Antecedentes"));
-                //System.out.println("$:"+o);
                 
-//                Object[] row = {ArraytoString(o.getJSONArray("Puestos")),o.getString("PK"),o.getString("Nombre"),
-//                    o.getJSONArray("Requisitos Personales"),o.getString("Antecedentes"),
-//                    o.getString("Nivel Educativo"),o.getString("Tipo"),o.getString("AñosExperiencia"),
-//                o.getString("Idiomas"),o.getString("Certificados"),o.getString("Modalidad")};
-//                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
-//                modelo.addRow(row);
-//                jt_EmpleosDisponibles.setModel(modelo);
+                Object[] row = {ArraytoString(o.getJSONArray("Puestos")),o.getString("PK"),
+                    o.getString("Nombre"),ArraytoString(o.getJSONArray("Requisitos_Personales")),
+                    o.getBoolean("Antecedentes"),o.getString("Nivel Educativo"),o.getString("Tipo"),
+                    o.getInt("AñosExperiencia"),ArraytoString(o.getJSONArray("Idiomas")),
+                    ArraytoString(o.getJSONArray("Certificaciones")),o.getString("Modalidad")};
+                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+                modelo.addRow(row);
+                jt_EmpleosDisponibles.setModel(modelo);
             }
-            
-            
-                
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-        for (int j = 0; j < ar.length(); j++) {
-            JSONObject o = ar.getJSONObject(j);
-            System.out.println("Nombre: "+o.getString("Nombre"));
-            System.out.println("ID: "+o.getString("PK"));
-            System.out.println("Idiomas: "+o.getJSONArray("Idiomas").toString());
-            //System.out.println("$:"+o);
         }
     }
 
@@ -2724,6 +2686,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel97;
     private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel2;
@@ -2738,6 +2703,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jSP_correoDP;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
@@ -2809,7 +2775,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JDialog jd_Empresa;
     private javax.swing.JDialog jd_ModificarPersona;
     private javax.swing.JDialog jd_Persona;
-    private javax.swing.JDialog jd_crearPuesto;
+    private javax.swing.JDialog jd_crearEmpleo;
     private javax.swing.JDialog jd_crearUsuario;
     private javax.swing.JLabel jl_CIF;
     private javax.swing.JLabel jl_Director;
