@@ -66,30 +66,27 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
-
-       
         //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
-
     }
 
     //CREATES
     //x == 0 -> crear
     //x == otro numero -> modificar
     //creates de postulante
-    public boolean createUser(String username, String password, String user_id, String obj){
+    public boolean createUser(String username, String password, String user_id, String obj) {
         HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
-        values.put("PK", new AttributeValue("usr_"+username));
+        values.put("PK", new AttributeValue("usr_" + username));
         values.put("SK", new AttributeValue(username));
         values.put("Nombre", new AttributeValue(username));
         values.put("Obj", new AttributeValue(obj));
-        try{
+        try {
             client.putItem("Centro_De_Empleo", values);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
-    
+
     public boolean createPersonal_pf(String[] values, int x) {
         //ejemplo de formato
         //String[] values = {"user_12247420", "Andino", "dmafgames@gmail.com", "19","Aleman", "Diego", "Hombre", "(504) 9999-3221"};
@@ -1075,9 +1072,8 @@ public class Admin {
             return null;
         }
     }
-   
-    public ArrayList<String> getEmpleos() {
 
+    public ArrayList<String> getEmpleos() {
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
 
         Table table = new Table(client, "Centro_De_Empleo");
@@ -1087,9 +1083,7 @@ public class Admin {
         try {
 
             for (Item result : results2) {
-
                 respuesta.add(result.toJSON());
-
             }
 
         } catch (Exception E) {
@@ -1099,7 +1093,28 @@ public class Admin {
 
         return respuesta;
     }
-    
+
+    public ArrayList<String> getEmpleo(String empleoid) {
+//este busca un empleo por medio de su id
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", empleoid).withString(":v_id", "empleo"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+                respuesta.add(result.toJSON());
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+        }
+
+        return respuesta;
+    }
+
     public ArrayList<String> getPuestos() {
 
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "puesto"));
@@ -1122,7 +1137,7 @@ public class Admin {
 
         return respuesta;
     }
-    
+
     public ArrayList<String> getEmpresas() {
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empresa"));
 
@@ -1170,7 +1185,7 @@ public class Admin {
     }
 
     public ArrayList<String> getSolicitudes(String empleoId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",empleoId).withString(":v_id", "solicitud"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", empleoId).withString(":v_id", "solicitud"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
@@ -1191,9 +1206,9 @@ public class Admin {
 
         return respuesta;
     }
-    
+
     public ArrayList<String> getSolicitudesDeUsuario(String userid) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",userid).withString(":v_id", "solicitud"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", userid).withString(":v_id", "solicitud"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
@@ -1238,19 +1253,20 @@ public class Admin {
         return respuesta;
     }
 
-    public boolean solicitarEmpleo(String user_id, String empleo_id){
-        HashMap<String, AttributeValue> values = new HashMap<String,AttributeValue>();
+    public boolean solicitarEmpleo(String user_id, String empleo_id) {
+        HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
         values.put("PK", new AttributeValue(user_id));
         values.put("SK", new AttributeValue(empleo_id));
         values.put("Obj", new AttributeValue("solicitud"));
-        try{
+        try {
             client.putItem("Centro_De_Empleo", values);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
-        
+
     }
+
     public boolean añadirFamiliar(String user1, String user2) {
         HashMap<String, AttributeValue> datos = new HashMap<String, AttributeValue>();
         datos.put("PK", new AttributeValue(user1));
@@ -1263,7 +1279,6 @@ public class Admin {
             return false;
         }
     }
-
 
     //metodo print solo para pruebas
     public void print(String[] arr) {
