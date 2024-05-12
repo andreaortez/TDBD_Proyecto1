@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import java.util.Arrays;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
@@ -31,6 +35,7 @@ public class Main extends javax.swing.JFrame {
     Admin admin = new Admin();
     String userid = "";
     ArrayList<String> atributosPersona = new ArrayList();
+    int pJobNumber = 0;
 
     public Main() {
         initComponents();
@@ -59,14 +64,14 @@ public class Main extends javax.swing.JFrame {
         System.out.println("UserID: " + userid);
 
         //LLenado de Tablas 
-        //TablaEmpleosDisponibles();
         String s = admin.getEmpleos().toString();
-        LlenarTabla(s, jt_EmpleosDisponibles);
+        LlenarTabla(s,jt_EmpleosDisponibles,0);
+        LlenarTabla(s,jt_EmpleosPostulados,1);
 
-        //LlenarTabla(s,jt_EmpleosDisponibles );
-        System.out.println("Emp: " + admin.getEmpleos());
-        System.out.println("&&: " + admin.getSolicitudesDeUsuario(userid));
-        //System.out.println("EMPLEOS: "+getEmpDisp());
+        System.out.println("-----------");
+        System.out.println("&&: " + admin.getPuestos());
+        //System.out.println("%%: "+Arrays.toString(admin.getPuesto(userid)));
+        System.out.println("--------------");
 
         //Datos Personales (dp)
         String[] dp = admin.getPersonal_pf(userid);
@@ -111,6 +116,239 @@ public class Main extends javax.swing.JFrame {
         lb_Idiomas.setText(dlp[3]);
         lb_Certificaciones.setText(dlp[4]);
         lb_ConEsp.setText(dlp[6]);
+        
+        //Historial Trabajo
+        String[]ht = admin.getCurrentJob(userid);
+        lb_TrabActual.setText(ht[0]);
+        
+        //Cuentas Familiares en la App
+        System.out.println("++++++++++++++++++");
+        //System.out.println("------------\n#: "+admin.getFalimiares(userid));
+        lb_EcivilP1.setText(CuentasFamiliares(admin.getFalimiares(userid).toString()));
+        System.out.println("++++++++++++++++++");
+        
+        //Solicitud Trabajo
+        //System.out.println("*:"+Arrays.toString(admin.getSolicitud(userid)));
+        String st = (Arrays.toString(admin.getSolicitud(userid))).substring(1, Arrays.toString(admin.getSolicitud(userid)).length()-1);
+        String[]st_data = st.split(", ");
+        llenarJList(jl_alergias1,st_data[3]);
+        llenarJList(jl_alergias2,st_data[4]);
+        lb_SalarioExpectante.setText(st_data[6]);
+    }
+
+    public void fillFilter() {
+        tf_buscar.getText();
+        String[] split = tf_buscar.getText().split(",");
+        String filter = "#Obj = :idd";
+        HashMap<String, String> names = new HashMap<>();
+        ValueMap valores = new ValueMap();
+        names.put("#Obj", "Obj");
+        valores = valores.withString(":idd", "empleo");
+        for (int i = 0; i < split.length; i++) {
+            String[] splitElements = split[i].split("=");
+            if (splitElements.length == 2) {
+                if (filter != "") {
+                    filter += " AND ";
+                }
+                splitElements[0] = splitElements[0].trim();
+                splitElements[1] = splitElements[1].trim();
+                if (!splitElements[0].replace(" ", "").equals(splitElements[0])) {
+                    String old = splitElements[0];
+                    String neww = splitElements[0] = "#" + splitElements[0].replace(" ", "_");
+                    names.put(neww, old);
+                }
+                if (!splitElements[1].replace(" ", "").equals(splitElements[1])) {
+                    String old = splitElements[1];
+                    String neww = splitElements[1] = "#" + splitElements[1].replace(" ", "_");
+                    names.put(neww, old);
+                }
+                if (splitElements[0].toLowerCase().equals("empresa")) {
+                    filter += "PK = :id" + i;
+                    valores = valores.withString(":id" + i, splitElements[1]);
+                } else if (splitElements[0].toLowerCase().equals("empleo")) {
+
+                    filter += "SK = :id" + i;
+                    valores = valores.withString(":id" + i, splitElements[1]);
+                } else if (splitElements[0].toLowerCase().equals("experiencia")) {
+
+                    names.put("#years", "AñosExperiencia");
+                    filter += "#years = :id" + i;
+                    valores = valores.withNumber(":id" + i, Integer.parseInt(splitElements[1]));
+
+                } else {
+
+                    filter += splitElements[0] + " = :id" + i;
+                    valores = valores.withString(":id" + i, splitElements[1]);
+
+                }
+            }
+        }
+ 
+ 
+        ArrayList<String> datos = admin.filtroEmpleados(filter, valores, names);
+        if (datos != null) {
+            System.out.println(datos.toString());
+            LlenarTabla(datos.toString(), jt_EmpleosDisponibles,0);
+        } else {
+            LlenarTabla(admin.getEmpleos().toString(), jt_EmpleosDisponibles,0);
+        }
+
+    }
+
+    public void loadPreviousJobs() {
+        int i = 1;
+        String trabajos = "";
+        /*
+        orden: Empleador, Rango (ignorar), (ignorar), Titulo
+         */
+        while (admin.getPreviousJob(userid, "pJob_" + Integer.toString(i)) != null) {
+            if (i == 1) {
+                lb_EcivilP2.setText("");
+            }
+            pJobNumber++;
+
+            String[] datos = admin.getPreviousJob(userid, "pJob_" + Integer.toString(i));
+            trabajos += "Titulo: " + datos[3] + "   Empleador: " + datos[0] + "\n";
+            i++;
+        }
+        lb_EcivilP2.setText(trabajos);
+    }
+
+    public void reloadPreviousJobs() {
+
+        String trabajos = "";
+        /*
+        orden: Empleador, Rango (ignorar), (ignorar), Titulo
+         */
+        for (int i = 0; i < pJobNumber; i++) {
+            if (i == 0) {
+                lb_EcivilP2.setText("");
+            }
+            pJobNumber++;
+
+            String[] datos = admin.getPreviousJob(userid, "pJob_" + Integer.toString(i));
+            trabajos += "Titulo: " + datos[3] + "   Empleador: " + datos[0] + "\n";
+        }
+        lb_EcivilP2.setText(trabajos);
+    }
+
+    public boolean validarSolicitudRequerimientos() {
+        DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+        int row = jt_EmpleosDisponibles.getSelectedRow();
+       boolean isThere = false;
+        //validar antecedentes
+        String[] legal = admin.getLegal_pf(userid);
+
+        if (legal == null) {
+            return false;
+        }
+        String antecedentes = legal[2];
+        
+        if ((boolean)modelo.getValueAt(row, 4)) {
+            
+            if (antecedentes != null) {
+                if (!antecedentes.equals("") && !antecedentes.equals("Ninguno,")) {
+                    return false;
+                }
+            }
+        }
+        System.out.println("c1");
+        //validar Nivel Educativo
+        String[] educativo = admin.getAcademic_pf(userid);
+        if (educativo == null) {
+            return false;
+        }
+        if (educationlvl(educativo[1]) < educationlvl((String) modelo.getValueAt(row, 5))) {
+            return false;
+        }
+        System.out.println("c2");
+        //validar Experiencia
+        String[] profesionales = admin.getProfesional_pf(userid);
+        if (profesionales == null) {
+            return false;
+        }
+        if (Integer.parseInt(profesionales[0]) < ((int) modelo.getValueAt(row, 7))) {
+            return false;
+        }
+        System.out.println("c3");
+        //validar idiomas
+        System.out.println(profesionales[3]);
+        if (profesionales[3] == null) {
+            return false;
+        }
+        String[] idiomas = profesionales[3].split(",");
+        String[] tablaIdiomas = ((String) modelo.getValueAt(row, 8)).split(",");
+        isThere = false;
+        for (String string : tablaIdiomas) {
+            for (String id : idiomas) {
+                if (string.equals(id)) {
+                    isThere = true;
+                }
+            }
+        }
+        if (!isThere) {
+            return false;
+        }
+        System.out.println("c4");
+        //validar certificaciones
+        if (profesionales[4] == null) {
+            return false;
+        }
+        String[] certificaciones = profesionales[4].split(",");
+        String[] tablaCerti = ((String) modelo.getValueAt(row, 9)).split(",");
+        isThere = false;
+        for (String string : tablaCerti) {
+            for (String id : certificaciones) {
+                if (string.equals(id)) {
+                    isThere = true;
+                }
+            }
+        }
+        if (!isThere) {
+            return false;
+        }
+        System.out.println("c5");
+        return true;
+    }
+
+    public boolean validarSolicitudSalario() {
+        DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+        int row = jt_EmpleosDisponibles.getSelectedRow();
+        String[] puestos = ((String) modelo.getValueAt(row, 1)).split(",");
+        String[] solicitud = admin.getSolicitud(userid)[3].split(",");
+        if (solicitud == null) {
+            return false;
+        }
+        boolean isThere = false;
+        for (String string : solicitud) {
+            for (String puesto : puestos) {
+                if (string.equals(puesto)) {
+                    if (Double.parseDouble(admin.getPuesto(puesto)[2]) >= Double.parseDouble(solicitud[7])) {
+                        isThere = true;
+                    }
+                }
+            }
+        }
+
+        return isThere;
+
+    }
+
+    public int educationlvl(String edu) {
+        if (edu.equals("Educacion Media")) {
+            return 1;
+        } else if (edu.equals("Grado")) {
+            return 2;
+        } else if (edu.equals("Universitario")) {
+            return 3;
+        } else if (edu.equals("Posgrado")) {
+            return 4;
+        } else if (edu.equals("Master")) {
+            return 5;
+        } else if (edu.equals("Doctorado")) {
+            return 6;
+        }
+        return -1;
     }
 
     @SuppressWarnings("unchecked")
@@ -376,7 +614,7 @@ public class Main extends javax.swing.JFrame {
         MenuBar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         tf_buscar = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
+        lb_busqueda = new javax.swing.JLabel();
         bt_EDisponibles = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -895,7 +1133,7 @@ public class Main extends javax.swing.JFrame {
 
         jPanel17.add(bt_crearU, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 120, 40));
 
-        ff_noCuenta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        ff_noCuenta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
         ff_noCuenta.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jPanel17.add(ff_noCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, 200, 30));
 
@@ -958,6 +1196,9 @@ public class Main extends javax.swing.JFrame {
 
         bt_guardarP.setBackground(new java.awt.Color(195, 22, 28));
         bt_guardarP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_guardarPMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 bt_guardarPMouseEntered(evt);
             }
@@ -1189,10 +1430,20 @@ public class Main extends javax.swing.JFrame {
                 PostularMouseClicked(evt);
             }
         });
+        Postular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PostularActionPerformed(evt);
+            }
+        });
         menuPostular.add(Postular);
 
         Contratar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/contrato.png"))); // NOI18N
         Contratar.setText("Contratar");
+        Contratar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ContratarActionPerformed(evt);
+            }
+        });
         menuContratar.add(Contratar);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1596,7 +1847,10 @@ public class Main extends javax.swing.JFrame {
         lb_EcivilP2.setForeground(new java.awt.Color(55, 55, 55));
         lb_EcivilP2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lb_EcivilP2.setText("Trabajos Anteriores del usuario");
-        jPanel9.add(lb_EcivilP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 280, -1));
+        lb_EcivilP2.setToolTipText("");
+        lb_EcivilP2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lb_EcivilP2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        jPanel9.add(lb_EcivilP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 870, 390));
 
         jTabbedPane1.addTab("Historial de Trabajo", jPanel9);
 
@@ -1686,8 +1940,13 @@ public class Main extends javax.swing.JFrame {
         });
         MenuBar.add(tf_buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 250, 30));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lupa.png"))); // NOI18N
-        MenuBar.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
+        lb_busqueda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lupa.png"))); // NOI18N
+        lb_busqueda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lb_busquedaMouseClicked(evt);
+            }
+        });
+        MenuBar.add(lb_busqueda, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
 
         bt_EDisponibles.setBackground(new java.awt.Color(255, 255, 255));
         bt_EDisponibles.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1878,13 +2137,13 @@ public class Main extends javax.swing.JFrame {
         jt_EmpleosDisponibles.setBackground(new java.awt.Color(255, 255, 255));
         jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Empresa ID", "Puesto", "Requisitos Personales", "Antecedentes", "Nivel Educativo", "Tipo de Trabajo", "Experiencia", "Idiomas Requeridos", "Certificaciones Requeridos", "Modalidad"
+                "Empresa ID", "Puesto", "Requisitos Personales", "Antecedentes", "Nivel Educativo", "Tipo de Trabajo", "Experiencia", "Idiomas Requeridos", "Certificaciones Requeridos", "Modalidad", "Empleo ID"
             }
         ));
         jt_EmpleosDisponibles.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2103,7 +2362,7 @@ public class Main extends javax.swing.JFrame {
         jl_name1.setText("EMPRESA");
         jl_name1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jl_name1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        pn_perfilEmpresa.add(jl_name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 280, -1));
+        pn_perfilEmpresa.add(jl_name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 280, -1));
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/perfil de empresa.png"))); // NOI18N
@@ -2449,7 +2708,7 @@ public class Main extends javax.swing.JFrame {
 
     private void bt_PDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_PDisponiblesMouseClicked
         pn_postulantes.setVisible(false);
-
+        llenarEmpleosDisponibles();
         if (pn_PuestosDisponibles.isVisible()) {
             pn_PuestosDisponibles.setVisible(false);
         } else {
@@ -2508,11 +2767,13 @@ public class Main extends javax.swing.JFrame {
                 Postulante.setVisible(true);
                 pn_perfilPersona.setVisible(true);
                 llenarDatosPostulante();
+                loadPreviousJobs();
             } else {
                 Login.setVisible(false);
                 Reclutador.setVisible(true);
                 Postulante.setVisible(false);
                 bt_regresar.setVisible(false);
+                llenarDatosEmpresa();
             }
 
         } else {
@@ -2594,10 +2855,21 @@ public class Main extends javax.swing.JFrame {
             lb_tituloJDEmpresa.setText("Crear Nueva Empresa");
             lb_btModEmpresa.setText("Crear Perfil");
             pn_fondoModE.setBackground(new Color(11, 103, 194));
-            AbrirJD(jd_Empresa);
+            if(crearUsuario()){
+               AbrirJD(jd_Empresa);
+            }else{
+                JOptionPane.showMessageDialog(this, "Ya existe una cuenta con ese id");
+            }
+          
         } else {
-            AbrirJD(jd_Persona);
+            if(crearUsuario()){
+               AbrirJD(jd_Persona);
+            }else{
+                JOptionPane.showMessageDialog(this, "Ya existe una cuenta con ese id");
+            }
         }
+      
+        vaciarUsuario();
     }//GEN-LAST:event_bt_crearUMouseClicked
 
     private void tb_modificarPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_modificarPMouseClicked
@@ -2740,9 +3012,11 @@ public class Main extends javax.swing.JFrame {
     private void bt_guardarEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_guardarEMouseClicked
         if (lb_btModEmpresa.getText().equals("Crear Perfil")) {
             //meten codigo para crear el nuevo perfil
+            crearEmpresa();
         } else {
             // el botón modifica el perfil de la empresa
         }
+        vaciarEmpresa();
     }//GEN-LAST:event_bt_guardarEMouseClicked
 
     private void jt_EmpleosDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_EmpleosDisponiblesMouseClicked
@@ -2783,6 +3057,38 @@ public class Main extends javax.swing.JFrame {
     private void bt_añadirPuestoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_añadirPuestoMouseExited
+
+    private void bt_guardarPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_guardarPMouseClicked
+        crearPersona();
+        vaciarPersona();
+    }//GEN-LAST:event_bt_guardarPMouseClicked
+
+    private void lb_busquedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_busquedaMouseClicked
+        fillFilter();
+    }//GEN-LAST:event_lb_busquedaMouseClicked
+
+    private void ContratarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContratarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ContratarActionPerformed
+
+    private void PostularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PostularActionPerformed
+       if(jt_EmpleosDisponibles.getSelectedColumn() != -1){
+           if(validarSolicitudRequerimientos()){
+               if(!validarSolicitudSalario()){
+                   int x =JOptionPane.showConfirmDialog(this, "El trabajo no cumple con el salario deseado.\nDesea aplicar igual?");
+                   if(x == JOptionPane.YES_OPTION){
+                       DefaultTableModel model = (DefaultTableModel)jt_EmpleosDisponibles.getModel();
+                   admin.solicitarEmpleo(userid,(String) model.getValueAt(jt_EmpleosDisponibles.getSelectedRow(), 11));
+                   }
+               }else{
+                   DefaultTableModel model = (DefaultTableModel)jt_EmpleosDisponibles.getModel();
+                   admin.solicitarEmpleo(userid,(String) model.getValueAt(jt_EmpleosDisponibles.getSelectedRow(), 11));
+               }
+           }else{
+               JOptionPane.showMessageDialog(null, "Que gay");
+           }
+       }
+    }//GEN-LAST:event_PostularActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2837,6 +3143,7 @@ public class Main extends javax.swing.JFrame {
         String[] mails = cadena.split(",");
         DefaultListModel modelo
                 = (DefaultListModel) list.getModel();
+        modelo.removeAllElements();
         for (String mail : mails) {
             modelo.addElement((String) mail);
         }
@@ -2868,27 +3175,207 @@ public class Main extends javax.swing.JFrame {
         return s;
     }
 
-    public void LlenarTabla(String datos, JTable table) {
-        JSONArray ar = new JSONArray(datos);
+    public void llenarEmpleosDisponibles() {
         try {
-            jt_EmpleosDisponibles.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
-                "Puestos", "PK", "Nombre", "Requisitos Personales", "Antecedentes", "Nivel Educativo", "Tipo",
-                "Experiencia(años)", "Idiomas", "Certificados", "Modalidad"}));
+            DefaultListModel modelito = new DefaultListModel();
+            String[] businessData = admin.getEmpresa(userid);
+
+            String[] empleosEmpresa = admin.getEmpleo(businessData[0], businessData[1]);
+
+            for (int i = 0; i < empleosEmpresa.length; i++) {
+                modelito.addElement(empleosEmpresa[i]);
+            }
+
+            jl_EDisponibles.setModel(modelito);
+        } catch (Exception e) {
+        }
+    }
+
+    public void llenarDatosEmpresa() {
+        String[] businessData = admin.getEmpresa(userid);
+        jl_name1.setText(businessData[0]);
+        jl_correoE.setText(businessData[1]);
+        jl_CIF.setText(businessData[2]);
+        jl_telE.setText(businessData[3]);
+        jl_Director.setText(businessData[4]);
+        jl_direccionE.setText(businessData[6]);
+        for (int i = 0; i < businessData.length; i++) {
+            System.out.print("i:"
+                    + i);
+            System.out.println("[" + businessData[i] + "]");
+        }
+    }
+
+    public boolean crearUsuario() {
+        try {
+            String rol = "";
+            String username = tf_Cusuario.getText();
+            String contra = tf_contraseña.getText();
+            String cuenta = ff_noCuenta.getText().replace(",", "");
+
+            System.out.println("cuenta: " + cuenta);
+            if (bt_empresa.isSelected()) {
+                rol = "empresa";
+            } else if (bt_persona.isSelected()) {
+                rol = "usuario";
+            }
+            return admin.createUser(username, contra, "user_" + cuenta, rol);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void crearEmpresa() {
+        try {
+            String[] datos = new String[7];
+
+            datos[0] = "emp_" + ff_noCuenta.getText().replace(",", "");
+            datos[1] = tf_CIF.getText(); //Cif
+            datos[2] = tf_correoE.getText(); //Correo
+            datos[3] = tf_direccionD.getText(); //Dirección
+            datos[4] = tf_director.getText(); //Director
+            datos[5] = tf_NombreE.getText(); //Nombre
+            datos[6] = ff_telefonoP1.getText(); //Teléfono
+
+            admin.createEmpresa(datos, 0);
+        } catch (Exception e) {
+        }
+    }
+
+    public void vaciarEmpresa() {
+        tf_NombreE.setText("");
+        tf_CIF.setText("");
+        tf_director.setText("");
+        tf_correoE.setText("");
+        ff_telefonoP1.setText("");
+        tf_direccionD.setText("");
+    }
+
+    public void vaciarPersona() {
+        tf_NombreP.setText("");
+        tf_apellido.setText("");
+        ff_Edad.setText("");
+        tf_correoP.setText("");
+        ff_telefonoP.setText("");
+        tf_nacionalidad.setText("");
+        bt_M.setSelected(false);
+        bt_F.setSelected(false);
+    }
+
+    public void vaciarUsuario() {
+        tf_Cusuario.setText("");
+        tf_contraseña.setText("");
+        ff_noCuenta.setText("");
+        bt_empresa.setSelected(false);
+        bt_persona.setSelected(false);
+    }
+
+    public boolean crearPersona() {
+        try {
+            String[] values = new String[8];
+
+            values[0] = "user_" + ff_noCuenta.getText().replace(",", "");
+            values[1] = tf_apellido.getText();
+            values[2] = tf_correoP.getText();
+            values[3] = ff_Edad.getText();
+            values[4] = tf_nacionalidad.getText();
+            values[5] = tf_NombreP.getText();
+            String genero = "";
+            if (bt_M.isSelected()) {
+                genero = "M";
+            } else if (bt_F.isSelected()) {
+                genero = "F";
+            }
+            values[6] = genero;
+            values[7] = ff_telefonoP.getText();
+
+           return admin.createPersonal_pf(values, 0);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void LlenarTabla(String datos, JTable table, int flag){
+        boolean addrow = true; 
+        JSONArray ar = new JSONArray(datos);
+        System.out.println("Datos: "+datos);
+        try {
+            table.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
+                "Empresa ID", "Puesto", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
+                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
             for (int j = 0; j < ar.length(); j++) {
                 JSONObject o = ar.getJSONObject(j);
-
-                Object[] row = {ArraytoString(o.getJSONArray("Puestos")), o.getString("PK"),
-                    o.getString("Nombre"), ArraytoString(o.getJSONArray("Requisitos_Personales")),
-                    o.getBoolean("Antecedentes"), o.getString("Nivel Educativo"), o.getString("Tipo"),
-                    o.getInt("AñosExperiencia"), ArraytoString(o.getJSONArray("Idiomas")),
-                    ArraytoString(o.getJSONArray("Certificaciones")), o.getString("Modalidad")};
-                DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
-                modelo.addRow(row);
-                jt_EmpleosDisponibles.setModel(modelo);
+                if (flag == 1) {//1 -> empleos postulados - vista postulantes
+                    ArrayList<String> empPost = getEmpresasPostuladas(admin.getSolicitudesDeUsuario(userid).toString());
+                    for (int i = 0; i < empPost.size(); i++) {
+                        if (o.getString("SK").equals(empPost.get(i))) {
+                            addrow = true; 
+                            break; 
+                        }else{
+                            addrow = false; 
+                        }
+                    }
+                }else{
+                    addrow = true; 
+                }
+                if (addrow) {
+                    Object[] row = {o.getString("PK"),
+                    o.getString("Nombre"),ArraytoString(o.getJSONArray("Requisitos_Personales")),
+                    o.getBoolean("Antecedentes"),o.getString("Nivel Educativo"),o.getString("Tipo"),
+                    o.getInt("AñosExperiencia"),ArraytoString(o.getJSONArray("Idiomas")),
+                    ArraytoString(o.getJSONArray("Certificaciones")),o.getString("Modalidad")};
+                    DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+                    modelo.addRow(row);
+                    table.setModel(modelo);
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    public String empPost(String emp){
+        ArrayList<String> empPost = getEmpresasPostuladas(admin.getSolicitudesDeUsuario(userid).toString());
+        String s = admin.getEmpleos().toString();
+        JSONArray ar = new JSONArray(s);
+        for (int j = 0; j < ar.length(); j++) {
+            JSONObject o = ar.getJSONObject(j);
+            
+            System.out.println("SK: " + o.getString("SK"));
+        }
+        for (int i = 0; i < empPost.size(); i++) {
+            
+        }
+        return null; 
+    }
+    public ArrayList<String> getEmpresasPostuladas(String emp){
+        JSONArray ar = new JSONArray(emp);
+        ArrayList<String> empresas = new ArrayList();
+        for (int j = 0; j < ar.length(); j++) {
+            JSONObject o = ar.getJSONObject(j);
+            empresas.add(o.getString("SK"));
+        }
+        return empresas;
+    }
+    
+    public String CuentasFamiliares(String data) {
+        JSONArray ar = new JSONArray(data);
+        String user = "";
+        for (int j = 0; j < ar.length(); j++) {
+            JSONObject o = ar.getJSONObject(j);
+            if (o.getString("SK").equals(userid)) {
+                user = o.getString("PK");
+            }else if(o.getString("PK").equals(userid)){
+                user = o.getString("SK");
+            }else{
+                System.out.println("Ojito: No hay coincidencias con el user");
+            }
+        }
+        System.out.println("Datos: "+Arrays.toString(admin.getPersonal_pf(user)));
+        String [] dp = admin.getPersonal_pf(user);
+        String s = "|Nombre: "+dp[0]+" "+dp[6]+"|"
+                +"Correo: "+dp[1]+"|"
+                +"ID: "+dp[7]+"|";
+        return s; 
     }
 
 
@@ -2974,7 +3461,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -3201,6 +3687,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel lb_SalarioExpectante;
     private javax.swing.JLabel lb_TrabActual;
     private javax.swing.JLabel lb_btModEmpresa;
+    private javax.swing.JLabel lb_busqueda;
     private javax.swing.JLabel lb_dirrecionP;
     private javax.swing.JLabel lb_hijosP;
     private javax.swing.JLabel lb_infoMed;
