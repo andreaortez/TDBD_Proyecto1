@@ -77,7 +77,7 @@ public class Admin {
         HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
         values.put("PK", new AttributeValue("usr_" + username));
         values.put("SK", new AttributeValue(username));
-        values.put("Nombre", new AttributeValue(username));
+        values.put("Nombre", new AttributeValue(user_id));
         values.put("Obj", new AttributeValue(obj));
         try {
             client.putItem("Centro_De_Empleo", values);

@@ -895,7 +895,7 @@ public class Main extends javax.swing.JFrame {
 
         jPanel17.add(bt_crearU, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 120, 40));
 
-        ff_noCuenta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        ff_noCuenta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter()));
         ff_noCuenta.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jPanel17.add(ff_noCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, 200, 30));
 
@@ -958,6 +958,9 @@ public class Main extends javax.swing.JFrame {
 
         bt_guardarP.setBackground(new java.awt.Color(195, 22, 28));
         bt_guardarP.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_guardarPMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 bt_guardarPMouseEntered(evt);
             }
@@ -2103,7 +2106,7 @@ public class Main extends javax.swing.JFrame {
         jl_name1.setText("EMPRESA");
         jl_name1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jl_name1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        pn_perfilEmpresa.add(jl_name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 170, 280, -1));
+        pn_perfilEmpresa.add(jl_name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 280, -1));
 
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/perfil de empresa.png"))); // NOI18N
@@ -2449,7 +2452,7 @@ public class Main extends javax.swing.JFrame {
 
     private void bt_PDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_PDisponiblesMouseClicked
         pn_postulantes.setVisible(false);
-
+        llenarEmpleosDisponibles();
         if (pn_PuestosDisponibles.isVisible()) {
             pn_PuestosDisponibles.setVisible(false);
         } else {
@@ -2513,6 +2516,7 @@ public class Main extends javax.swing.JFrame {
                 Reclutador.setVisible(true);
                 Postulante.setVisible(false);
                 bt_regresar.setVisible(false);
+                llenarDatosEmpresa();
             }
 
         } else {
@@ -2598,6 +2602,8 @@ public class Main extends javax.swing.JFrame {
         } else {
             AbrirJD(jd_Persona);
         }
+        crearUsuario();
+        vaciarUsuario();
     }//GEN-LAST:event_bt_crearUMouseClicked
 
     private void tb_modificarPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_modificarPMouseClicked
@@ -2740,9 +2746,11 @@ public class Main extends javax.swing.JFrame {
     private void bt_guardarEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_guardarEMouseClicked
         if (lb_btModEmpresa.getText().equals("Crear Perfil")) {
             //meten codigo para crear el nuevo perfil
+            crearEmpresa();
         } else {
             // el botón modifica el perfil de la empresa
         }
+        vaciarEmpresa();
     }//GEN-LAST:event_bt_guardarEMouseClicked
 
     private void jt_EmpleosDisponiblesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_EmpleosDisponiblesMouseClicked
@@ -2783,6 +2791,11 @@ public class Main extends javax.swing.JFrame {
     private void bt_añadirPuestoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseExited
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_añadirPuestoMouseExited
+
+    private void bt_guardarPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_guardarPMouseClicked
+        crearPersona();
+        vaciarPersona();
+    }//GEN-LAST:event_bt_guardarPMouseClicked
 
     /**
      * @param args the command line arguments
@@ -2866,6 +2879,124 @@ public class Main extends javax.swing.JFrame {
             }
         }
         return s;
+    }
+
+    public void llenarEmpleosDisponibles() {
+        try {
+            DefaultListModel modelito = new DefaultListModel();
+            String[] businessData = admin.getEmpresa(userid);
+
+            String[] empleosEmpresa = admin.getEmpleo(businessData[0], businessData[1]);
+
+            for (int i = 0; i < empleosEmpresa.length; i++) {
+                modelito.addElement(empleosEmpresa[i]);
+            }
+
+            jl_EDisponibles.setModel(modelito);
+        } catch (Exception e) {
+        }
+    }
+
+    public void llenarDatosEmpresa() {
+        String[] businessData = admin.getEmpresa(userid);
+        jl_name1.setText(businessData[0]);
+        jl_correoE.setText(businessData[1]);
+        jl_CIF.setText(businessData[2]);
+        jl_telE.setText(businessData[3]);
+        jl_Director.setText(businessData[4]);
+        jl_direccionE.setText(businessData[6]);
+        for (int i = 0; i < businessData.length; i++) {
+            System.out.print("i:"
+                    + i);
+            System.out.println("["+ businessData[i]+"]");
+        } 
+    }
+
+    public void crearUsuario() {
+        try {
+            String rol = "";
+            String username = tf_Cusuario.getText();
+            String contra = tf_contraseña.getText();
+            String cuenta = ff_noCuenta.getText().replace(",", "");
+
+            System.out.println("cuenta: " + cuenta);
+            if (bt_empresa.isSelected()) {
+                rol = "empresa";
+            } else if (bt_persona.isSelected()) {
+                rol = "usuario";
+            }
+            admin.createUser(username, contra, "user_" + cuenta, rol);
+        } catch (Exception e) {
+        }
+    }
+
+    public void crearEmpresa() {
+        try {
+            String[] datos = new String[7];
+
+            datos[0] = "emp_" + ff_noCuenta.getText().replace(",", "");
+            datos[1] = tf_CIF.getText(); //Cif
+            datos[2] = tf_correoE.getText(); //Correo
+            datos[3] = tf_direccionD.getText(); //Dirección
+            datos[4] = tf_director.getText(); //Director
+            datos[5] = tf_NombreE.getText(); //Nombre
+            datos[6] = ff_telefonoP1.getText(); //Teléfono
+
+            admin.createEmpresa(datos, 0);
+        } catch (Exception e) {
+        }
+    }
+
+    public void vaciarEmpresa() {
+        tf_NombreE.setText("");
+        tf_CIF.setText("");
+        tf_director.setText("");
+        tf_correoE.setText("");
+        ff_telefonoP1.setText("");
+        tf_direccionD.setText("");
+    }
+
+    public void vaciarPersona() {
+        tf_NombreP.setText("");
+        tf_apellido.setText("");
+        ff_Edad.setText("");
+        tf_correoP.setText("");
+        ff_telefonoP.setText("");
+        tf_nacionalidad.setText("");
+        bt_M.setSelected(false);
+        bt_F.setSelected(false);
+    }
+
+    public void vaciarUsuario() {
+        tf_Cusuario.setText("");
+        tf_contraseña.setText("");
+        ff_noCuenta.setText("");
+        bt_empresa.setSelected(false);
+        bt_persona.setSelected(false);
+    }
+
+    public void crearPersona() {
+        try {
+            String[] values = new String[8];
+
+            values[0] = "user_" + ff_noCuenta.getText().replace(",", "");
+            values[1] = tf_apellido.getText();
+            values[2] = tf_correoP.getText();
+            values[3] = ff_Edad.getText();
+            values[4] = tf_nacionalidad.getText();
+            values[5] = tf_NombreP.getText();
+            String genero = "";
+            if (bt_M.isSelected()) {
+                genero = "M";
+            } else if (bt_F.isSelected()) {
+                genero = "F";
+            }
+            values[6] = genero;
+            values[7] = ff_telefonoP.getText();
+
+            admin.createPersonal_pf(values, 0);
+        } catch (Exception e) {
+        }
     }
 
     public void LlenarTabla(String datos, JTable table) {
