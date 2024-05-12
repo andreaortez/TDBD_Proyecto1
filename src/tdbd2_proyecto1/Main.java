@@ -35,7 +35,7 @@ import org.json.JSONString;
 public class Main extends javax.swing.JFrame {
 
     Admin admin = new Admin();
-    String userid = "";
+    String userid = "", pass = "", user = "";
     ArrayList<String> atributosPersona = new ArrayList();
     int pJobNumber = 0;
     
@@ -613,6 +613,12 @@ public class Main extends javax.swing.JFrame {
         jSeparator59 = new javax.swing.JSeparator();
         jLabel114 = new javax.swing.JLabel();
         lb_SalarioExpectante = new javax.swing.JLabel();
+        jSeparator64 = new javax.swing.JSeparator();
+        jLabel121 = new javax.swing.JLabel();
+        lb_TC = new javax.swing.JLabel();
+        jSeparator65 = new javax.swing.JSeparator();
+        jLabel122 = new javax.swing.JLabel();
+        lb_TT = new javax.swing.JLabel();
         Postulante = new javax.swing.JPanel();
         MenuBar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -1881,39 +1887,65 @@ public class Main extends javax.swing.JFrame {
         jLabel112.setForeground(new java.awt.Color(0, 114, 177));
         jLabel112.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel112.setText("Puestos Aceptables");
-        jPanel11.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 280, -1));
-        jPanel11.add(jSeparator58, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 880, 10));
+        jPanel11.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 280, -1));
+        jPanel11.add(jSeparator58, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 880, 10));
 
         jl_alergias1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jl_alergias1.setModel(new DefaultListModel ());
         jScrollPane13.setViewportView(jl_alergias1);
 
-        jPanel11.add(jScrollPane13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 880, 120));
+        jPanel11.add(jScrollPane13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 880, 90));
 
         jLabel113.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel113.setForeground(new java.awt.Color(0, 114, 177));
         jLabel113.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel113.setText("Puestos Inaceptables");
-        jPanel11.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 280, -1));
+        jPanel11.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 280, -1));
 
         jl_alergias2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jl_alergias2.setModel(new DefaultListModel ());
         jScrollPane14.setViewportView(jl_alergias2);
 
-        jPanel11.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 880, 120));
-        jPanel11.add(jSeparator59, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 880, 10));
+        jPanel11.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 880, 90));
+        jPanel11.add(jSeparator59, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 880, 10));
 
         jLabel114.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel114.setForeground(new java.awt.Color(0, 114, 177));
         jLabel114.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel114.setText("Salario Expectante");
-        jPanel11.add(jLabel114, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 280, -1));
+        jPanel11.add(jLabel114, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 280, -1));
 
         lb_SalarioExpectante.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lb_SalarioExpectante.setForeground(new java.awt.Color(55, 55, 55));
         lb_SalarioExpectante.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lb_SalarioExpectante.setText("SE del usuario");
-        jPanel11.add(lb_SalarioExpectante, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 280, -1));
+        jPanel11.add(lb_SalarioExpectante, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 280, -1));
+        jPanel11.add(jSeparator64, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 880, 10));
+
+        jLabel121.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel121.setForeground(new java.awt.Color(0, 114, 177));
+        jLabel121.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel121.setText("Tipo de Contrato");
+        jPanel11.add(jLabel121, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 280, -1));
+
+        lb_TC.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lb_TC.setForeground(new java.awt.Color(55, 55, 55));
+        lb_TC.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lb_TC.setText("TC del usuario");
+        jPanel11.add(lb_TC, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 280, -1));
+        jPanel11.add(jSeparator65, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 470, 880, 10));
+
+        jLabel122.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel122.setForeground(new java.awt.Color(0, 114, 177));
+        jLabel122.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel122.setText("Tipo de Trabajo");
+        jPanel11.add(jLabel122, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 280, -1));
+
+        lb_TT.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lb_TT.setForeground(new java.awt.Color(55, 55, 55));
+        lb_TT.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lb_TT.setText("TT del usuario");
+        jPanel11.add(lb_TT, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, 280, -1));
 
         jTabbedPane1.addTab("Solicitud de Trabajo", jPanel11);
 
@@ -2180,6 +2212,7 @@ public class Main extends javax.swing.JFrame {
                 "Puesto", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jt_EmpleosPostulados.setEnabled(false);
         jScrollPane2.setViewportView(jt_EmpleosPostulados);
 
         pn_EmpleosPostulados.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 920, 570));
@@ -2565,7 +2598,7 @@ public class Main extends javax.swing.JFrame {
         bt_iniciarSesión.setLayout(bt_iniciarSesiónLayout);
         bt_iniciarSesiónLayout.setHorizontalGroup(
             bt_iniciarSesiónLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+            .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
         );
         bt_iniciarSesiónLayout.setVerticalGroup(
             bt_iniciarSesiónLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2766,6 +2799,8 @@ public class Main extends javax.swing.JFrame {
 
     private void bt_iniciarSesiónMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_iniciarSesiónMouseClicked
         userid = admin.login("usr_" + tf_usuario.getText(), pf_contra.getText());
+        user = tf_usuario.getText(); 
+        pass = pf_contra.getText();
 
         if (userid != null) {
             String[] split = userid.split("_");
@@ -3013,9 +3048,10 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_modificarPerfilEMouseExited
 
     private void bt_eliminarPerfilEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_eliminarPerfilEMouseClicked
-        int r = JOptionPane.showConfirmDialog(Postulante, "Desea eliminar su cuenta?", "Eliminar Cuenta", YES_NO_OPTION);
+        int r = JOptionPane.showConfirmDialog(Reclutador, "Desea eliminar su cuenta?", "Eliminar Cuenta", YES_NO_OPTION);
         if (r == 0) {
-            //codigo para borrarla
+            admin.deleteUser("emp_" + user, pass, userid);
+            admin.delete(userid);
             JOptionPane.showMessageDialog(this, "¡Cuenta Eliminada con Éxito!");
             LimpiarSesion();
             Reclutador.setVisible(false);
@@ -3566,6 +3602,7 @@ public class Main extends javax.swing.JFrame {
         return s;
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Contratar;
     private javax.swing.JPanel Login;
@@ -3640,6 +3677,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel119;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel120;
+    private javax.swing.JLabel jLabel121;
+    private javax.swing.JLabel jLabel122;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel144;
@@ -3825,6 +3864,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator61;
     private javax.swing.JSeparator jSeparator62;
     private javax.swing.JSeparator jSeparator63;
+    private javax.swing.JSeparator jSeparator64;
+    private javax.swing.JSeparator jSeparator65;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
@@ -3872,6 +3913,8 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel lb_SM;
     private javax.swing.JLabel lb_SSN;
     private javax.swing.JLabel lb_SalarioExpectante;
+    private javax.swing.JLabel lb_TC;
+    private javax.swing.JLabel lb_TT;
     private javax.swing.JLabel lb_TrabActual;
     private javax.swing.JLabel lb_btModEmpresa;
     private javax.swing.JLabel lb_busqueda;
