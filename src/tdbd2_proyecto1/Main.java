@@ -3378,6 +3378,7 @@ public class Main extends javax.swing.JFrame {
         return s; 
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem Contratar;
     private javax.swing.JPanel Login;
