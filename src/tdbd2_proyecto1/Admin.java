@@ -67,6 +67,7 @@ public class Admin {
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
         //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
+        
     }
 
     //CREATES
@@ -403,7 +404,7 @@ public class Admin {
     }
 
     //otros creates 
-    public int createPuesto(int puestosNumber, String name, String type) {
+    public int createPuesto(int puestosNumber, String name, String type, Double sueldo) {
         puestosNumber++;
         String pk = "puesto_" + puestosNumber;
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
@@ -412,6 +413,7 @@ public class Admin {
         keyValues.put("SK", new AttributeValue("descripcion"));
         keyValues.put("Obj", new AttributeValue("puesto"));
         keyValues.put("Nombre", new AttributeValue(name));
+        keyValues.put("Sueldo", new AttributeValue(Double.toString(sueldo)));
         keyValues.put("Tipo", new AttributeValue(type));
         //ejecutar el create
 
@@ -421,6 +423,7 @@ public class Admin {
 
     //UPDATE
     //este funciona como create si es su primer trabajo, y un create de trabajos anteriores
+    //el jobNumber es (pJobNumber+1)
     public int updateJob(String user, int jobNumber, Object[] values) {
         HashMap<String, AttributeValue> keyValues;
         String[] array = getCurrentJob(user);
@@ -690,7 +693,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("academic_pf"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+      
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -796,8 +799,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("emp_actual"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
-
+  
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
 
         String[] datos = new String[results.size()];
@@ -949,6 +951,9 @@ public class Admin {
             String data = results.get(key).getS();
 
             datos[i] = data;
+            if(key.equals("Sueldo")){
+                datos[i] = results.get(key).getN();
+            }
             i++;
         }
 
@@ -1075,7 +1080,7 @@ public class Admin {
 
     public ArrayList<String> getEmpleos() {
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
-
+     
         Table table = new Table(client, "Centro_De_Empleo");
 
         ItemCollection<ScanOutcome> results2 = table.scan(query2);
@@ -1097,7 +1102,7 @@ public class Admin {
     public ArrayList<String> getEmpleo(String empleoid) {
 //este busca un empleo por medio de su id
         ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", empleoid).withString(":v_id", "empleo"));
-
+        
         Table table = new Table(client, "Centro_De_Empleo");
 
         ItemCollection<ScanOutcome> results2 = table.scan(query2);
@@ -1231,7 +1236,7 @@ public class Admin {
     }
 
     public ArrayList<String> getFalimiares(String userId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Tipo = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "familia"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
@@ -1277,6 +1282,29 @@ public class Admin {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public ArrayList<String> filtroEmpleados(String queue, ValueMap valores, HashMap names) {
+        try {
+
+            ScanSpec query2 = new ScanSpec().withFilterExpression(queue).withValueMap(valores).withNameMap(names);
+
+            Table table = new Table(client, "Centro_De_Empleo");
+
+            ItemCollection<ScanOutcome> results2 = table.scan(query2);
+            ArrayList<String> respuesta = new ArrayList<>();
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+            return respuesta;
+        } catch (Exception E) {
+            System.out.println("llegue");
+            E.printStackTrace();
+            return null;
         }
     }
 
