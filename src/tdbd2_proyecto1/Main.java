@@ -235,24 +235,24 @@ public class Main extends javax.swing.JFrame {
         pn_fondoModE = new javax.swing.JPanel();
         jPanel23 = new javax.swing.JPanel();
         jLabel97 = new javax.swing.JLabel();
-        tf_NombreP1 = new javax.swing.JTextField();
+        tf_NombreE = new javax.swing.JTextField();
         jSeparator52 = new javax.swing.JSeparator();
         jLabel98 = new javax.swing.JLabel();
-        tf_apellido1 = new javax.swing.JTextField();
+        tf_CIF = new javax.swing.JTextField();
         jSeparator53 = new javax.swing.JSeparator();
         bt_guardarE = new javax.swing.JPanel();
         lb_btModEmpresa = new javax.swing.JLabel();
         jLabel100 = new javax.swing.JLabel();
-        tf_correoP1 = new javax.swing.JTextField();
+        tf_director = new javax.swing.JTextField();
         jSeparator54 = new javax.swing.JSeparator();
         jLabel101 = new javax.swing.JLabel();
-        tf_nacionalidad1 = new javax.swing.JTextField();
+        tf_direccionD = new javax.swing.JTextField();
         ff_telefonoP1 = new javax.swing.JFormattedTextField();
         jSeparator56 = new javax.swing.JSeparator();
         jSeparator57 = new javax.swing.JSeparator();
         jLabel103 = new javax.swing.JLabel();
         jLabel102 = new javax.swing.JLabel();
-        ff_telefonoP2 = new javax.swing.JFormattedTextField();
+        tf_correoE = new javax.swing.JTextField();
         lb_tituloJDEmpresa = new javax.swing.JLabel();
         jd_ModificarPersona = new javax.swing.JDialog();
         jPanel7 = new javax.swing.JPanel();
@@ -1040,8 +1040,8 @@ public class Main extends javax.swing.JFrame {
         jLabel97.setText("Nombre");
         jPanel23.add(jLabel97, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, 30));
 
-        tf_NombreP1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel23.add(tf_NombreP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 200, 30));
+        tf_NombreE.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel23.add(tf_NombreE, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 200, 30));
         jPanel23.add(jSeparator52, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 400, 30));
 
         jLabel98.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -1049,8 +1049,8 @@ public class Main extends javax.swing.JFrame {
         jLabel98.setText("CIF");
         jPanel23.add(jLabel98, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, -1, 30));
 
-        tf_apellido1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel23.add(tf_apellido1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, 200, 30));
+        tf_CIF.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel23.add(tf_CIF, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, 200, 30));
         jPanel23.add(jSeparator53, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 400, 400, 30));
 
         bt_guardarE.setBackground(new java.awt.Color(195, 22, 28));
@@ -1080,8 +1080,8 @@ public class Main extends javax.swing.JFrame {
         jLabel100.setText("Director");
         jPanel23.add(jLabel100, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, 30));
 
-        tf_correoP1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel23.add(tf_correoP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 200, 30));
+        tf_director.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel23.add(tf_director, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 190, 200, 30));
         jPanel23.add(jSeparator54, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 400, 30));
 
         jLabel101.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -1089,8 +1089,8 @@ public class Main extends javax.swing.JFrame {
         jLabel101.setText("Teléfono");
         jPanel23.add(jLabel101, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, 30));
 
-        tf_nacionalidad1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel23.add(tf_nacionalidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 270, 200, 30));
+        tf_direccionD.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel23.add(tf_direccionD, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 200, 30));
 
         ff_telefonoP1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
         ff_telefonoP1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -1108,9 +1108,8 @@ public class Main extends javax.swing.JFrame {
         jLabel102.setText("Dirección");
         jPanel23.add(jLabel102, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 430, -1, 30));
 
-        ff_telefonoP2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        ff_telefonoP2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jPanel23.add(ff_telefonoP2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, 200, 30));
+        tf_correoE.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel23.add(tf_correoE, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 270, 200, 30));
 
         pn_fondoModE.add(jPanel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 460, 550));
 
@@ -2692,6 +2691,8 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "¡Cuenta Eliminada con Éxito!");
             LimpiarSesion();
             Postulante.setVisible(false);
+            pn_DatosDelPostulante.setVisible(false);
+            pn_perfilPersona.setVisible(false);
         }
     }//GEN-LAST:event_bt_eliminarPerfilMouseClicked
 
@@ -2939,7 +2940,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField ff_noCuenta;
     private javax.swing.JFormattedTextField ff_telefonoP;
     private javax.swing.JFormattedTextField ff_telefonoP1;
-    private javax.swing.JFormattedTextField ff_telefonoP2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel100;
@@ -3227,20 +3227,21 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextArea ta_RP;
     private javax.swing.JTabbedPane tab1;
     private javax.swing.JTable tb_modificarP;
+    private javax.swing.JTextField tf_CIF;
     private javax.swing.JTextField tf_Cusuario;
+    private javax.swing.JTextField tf_NombreE;
     private javax.swing.JTextField tf_NombreP;
-    private javax.swing.JTextField tf_NombreP1;
     private javax.swing.JTextField tf_apellido;
-    private javax.swing.JTextField tf_apellido1;
     private javax.swing.JTextField tf_buscar;
     private javax.swing.JTextField tf_certificaciones;
     private javax.swing.JTextField tf_contraseña;
     private javax.swing.JTextField tf_contraseña1;
+    private javax.swing.JTextField tf_correoE;
     private javax.swing.JTextField tf_correoP;
-    private javax.swing.JTextField tf_correoP1;
+    private javax.swing.JTextField tf_direccionD;
+    private javax.swing.JTextField tf_director;
     private javax.swing.JTextField tf_empleo;
     private javax.swing.JTextField tf_nacionalidad;
-    private javax.swing.JTextField tf_nacionalidad1;
     private javax.swing.JTextField tf_puesto;
     private javax.swing.JTextField tf_sueldo;
     private javax.swing.JTextField tf_tipoEmpleo;
