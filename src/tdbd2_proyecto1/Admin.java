@@ -75,6 +75,18 @@ public class Admin {
     //x == otro numero -> modificar
     //creates de postulante
     public boolean createUser(String username, String password, String user_id, String obj) {
+        if(this.login(user_id, password) != null){
+            return false;
+        }
+        if(obj.equals("usuario")){
+            if(this.getPersonal_pf(user_id) != null){
+                return false;
+            }
+        }else{
+            if(this.getEmpresa(user_id) != null){
+                return false;
+            }
+        }
         HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
         values.put("PK", new AttributeValue("usr_" + username));
         values.put("SK", new AttributeValue(username));
