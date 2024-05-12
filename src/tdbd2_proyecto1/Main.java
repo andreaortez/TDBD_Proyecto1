@@ -117,23 +117,23 @@ public class Main extends javax.swing.JFrame {
         lb_Certificaciones.setText(dlp[4]);
         lb_ConEsp.setText(dlp[6]);
         
-//        //Historial Trabajo
-//        String[]ht = admin.getCurrentJob(userid);
-//        lb_TrabActual.setText(ht[0]);
-//        
-//        //Cuentas Familiares en la App
-//        System.out.println("++++++++++++++++++");
-//        //System.out.println("------------\n#: "+admin.getFalimiares(userid));
-//        lb_EcivilP1.setText(CuentasFamiliares(admin.getFalimiares(userid).toString()));
-//        System.out.println("++++++++++++++++++");
-//        
-//        //Solicitud Trabajo
-//        //System.out.println("*:"+Arrays.toString(admin.getSolicitud(userid)));
-//        String st = (Arrays.toString(admin.getSolicitud(userid))).substring(1, Arrays.toString(admin.getSolicitud(userid)).length()-1);
-//        String[]st_data = st.split(", ");
-//        llenarJList(jl_alergias1,st_data[3]);
-//        llenarJList(jl_alergias2,st_data[4]);
-//        lb_SalarioExpectante.setText(st_data[6]);
+        //Historial Trabajo
+        String[]ht = admin.getCurrentJob(userid);
+        lb_TrabActual.setText(ht[0]);
+        
+        //Cuentas Familiares en la App
+        System.out.println("++++++++++++++++++");
+        //System.out.println("------------\n#: "+admin.getFalimiares(userid));
+        lb_EcivilP1.setText(CuentasFamiliares(admin.getFalimiares(userid).toString()));
+        System.out.println("++++++++++++++++++");
+        
+        //Solicitud Trabajo
+        //System.out.println("*:"+Arrays.toString(admin.getSolicitud(userid)));
+        String st = (Arrays.toString(admin.getSolicitud(userid))).substring(1, Arrays.toString(admin.getSolicitud(userid)).length()-1);
+        String[]st_data = st.split(", ");
+        llenarJList(jl_alergias1,st_data[3]);
+        llenarJList(jl_alergias2,st_data[4]);
+        lb_SalarioExpectante.setText(st_data[6]);
     }
 
     public void fillFilter() {
@@ -188,9 +188,9 @@ public class Main extends javax.swing.JFrame {
         ArrayList<String> datos = admin.filtroEmpleados(filter, valores, names);
         if (datos != null) {
             System.out.println(datos.toString());
-            LlenarTabla(datos.toString(), jt_EmpleosDisponibles);
+            LlenarTabla(datos.toString(), jt_EmpleosDisponibles,0);
         } else {
-            LlenarTabla(admin.getEmpleos().toString(), jt_EmpleosDisponibles);
+            LlenarTabla(admin.getEmpleos().toString(), jt_EmpleosDisponibles,0);
         }
 
     }
