@@ -67,7 +67,7 @@ public class Admin {
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
         //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
-        
+        print(getCurrentJob("user_12241006"));
     }
 
     //CREATES
@@ -445,11 +445,11 @@ public class Admin {
             keyValues.put("PK", new AttributeValue(user));
             jobNumber++;
             keyValues.put("SK", new AttributeValue("pJob_" + Integer.toString(jobNumber)));
-            keyValues.put("Rango", new AttributeValue(array[3] + "-" + Integer.toString((int) values[3])));
-            System.out.println(array[4]);
-            System.out.println(array[0]);
-            String[] array2 = getEmpleo(array[4], array[0]);
-            keyValues.put("Titulo", new AttributeValue(array2[0]));
+            keyValues.put("Rango", new AttributeValue(array[3] + "-" + Integer.toString((int) values[2])));
+            ArrayList<String> empleo = getEmpleo(array[0]);
+             JSONArray ar = new JSONArray(empleo.toString());
+            
+            keyValues.put("Titulo", new AttributeValue(ar.getJSONObject(0).getString("Nombre")));
             client.putItem("Centro_De_Empleo", keyValues);
         }
         /*
@@ -462,7 +462,7 @@ public class Admin {
         deletion.put("PK", new AttributeValue((String) values[0]));
         deletion.put("SK", new AttributeValue((String) values[1]));
         for (int i = 0; i < keys.length; i++) {
-            if (i != 3) {
+            if (i != 2) {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
             } else {
                 keyValues.put(keys[i], new AttributeValue(Integer.toString((int) values[i])));
@@ -813,7 +813,9 @@ public class Admin {
         queue.put("SK", new AttributeValue("emp_actual"));
   
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
-
+        if(results == null){
+            return null;
+        }
         String[] datos = new String[results.size()];
         int i = 0;
 
@@ -826,7 +828,7 @@ public class Admin {
         }
 
         /*
-        orden: empleo (el id), (ignorar), (ignorar), año inicial, 
+        orden: empleo (el id), (ignorar), año inicial, 
          */
         return datos;
 
