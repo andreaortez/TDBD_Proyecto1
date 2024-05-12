@@ -1231,7 +1231,7 @@ public class Admin {
     }
 
     public ArrayList<String> getFalimiares(String userId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Tipo = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "familia"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
