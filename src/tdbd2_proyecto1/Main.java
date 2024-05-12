@@ -3034,7 +3034,7 @@ public class Main extends javax.swing.JFrame {
     public String convertirAString(String[] arr) {
         String cadena = "";
         for (int i = 0; i < arr.length; i++) {
-            if (arr.length == i) {
+            if (arr.length == i +1) {
                 cadena += arr[i];
             } else {
                 cadena += arr[i] + ",";
