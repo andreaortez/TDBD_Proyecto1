@@ -2818,7 +2818,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_cerrarSesiónRMouseExited
 
     private void bt_añadirPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPMouseClicked
-
+        crearEmpleo();
+        vaciarEmpleo();
     }//GEN-LAST:event_bt_añadirPMouseClicked
 
     private void bt_crearUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearUsuarioMouseClicked
@@ -2842,11 +2843,21 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_regresarMouseExited
 
     private void bt_añadirIdiomaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirIdiomaMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_idiomasAñadidos.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_idiomasAñadidos.getModel();
+        }
+        modelito.addElement(cb_idiomas.getSelectedItem());
+        jl_idiomasAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirIdiomaMouseClicked
 
     private void bt_añadirCertificacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirCertificacionMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_certificacionesAñadidas.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_certificacionesAñadidas.getModel();
+        }
+        modelito.addElement(tf_certificaciones.getText());
+        jl_certificacionesAñadidas.setModel(modelito);
     }//GEN-LAST:event_bt_añadirCertificacionMouseClicked
 
     private void bt_crearUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearUMouseClicked
@@ -2980,6 +2991,7 @@ public class Main extends javax.swing.JFrame {
         lb_tituloJDEmpresa.setText("Modificar Perfil");
         lb_btModEmpresa.setText("Modificar Perfil");
         pn_fondoModE.setBackground(new Color(1, 103, 153));
+        setearModifEmpresa();
         AbrirJD(jd_Empresa);
     }//GEN-LAST:event_bt_modificarPerfilEMouseClicked
 
@@ -3015,6 +3027,7 @@ public class Main extends javax.swing.JFrame {
             crearEmpresa();
         } else {
             // el botón modifica el perfil de la empresa
+            modificarEmpresa();
         }
         vaciarEmpresa();
     }//GEN-LAST:event_bt_guardarEMouseClicked
@@ -3242,6 +3255,89 @@ public class Main extends javax.swing.JFrame {
         }
     }
 
+    public void modificarEmpresa() {
+        try {
+            String datos[] = new String[7];
+
+            String[] data = admin.getEmpresa(userid);
+
+            datos[0] = data[0];
+            datos[1] = tf_CIF.getText(); //Cif
+            datos[2] = tf_correoE.getText(); //Correo
+            datos[3] = tf_direccionD.getText(); //Dirección
+            datos[4] = tf_director.getText(); //Director
+            datos[5] = tf_NombreE.getText(); //Nombre
+            datos[6] = ff_telefonoP1.getText(); //Teléfono
+
+            admin.createEmpresa(datos, 1);
+        } catch (Exception e) {
+        }
+    }
+
+    public void crearEmpleo() {
+        try {
+
+            String[] datos = new String[11];
+
+            String antecedentes = "";
+            if (rb_si.isSelected()) {
+                antecedentes = "true";
+            } else if (rb_no.isSelected()) {
+                antecedentes = "false";
+            }
+
+            datos[2] = antecedentes; //Antecedentes
+            datos[3] = ff_añosE.getText(); //AñosExperiencia
+            datos[4] = convertirAString(datosTablaComboBoxs(jl_certificacionesAñadidas)); //Certificaciones
+            datos[5] = convertirAString(datosTablaComboBoxs(jl_idiomasAñadidos)); //Idiomas
+            datos[5] = cb_nivelEducativo.getSelectedItem().toString(); //Nivel Educativo
+            datos[6] = tf_empleo.getText(); //Nombre Empleo
+            datos[7] = convertirAString(datosTablaComboBoxs(jl_puestosAñadidos)); //Puestos
+            datos[8] = ta_RP.getText(); //Requisitos
+            datos[9] = tf_tipoEmpleo.getText();//Tipo
+
+            //String modalidad = cb_modalidad.getSelectedItem().toString();
+            admin.createEmpleo(datos, 0);
+
+        } catch (Exception e) {
+        }
+    }
+
+    public String[] datosTablaComboBoxs(JList lista) {
+        String[] datos = new String[lista.getModel().getSize()];
+        try {
+            for (int i = 0; i < lista.getModel().getSize(); i++) {
+                datos[i] = (String) lista.getModel().getElementAt(i);
+            }
+           
+        } catch (Exception e) {
+        }
+         return datos;
+    }
+
+    public void crearPuesto() {
+        try {
+            String nombrePuesto = tf_puesto.getText();
+            String tipoPuesto = tf_tipoPuesto.getText();
+            String sueldo = tf_sueldo.getText();
+
+            //admin.createPuesto(, nombrePuesto, tipoPuesto);
+        } catch (Exception e) {
+        }
+    }
+
+    public String convertirAString(String[] arr) {
+        String cadena = "";
+        for (int i = 0; i < arr.length; i++) {
+            if (arr.length == i +1) {
+                cadena += arr[i];
+            } else {
+                cadena += arr[i] + ",";
+            }
+        }
+        return cadena;
+    }
+
     public void vaciarEmpresa() {
         tf_NombreE.setText("");
         tf_CIF.setText("");
@@ -3249,6 +3345,23 @@ public class Main extends javax.swing.JFrame {
         tf_correoE.setText("");
         ff_telefonoP1.setText("");
         tf_direccionD.setText("");
+    }
+
+    public void vaciarEmpleo() {
+        rb_si.setSelected(false);
+        rb_no.setSelected(false);
+
+        jl_certificacionesAñadidas.setModel(new DefaultListModel());
+        jl_idiomasAñadidos.setModel(new DefaultListModel());
+        jl_puestosAñadidos.setModel(new DefaultListModel());
+
+        cb_nivelEducativo.setSelectedIndex(0);
+        cb_modalidad.setSelectedIndex(0);
+
+        tf_empleo.setText("");
+        ff_añosE.setText("");
+        ta_RP.setText("");
+        tf_tipoEmpleo.setText("");
     }
 
     public void vaciarPersona() {
@@ -3270,7 +3383,20 @@ public class Main extends javax.swing.JFrame {
         bt_persona.setSelected(false);
     }
 
+
+    public void setearModifEmpresa() {
+        String[] datos = admin.getEmpresa(userid);
+
+        tf_CIF.setText(datos[1]); //Cif
+        tf_correoE.setText(datos[2]); //Correo
+        tf_direccionD.setText(datos[3]); //Dirección
+        tf_director.setText(datos[4]); //Director
+        tf_NombreE.setText(datos[5]); //Nombre
+        ff_telefonoP1.setText(datos[6]); //Teléfono
+    }
+
     public boolean crearPersona() {
+
         try {
             String[] values = new String[8];
 
