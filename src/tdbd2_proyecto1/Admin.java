@@ -801,6 +801,10 @@ public class Admin {
         queue.put("SK", new AttributeValue("emp_actual"));
   
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
+        
+        if (results == null) {
+            return null;
+        }
 
         String[] datos = new String[results.size()];
         int i = 0;
@@ -1050,7 +1054,7 @@ public class Admin {
 
         try {
             client.deleteItem("Centro_De_Empleo", map);
-            deletePostulante(userid);
+            //deletePostulante(userid);
 
             return true;
         } catch (Exception E) {
