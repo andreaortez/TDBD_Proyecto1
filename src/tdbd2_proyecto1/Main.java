@@ -2855,11 +2855,20 @@ public class Main extends javax.swing.JFrame {
             lb_tituloJDEmpresa.setText("Crear Nueva Empresa");
             lb_btModEmpresa.setText("Crear Perfil");
             pn_fondoModE.setBackground(new Color(11, 103, 194));
-            AbrirJD(jd_Empresa);
+            if(crearUsuario()){
+               AbrirJD(jd_Empresa);
+            }else{
+                JOptionPane.showMessageDialog(this, "Ya existe una cuenta con ese id");
+            }
+          
         } else {
-            AbrirJD(jd_Persona);
+            if(crearUsuario()){
+               AbrirJD(jd_Persona);
+            }else{
+                JOptionPane.showMessageDialog(this, "Ya existe una cuenta con ese id");
+            }
         }
-        crearUsuario();
+      
         vaciarUsuario();
     }//GEN-LAST:event_bt_crearUMouseClicked
 
@@ -3197,7 +3206,7 @@ public class Main extends javax.swing.JFrame {
         }
     }
 
-    public void crearUsuario() {
+    public boolean crearUsuario() {
         try {
             String rol = "";
             String username = tf_Cusuario.getText();
@@ -3210,8 +3219,9 @@ public class Main extends javax.swing.JFrame {
             } else if (bt_persona.isSelected()) {
                 rol = "usuario";
             }
-            admin.createUser(username, contra, "user_" + cuenta, rol);
+            return admin.createUser(username, contra, "user_" + cuenta, rol);
         } catch (Exception e) {
+            return false;
         }
     }
 
@@ -3260,7 +3270,7 @@ public class Main extends javax.swing.JFrame {
         bt_persona.setSelected(false);
     }
 
-    public void crearPersona() {
+    public boolean crearPersona() {
         try {
             String[] values = new String[8];
 
@@ -3279,8 +3289,9 @@ public class Main extends javax.swing.JFrame {
             values[6] = genero;
             values[7] = ff_telefonoP.getText();
 
-            admin.createPersonal_pf(values, 0);
+           return admin.createPersonal_pf(values, 0);
         } catch (Exception e) {
+            return false;
         }
     }
 
