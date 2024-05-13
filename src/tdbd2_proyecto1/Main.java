@@ -12,10 +12,12 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
@@ -65,8 +67,8 @@ public class Main extends javax.swing.JFrame {
 
         //LLenado de Tablas 
         String s = admin.getEmpleos().toString();
-        LlenarTabla(s,jt_EmpleosDisponibles,0);
-        LlenarTabla(s,jt_EmpleosPostulados,1);
+        LlenarTabla(s, jt_EmpleosDisponibles, 0);
+        LlenarTabla(s, jt_EmpleosPostulados, 1);
 
         System.out.println("-----------");
         System.out.println("&&: " + admin.getPuestos());
@@ -116,23 +118,23 @@ public class Main extends javax.swing.JFrame {
         lb_Idiomas.setText(dlp[3]);
         lb_Certificaciones.setText(dlp[4]);
         lb_ConEsp.setText(dlp[6]);
-        
+
         //Historial Trabajo
-        String[]ht = admin.getCurrentJob(userid);
+        String[] ht = admin.getCurrentJob(userid);
         lb_TrabActual.setText(ht[0]);
-        
+
         //Cuentas Familiares en la App
         System.out.println("++++++++++++++++++");
         //System.out.println("------------\n#: "+admin.getFalimiares(userid));
         lb_EcivilP1.setText(CuentasFamiliares(admin.getFalimiares(userid).toString()));
         System.out.println("++++++++++++++++++");
-        
+
         //Solicitud Trabajo
         //System.out.println("*:"+Arrays.toString(admin.getSolicitud(userid)));
-        String st = (Arrays.toString(admin.getSolicitud(userid))).substring(1, Arrays.toString(admin.getSolicitud(userid)).length()-1);
-        String[]st_data = st.split(", ");
-        llenarJList(jl_alergias1,st_data[3]);
-        llenarJList(jl_alergias2,st_data[4]);
+        String st = (Arrays.toString(admin.getSolicitud(userid))).substring(1, Arrays.toString(admin.getSolicitud(userid)).length() - 1);
+        String[] st_data = st.split(", ");
+        llenarJList(jl_alergias1, st_data[3]);
+        llenarJList(jl_alergias2, st_data[4]);
         lb_SalarioExpectante.setText(st_data[6]);
     }
 
@@ -183,14 +185,13 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         }
- 
- 
+
         ArrayList<String> datos = admin.filtroEmpleados(filter, valores, names);
         if (datos != null) {
             System.out.println(datos.toString());
-            LlenarTabla(datos.toString(), jt_EmpleosDisponibles,0);
+            LlenarTabla(datos.toString(), jt_EmpleosDisponibles, 0);
         } else {
-            LlenarTabla(admin.getEmpleos().toString(), jt_EmpleosDisponibles,0);
+            LlenarTabla(admin.getEmpleos().toString(), jt_EmpleosDisponibles, 0);
         }
 
     }
@@ -235,7 +236,7 @@ public class Main extends javax.swing.JFrame {
     public boolean validarSolicitudRequerimientos() {
         DefaultTableModel modelo = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
         int row = jt_EmpleosDisponibles.getSelectedRow();
-       boolean isThere = false;
+        boolean isThere = false;
         //validar antecedentes
         String[] legal = admin.getLegal_pf(userid);
 
@@ -243,9 +244,9 @@ public class Main extends javax.swing.JFrame {
             return false;
         }
         String antecedentes = legal[2];
-        
-        if ((boolean)modelo.getValueAt(row, 4)) {
-            
+
+        if ((boolean) modelo.getValueAt(row, 4)) {
+
             if (antecedentes != null) {
                 if (!antecedentes.equals("") && !antecedentes.equals("Ninguno,")) {
                     return false;
@@ -2818,7 +2819,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_cerrarSesiónRMouseExited
 
     private void bt_añadirPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPMouseClicked
-
+        crearEmpleo();
+        vaciarEmpleo();
     }//GEN-LAST:event_bt_añadirPMouseClicked
 
     private void bt_crearUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearUsuarioMouseClicked
@@ -2842,11 +2844,21 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_regresarMouseExited
 
     private void bt_añadirIdiomaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirIdiomaMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_idiomasAñadidos.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_idiomasAñadidos.getModel();
+        }
+        modelito.addElement(cb_idiomas.getSelectedItem().toString());
+        jl_idiomasAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirIdiomaMouseClicked
 
     private void bt_añadirCertificacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirCertificacionMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_certificacionesAñadidas.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_certificacionesAñadidas.getModel();
+        }
+        modelito.addElement(tf_certificaciones.getText());
+        jl_certificacionesAñadidas.setModel(modelito);
     }//GEN-LAST:event_bt_añadirCertificacionMouseClicked
 
     private void bt_crearUMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearUMouseClicked
@@ -2855,20 +2867,20 @@ public class Main extends javax.swing.JFrame {
             lb_tituloJDEmpresa.setText("Crear Nueva Empresa");
             lb_btModEmpresa.setText("Crear Perfil");
             pn_fondoModE.setBackground(new Color(11, 103, 194));
-            if(crearUsuario()){
-               AbrirJD(jd_Empresa);
-            }else{
+            if (crearUsuario()) {
+                AbrirJD(jd_Empresa);
+            } else {
                 JOptionPane.showMessageDialog(this, "Ya existe una cuenta con ese id");
             }
-          
+
         } else {
-            if(crearUsuario()){
-               AbrirJD(jd_Persona);
-            }else{
+            if (crearUsuario()) {
+                AbrirJD(jd_Persona);
+            } else {
                 JOptionPane.showMessageDialog(this, "Ya existe una cuenta con ese id");
             }
         }
-      
+
         vaciarUsuario();
     }//GEN-LAST:event_bt_crearUMouseClicked
 
@@ -3015,6 +3027,7 @@ public class Main extends javax.swing.JFrame {
             crearEmpresa();
         } else {
             // el botón modifica el perfil de la empresa
+            modificarEmpresa();
         }
         vaciarEmpresa();
     }//GEN-LAST:event_bt_guardarEMouseClicked
@@ -3035,7 +3048,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_PostularMouseClicked
 
     private void bt_crearPuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearPuestoMouseClicked
-        // TODO add your handling code here:
+        crearPuesto();
+        vaciarPuesto();
     }//GEN-LAST:event_bt_crearPuestoMouseClicked
 
     private void bt_crearPuestoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearPuestoMouseEntered
@@ -3047,7 +3061,12 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_crearPuestoMouseExited
 
     private void bt_añadirPuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_puestosAñadidos.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_puestosAñadidos.getModel();
+        }
+        modelito.addElement(cb_puestos.getSelectedItem().toString());
+        jl_puestosAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirPuestoMouseClicked
 
     private void bt_añadirPuestoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseEntered
@@ -3072,22 +3091,22 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_ContratarActionPerformed
 
     private void PostularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PostularActionPerformed
-       if(jt_EmpleosDisponibles.getSelectedColumn() != -1){
-           if(validarSolicitudRequerimientos()){
-               if(!validarSolicitudSalario()){
-                   int x =JOptionPane.showConfirmDialog(this, "El trabajo no cumple con el salario deseado.\nDesea aplicar igual?");
-                   if(x == JOptionPane.YES_OPTION){
-                       DefaultTableModel model = (DefaultTableModel)jt_EmpleosDisponibles.getModel();
-                   admin.solicitarEmpleo(userid,(String) model.getValueAt(jt_EmpleosDisponibles.getSelectedRow(), 11));
-                   }
-               }else{
-                   DefaultTableModel model = (DefaultTableModel)jt_EmpleosDisponibles.getModel();
-                   admin.solicitarEmpleo(userid,(String) model.getValueAt(jt_EmpleosDisponibles.getSelectedRow(), 11));
-               }
-           }else{
-               JOptionPane.showMessageDialog(null, "Que gay");
-           }
-       }
+        if (jt_EmpleosDisponibles.getSelectedColumn() != -1) {
+            if (validarSolicitudRequerimientos()) {
+                if (!validarSolicitudSalario()) {
+                    int x = JOptionPane.showConfirmDialog(this, "El trabajo no cumple con el salario deseado.\nDesea aplicar igual?");
+                    if (x == JOptionPane.YES_OPTION) {
+                        DefaultTableModel model = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+                        admin.solicitarEmpleo(userid, (String) model.getValueAt(jt_EmpleosDisponibles.getSelectedRow(), 11));
+                    }
+                } else {
+                    DefaultTableModel model = (DefaultTableModel) jt_EmpleosDisponibles.getModel();
+                    admin.solicitarEmpleo(userid, (String) model.getValueAt(jt_EmpleosDisponibles.getSelectedRow(), 11));
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Que gay");
+            }
+        }
     }//GEN-LAST:event_PostularActionPerformed
 
     /**
@@ -3289,41 +3308,177 @@ public class Main extends javax.swing.JFrame {
             values[6] = genero;
             values[7] = ff_telefonoP.getText();
 
-           return admin.createPersonal_pf(values, 0);
+            return admin.createPersonal_pf(values, 0);
         } catch (Exception e) {
             return false;
         }
     }
 
-    public void LlenarTabla(String datos, JTable table, int flag){
-        boolean addrow = true; 
+    public void modificarEmpresa() {
+        try {
+            String datos[] = new String[7];
+
+            String[] data = admin.getEmpresa(userid);
+
+            datos[0] = data[0];
+            datos[1] = tf_CIF.getText(); //Cif
+            datos[2] = tf_correoE.getText(); //Correo
+            datos[3] = tf_direccionD.getText(); //Dirección
+            datos[4] = tf_director.getText(); //Director
+            datos[5] = tf_NombreE.getText(); //Nombre
+            datos[6] = ff_telefonoP1.getText(); //Teléfono
+
+            admin.createEmpresa(datos, 1);
+        } catch (Exception e) {
+        }
+    }
+
+    public void crearEmpleo() {
+        try {
+
+            String[] datos = new String[11];
+
+            String antecedentes = "";
+            if (rb_si.isSelected()) {
+                antecedentes = "true";
+            } else if (rb_no.isSelected()) {
+                antecedentes = "false";
+            }
+
+            datos[2] = antecedentes; //Antecedentes
+            datos[3] = ff_añosE.getText(); //AñosExperiencia
+            datos[4] = convertirAString(datosTablaComboBoxs(jl_certificacionesAñadidas)); //Certificaciones
+            datos[5] = convertirAString(datosTablaComboBoxs(jl_idiomasAñadidos)); //Idiomas
+            datos[5] = cb_nivelEducativo.getSelectedItem().toString(); //Nivel Educativo
+            datos[6] = tf_empleo.getText(); //Nombre Empleo
+            datos[7] = convertirAString(datosTablaComboBoxs(jl_puestosAñadidos)); //Puestos
+            datos[8] = ta_RP.getText(); //Requisitos
+            datos[9] = tf_tipoEmpleo.getText();//Tipo
+
+            //String modalidad = cb_modalidad.getSelectedItem().toString();
+            admin.createEmpleo(datos, 0);
+
+        } catch (Exception e) {
+        }
+    }
+
+    public String[] datosTablaComboBoxs(JList lista) {
+        String[] datos = new String[lista.getModel().getSize()];
+        try {
+            for (int i = 0; i < lista.getModel().getSize(); i++) {
+                datos[i] = (String) lista.getModel().getElementAt(i);
+            }
+
+        } catch (Exception e) {
+        }
+        return datos;
+    }
+
+    public void crearPuesto() {
+        try {
+            String nombrePuesto = tf_puesto.getText();
+            String tipoPuesto = tf_tipoPuesto.getText();
+            String sueldo = tf_sueldo.getText();
+            String puestosNumber = numeroRandom();
+
+
+            String[] datos = new String[5];
+            datos[0] = puestosNumber;
+            datos[1] = tf_puesto.getText();
+            datos[2] = tf_tipoPuesto.getText();
+            datos[3] = tf_sueldo.getText();
+
+            cb_puestos.addItem(convertirAString(datos));
+            admin.createPuesto(Integer.parseInt(puestosNumber), nombrePuesto, tipoPuesto, Double.parseDouble(sueldo));
+        } catch (Exception e) {
+        }
+    }
+
+    public void vaciarPuesto() {
+        tf_puesto.setText("");
+        tf_tipoPuesto.setText("");
+        tf_sueldo.setText("");
+    }
+
+    public String convertirAString(String[] arr) {
+        String cadena = "";
+        for (int i = 0; i < arr.length; i++) {
+            if (arr.length == i + 1) {
+                cadena += arr[i];
+            } else {
+                cadena += arr[i] + ",";
+            }
+        }
+        return cadena;
+    }
+
+    public String numeroRandom() {
+        String strNumero = "";
+        Random rand = new Random();
+        for (int i = 0; i < 8; i++) {
+            strNumero += rand.nextInt(9);
+        }
+        
+        return strNumero;
+    }
+
+    public void vaciarEmpleo() {
+        rb_si.setSelected(false);
+        rb_no.setSelected(false);
+
+        jl_certificacionesAñadidas.setModel(new DefaultListModel());
+        jl_idiomasAñadidos.setModel(new DefaultListModel());
+        jl_puestosAñadidos.setModel(new DefaultListModel());
+
+        cb_nivelEducativo.setSelectedIndex(0);
+        cb_modalidad.setSelectedIndex(0);
+
+        tf_empleo.setText("");
+        ff_añosE.setText("");
+        ta_RP.setText("");
+        tf_tipoEmpleo.setText("");
+    }
+
+    public void setearModifEmpresa() {
+        String[] datos = admin.getEmpresa(userid);
+
+        tf_CIF.setText(datos[1]); //Cif
+        tf_correoE.setText(datos[2]); //Correo
+        tf_direccionD.setText(datos[3]); //Dirección
+        tf_director.setText(datos[4]); //Director
+        tf_NombreE.setText(datos[5]); //Nombre
+        ff_telefonoP1.setText(datos[6]); //Teléfono
+    }
+
+    public void LlenarTabla(String datos, JTable table, int flag) {
+        boolean addrow = true;
         JSONArray ar = new JSONArray(datos);
-        System.out.println("Datos: "+datos);
+        System.out.println("Datos: " + datos);
         try {
             table.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{
-                "Empresa ID", "Puesto", "Requisitos Personales","Antecedentes","Nivel Educativo","Tipo",
-                "Experiencia(años)","Idiomas","Certificados","Modalidad"}));
+                "Empresa ID", "Puesto", "Requisitos Personales", "Antecedentes", "Nivel Educativo", "Tipo",
+                "Experiencia(años)", "Idiomas", "Certificados", "Modalidad"}));
             for (int j = 0; j < ar.length(); j++) {
                 JSONObject o = ar.getJSONObject(j);
                 if (flag == 1) {//1 -> empleos postulados - vista postulantes
                     ArrayList<String> empPost = getEmpresasPostuladas(admin.getSolicitudesDeUsuario(userid).toString());
                     for (int i = 0; i < empPost.size(); i++) {
                         if (o.getString("SK").equals(empPost.get(i))) {
-                            addrow = true; 
-                            break; 
-                        }else{
-                            addrow = false; 
+                            addrow = true;
+                            break;
+                        } else {
+                            addrow = false;
                         }
                     }
-                }else{
-                    addrow = true; 
+                } else {
+                    addrow = true;
                 }
                 if (addrow) {
                     Object[] row = {o.getString("PK"),
-                    o.getString("Nombre"),ArraytoString(o.getJSONArray("Requisitos_Personales")),
-                    o.getBoolean("Antecedentes"),o.getString("Nivel Educativo"),o.getString("Tipo"),
-                    o.getInt("AñosExperiencia"),ArraytoString(o.getJSONArray("Idiomas")),
-                    ArraytoString(o.getJSONArray("Certificaciones")),o.getString("Modalidad")};
+                        o.getString("Nombre"), ArraytoString(o.getJSONArray("Requisitos_Personales")),
+                        o.getBoolean("Antecedentes"), o.getString("Nivel Educativo"), o.getString("Tipo"),
+                        o.getInt("AñosExperiencia"), ArraytoString(o.getJSONArray("Idiomas")),
+                        ArraytoString(o.getJSONArray("Certificaciones")), o.getString("Modalidad")};
                     DefaultTableModel modelo = (DefaultTableModel) table.getModel();
                     modelo.addRow(row);
                     table.setModel(modelo);
@@ -3333,21 +3488,23 @@ public class Main extends javax.swing.JFrame {
             ex.printStackTrace();
         }
     }
-    public String empPost(String emp){
+
+    public String empPost(String emp) {
         ArrayList<String> empPost = getEmpresasPostuladas(admin.getSolicitudesDeUsuario(userid).toString());
         String s = admin.getEmpleos().toString();
         JSONArray ar = new JSONArray(s);
         for (int j = 0; j < ar.length(); j++) {
             JSONObject o = ar.getJSONObject(j);
-            
+
             System.out.println("SK: " + o.getString("SK"));
         }
         for (int i = 0; i < empPost.size(); i++) {
-            
+
         }
-        return null; 
+        return null;
     }
-    public ArrayList<String> getEmpresasPostuladas(String emp){
+
+    public ArrayList<String> getEmpresasPostuladas(String emp) {
         JSONArray ar = new JSONArray(emp);
         ArrayList<String> empresas = new ArrayList();
         for (int j = 0; j < ar.length(); j++) {
@@ -3356,7 +3513,7 @@ public class Main extends javax.swing.JFrame {
         }
         return empresas;
     }
-    
+
     public String CuentasFamiliares(String data) {
         JSONArray ar = new JSONArray(data);
         String user = "";
@@ -3364,18 +3521,18 @@ public class Main extends javax.swing.JFrame {
             JSONObject o = ar.getJSONObject(j);
             if (o.getString("SK").equals(userid)) {
                 user = o.getString("PK");
-            }else if(o.getString("PK").equals(userid)){
+            } else if (o.getString("PK").equals(userid)) {
                 user = o.getString("SK");
-            }else{
+            } else {
                 System.out.println("Ojito: No hay coincidencias con el user");
             }
         }
-        System.out.println("Datos: "+Arrays.toString(admin.getPersonal_pf(user)));
-        String [] dp = admin.getPersonal_pf(user);
-        String s = "|Nombre: "+dp[0]+" "+dp[6]+"|"
-                +"Correo: "+dp[1]+"|"
-                +"ID: "+dp[7]+"|";
-        return s; 
+        System.out.println("Datos: " + Arrays.toString(admin.getPersonal_pf(user)));
+        String[] dp = admin.getPersonal_pf(user);
+        String s = "|Nombre: " + dp[0] + " " + dp[6] + "|"
+                + "Correo: " + dp[1] + "|"
+                + "ID: " + dp[7] + "|";
+        return s;
     }
 
 
