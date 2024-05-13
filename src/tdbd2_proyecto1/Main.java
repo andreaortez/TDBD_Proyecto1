@@ -12,12 +12,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.awt.event.MouseEvent;
 import java.time.Year;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
@@ -68,6 +70,8 @@ public class Main extends javax.swing.JFrame {
         LlenarAtributos();
     }
 
+   
+    
     public void llenarDatosPostulante() {
         System.out.println("UserID: " + userid);
 
@@ -425,6 +429,9 @@ public class Main extends javax.swing.JFrame {
         rb_si = new javax.swing.JRadioButton();
         rb_no = new javax.swing.JRadioButton();
         bt_RP = new javax.swing.JCheckBox();
+        jSeparator66 = new javax.swing.JSeparator();
+        tf_idEmpleo = new javax.swing.JTextField();
+        jLabel123 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel72 = new javax.swing.JLabel();
         cb_idiomas = new javax.swing.JComboBox<>();
@@ -762,8 +769,9 @@ public class Main extends javax.swing.JFrame {
         jLabel87 = new javax.swing.JLabel();
 
         jPanel3.setBackground(new java.awt.Color(0, 114, 177));
-        jPanel3.setMinimumSize(new java.awt.Dimension(900, 600));
+        jPanel3.setMinimumSize(new java.awt.Dimension(600, 725));
         jPanel3.setName(""); // NOI18N
+        jPanel3.setPreferredSize(new java.awt.Dimension(600, 725));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tab1.setBackground(new java.awt.Color(236, 240, 245));
@@ -777,68 +785,68 @@ public class Main extends javax.swing.JFrame {
         jLabel30.setForeground(new java.awt.Color(55, 55, 55));
         jLabel30.setText("Nombre del Empleo");
         jPanel4.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, 30));
-        jPanel4.add(jSeparator30, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 500, 30));
+        jPanel4.add(jSeparator30, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 500, 30));
 
         jLabel62.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel62.setForeground(new java.awt.Color(55, 55, 55));
         jLabel62.setText("Nivel Educativo");
-        jPanel4.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, 30));
-        jPanel4.add(jSeparator31, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 500, 30));
+        jPanel4.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, 30));
+        jPanel4.add(jSeparator31, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 500, 30));
         jPanel4.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(443, 12, -1, -1));
 
         jLabel66.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel66.setForeground(new java.awt.Color(55, 55, 55));
         jLabel66.setText("Años de experiencia necesarios");
-        jPanel4.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, 30));
-        jPanel4.add(jSeparator32, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 500, 30));
+        jPanel4.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, 30));
+        jPanel4.add(jSeparator32, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 500, 30));
 
         jLabel68.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel68.setForeground(new java.awt.Color(55, 55, 55));
         jLabel68.setText("Modalidad");
-        jPanel4.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, 30));
+        jPanel4.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, 30));
         jPanel4.add(tf_empleo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 230, 30));
-        jPanel4.add(jSeparator33, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 500, 30));
-        jPanel4.add(jSeparator34, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 500, 30));
+        jPanel4.add(jSeparator33, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 500, 30));
+        jPanel4.add(jSeparator34, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 530, 500, 30));
 
         jLabel70.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel70.setForeground(new java.awt.Color(55, 55, 55));
         jLabel70.setText("Antecedentes Penales");
-        jPanel4.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 490, -1, 40));
-        jPanel4.add(jSeparator35, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 500, 30));
-        jPanel4.add(tf_tipoEmpleo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 230, 30));
+        jPanel4.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 540, -1, 40));
+        jPanel4.add(jSeparator35, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 500, 30));
+        jPanel4.add(tf_tipoEmpleo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 230, 30));
 
         ff_añosE.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jPanel4.add(ff_añosE, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 230, 30));
+        jPanel4.add(ff_añosE, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 230, 30));
 
         jLabel80.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel80.setForeground(new java.awt.Color(55, 55, 55));
         jLabel80.setText("Tipo de Empleo");
-        jPanel4.add(jLabel80, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, 30));
+        jPanel4.add(jLabel80, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, 30));
 
         cb_modalidad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Presencial", "Híbrido", "Remoto" }));
-        jPanel4.add(cb_modalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, 230, 32));
+        jPanel4.add(cb_modalidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 230, 32));
 
         cb_nivelEducativo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Educación Media", "Grado", "Master", "Doctorado" }));
-        jPanel4.add(cb_nivelEducativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 230, 32));
+        jPanel4.add(cb_nivelEducativo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 230, 32));
 
         ta_RP.setEditable(false);
         ta_RP.setColumns(20);
         ta_RP.setRows(5);
         jScrollPane5.setViewportView(ta_RP);
 
-        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 370, 290, 90));
+        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 440, 290, 70));
 
         rb_si.setBackground(new java.awt.Color(255, 255, 255));
         bg_antecedentes.add(rb_si);
         rb_si.setForeground(new java.awt.Color(55, 55, 55));
         rb_si.setText("Sí");
-        jPanel4.add(rb_si, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 500, -1, -1));
+        jPanel4.add(rb_si, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 550, -1, -1));
 
         rb_no.setBackground(new java.awt.Color(255, 255, 255));
         bg_antecedentes.add(rb_no);
         rb_no.setForeground(new java.awt.Color(55, 55, 55));
         rb_no.setText("No");
-        jPanel4.add(rb_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 500, -1, -1));
+        jPanel4.add(rb_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 550, -1, -1));
 
         bt_RP.setBackground(new java.awt.Color(255, 255, 255));
         bt_RP.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -849,7 +857,14 @@ public class Main extends javax.swing.JFrame {
                 bt_RPMouseClicked(evt);
             }
         });
-        jPanel4.add(bt_RP, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, -1));
+        jPanel4.add(bt_RP, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, -1, -1));
+        jPanel4.add(jSeparator66, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 500, 30));
+        jPanel4.add(tf_idEmpleo, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 230, 30));
+
+        jLabel123.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel123.setForeground(new java.awt.Color(55, 55, 55));
+        jLabel123.setText("ID Empleo");
+        jPanel4.add(jLabel123, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, 30));
 
         tab1.addTab("General", jPanel4);
 
@@ -1064,7 +1079,7 @@ public class Main extends javax.swing.JFrame {
 
         tab1.addTab("Puestos", jPanel1);
 
-        jPanel3.add(tab1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 540, 570));
+        jPanel3.add(tab1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 540, 620));
 
         bt_añadirP.setBackground(new java.awt.Color(195, 22, 28));
         bt_añadirP.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1098,19 +1113,17 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel3.add(bt_añadirP, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 620, 120, 40));
+        jPanel3.add(bt_añadirP, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 670, 120, 40));
 
         javax.swing.GroupLayout jd_crearEmpleoLayout = new javax.swing.GroupLayout(jd_crearEmpleo.getContentPane());
         jd_crearEmpleo.getContentPane().setLayout(jd_crearEmpleoLayout);
         jd_crearEmpleoLayout.setHorizontalGroup(
             jd_crearEmpleoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jd_crearEmpleoLayout.setVerticalGroup(
             jd_crearEmpleoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jd_crearEmpleoLayout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 680, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jd_crearUsuario.getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -2962,7 +2975,7 @@ public class Main extends javax.swing.JFrame {
         if (jl_idiomasAñadidos.getModel().getSize() > 0) {
             modelito = (DefaultListModel) jl_idiomasAñadidos.getModel();
         }
-        modelito.addElement(cb_idiomas.getSelectedItem());
+        modelito.addElement(cb_idiomas.getSelectedItem().toString());
         jl_idiomasAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirIdiomaMouseClicked
 
@@ -3159,16 +3172,12 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jt_EmpleosDisponiblesMouseClicked
 
     private void PostularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_PostularMouseClicked
-        // aqui tienen que validar si el usuario es candidato al puesto.
-        // para eso pongan un JOptionPane de no ser asi
-        //JOptionPane.showConfirmDialog(Postulantes,  "Este trabajo no cumple con los detalles establecidos en su solicitud. ¿Desea aplicar igual?", "Enviar Solicitud de Empleo", YES_NO_OPTION);
-        // ese es por si no se cumplen los deseos del postulante
-        //JOptionPane.showMessageDialog(null, "No cumple con los requerimientos para aplicar a este trabajo", "Warning", WARNING_MESSAGE);
-        //por si el aplicante no puede postularse
+        
     }//GEN-LAST:event_PostularMouseClicked
 
     private void bt_crearPuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearPuestoMouseClicked
-        // TODO add your handling code here:
+        crearPuesto();
+        vaciarPuesto();
     }//GEN-LAST:event_bt_crearPuestoMouseClicked
 
     private void bt_crearPuestoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearPuestoMouseEntered
@@ -3180,7 +3189,12 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_crearPuestoMouseExited
 
     private void bt_añadirPuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_puestosAñadidos.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_puestosAñadidos.getModel();
+        }
+        modelito.addElement(cb_puestos.getSelectedItem().toString());
+        jl_puestosAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirPuestoMouseClicked
 
     private void bt_añadirPuestoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseEntered
@@ -3245,7 +3259,7 @@ public class Main extends javax.swing.JFrame {
                 }
 
             } else {
-                JOptionPane.showMessageDialog(null, "No cumple con los requisitos para este empleo.\n\"Gracias por participar\"\n                             -Dazu");
+                JOptionPane.showMessageDialog(null, "No cumple con los requisitos para este empleo.");
             }
         }
     }//GEN-LAST:event_PostularActionPerformed
@@ -3537,16 +3551,7 @@ public class Main extends javax.swing.JFrame {
         return datos;
     }
 
-    public void crearPuesto() {
-        try {
-            String nombrePuesto = tf_puesto.getText();
-            String tipoPuesto = tf_tipoPuesto.getText();
-            String sueldo = tf_sueldo.getText();
-
-            //admin.createPuesto(, nombrePuesto, tipoPuesto);
-        } catch (Exception e) {
-        }
-    }
+    
 
     public String convertirAString(String[] arr) {
         String cadena = "";
@@ -3641,6 +3646,55 @@ public class Main extends javax.swing.JFrame {
             return false;
         }
     }
+
+    
+
+    
+
+    
+
+    public void crearPuesto() {
+        try {
+            String nombrePuesto = tf_puesto.getText();
+            String tipoPuesto = tf_tipoPuesto.getText();
+            String sueldo = tf_sueldo.getText();
+            String puestosNumber = numeroRandom();
+
+
+            String[] datos = new String[5];
+            datos[0] = puestosNumber;
+            datos[1] = tf_puesto.getText();
+            datos[2] = tf_tipoPuesto.getText();
+            datos[3] = tf_sueldo.getText();
+
+            cb_puestos.addItem(convertirAString(datos));
+            admin.createPuesto(Integer.parseInt(puestosNumber), nombrePuesto, tipoPuesto, Double.parseDouble(sueldo));
+        } catch (Exception e) {
+        }
+    }
+
+    public void vaciarPuesto() {
+        tf_puesto.setText("");
+        tf_tipoPuesto.setText("");
+        tf_sueldo.setText("");
+    }
+
+    
+
+    public String numeroRandom() {
+        String strNumero = "";
+        Random rand = new Random();
+        for (int i = 0; i < 8; i++) {
+            strNumero += rand.nextInt(9);
+        }
+        
+        return strNumero;
+    }
+
+    
+     
+
+    
 
     public void LlenarTabla(String datos, JTable table, int flag) {
         boolean addrow = true;
@@ -3857,6 +3911,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel120;
     private javax.swing.JLabel jLabel121;
     private javax.swing.JLabel jLabel122;
+    private javax.swing.JLabel jLabel123;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel144;
@@ -4044,6 +4099,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator63;
     private javax.swing.JSeparator jSeparator64;
     private javax.swing.JSeparator jSeparator65;
+    private javax.swing.JSeparator jSeparator66;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
@@ -4137,6 +4193,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField tf_direccionD;
     private javax.swing.JTextField tf_director;
     private javax.swing.JTextField tf_empleo;
+    private javax.swing.JTextField tf_idEmpleo;
     private javax.swing.JTextField tf_nacionalidad;
     private javax.swing.JTextField tf_puesto;
     private javax.swing.JTextField tf_sueldo;
