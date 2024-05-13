@@ -12,12 +12,14 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.awt.event.MouseEvent;
 import java.time.Year;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JList;
@@ -67,19 +69,6 @@ public class Main extends javax.swing.JFrame {
         LlenarAtributos();
     }
 
-<<<<<<< HEAD
-    public void llenarEmpleosDisponibles(){
-        DefaultListModel modelito = new DefaultListModel();
-        String [] businessData = admin.getEmpresa(userid);
-        
-        String[] empleosEmpresa = admin.getEmpleo(businessData[0], userid);
-        
-        for (int i = 0; i < empleosEmpresa.length; i++) {
-            modelito.addElement(empleosEmpresa[i]);
-        }
-        
-        jl_EDisponibles.setModel(modelito);
-    }
     public void llenarDatosEmpresa(){
         String [] businessData = admin.getEmpresa(userid);
         jl_name.setText(businessData[0]);
@@ -89,14 +78,10 @@ public class Main extends javax.swing.JFrame {
         jl_direccionE.setText(businessData[5]);
     }
     
-    public void llenarDatosPostulante(){
-        //System.out.println(userid);
-=======
     public void llenarDatosPostulante() {
         System.out.println("UserID: " + userid);
 
         //LLenado de Tablas 
->>>>>>> 5e765ce2c6432b92cf2257b1ea241283769d2198
         
         String s = admin.getEmpleos().toString();
         LlenarTabla(s, jt_EmpleosDisponibles, 0);
@@ -2996,7 +2981,7 @@ public class Main extends javax.swing.JFrame {
         if (jl_idiomasAñadidos.getModel().getSize() > 0) {
             modelito = (DefaultListModel) jl_idiomasAñadidos.getModel();
         }
-        modelito.addElement(cb_idiomas.getSelectedItem());
+        modelito.addElement(cb_idiomas.getSelectedItem().toString());
         jl_idiomasAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirIdiomaMouseClicked
 
@@ -3202,7 +3187,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_PostularMouseClicked
 
     private void bt_crearPuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearPuestoMouseClicked
-        // TODO add your handling code here:
+        crearPuesto();
+        vaciarPuesto();
     }//GEN-LAST:event_bt_crearPuestoMouseClicked
 
     private void bt_crearPuestoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crearPuestoMouseEntered
@@ -3214,7 +3200,12 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_crearPuestoMouseExited
 
     private void bt_añadirPuestoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseClicked
-        // TODO add your handling code here:
+        DefaultListModel modelito = new DefaultListModel();
+        if (jl_puestosAñadidos.getModel().getSize() > 0) {
+            modelito = (DefaultListModel) jl_puestosAñadidos.getModel();
+        }
+        modelito.addElement(cb_puestos.getSelectedItem().toString());
+        jl_puestosAñadidos.setModel(modelito);
     }//GEN-LAST:event_bt_añadirPuestoMouseClicked
 
     private void bt_añadirPuestoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_añadirPuestoMouseEntered
@@ -3667,6 +3658,142 @@ public class Main extends javax.swing.JFrame {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void modificarEmpresa() {
+        try {
+            String datos[] = new String[7];
+
+            String[] data = admin.getEmpresa(userid);
+
+            datos[0] = data[0];
+            datos[1] = tf_CIF.getText(); //Cif
+            datos[2] = tf_correoE.getText(); //Correo
+            datos[3] = tf_direccionD.getText(); //Dirección
+            datos[4] = tf_director.getText(); //Director
+            datos[5] = tf_NombreE.getText(); //Nombre
+            datos[6] = ff_telefonoP1.getText(); //Teléfono
+
+            admin.createEmpresa(datos, 1);
+        } catch (Exception e) {
+        }
+    }
+
+    public void crearEmpleo() {
+        try {
+
+            String[] datos = new String[11];
+
+            String antecedentes = "";
+            if (rb_si.isSelected()) {
+                antecedentes = "true";
+            } else if (rb_no.isSelected()) {
+                antecedentes = "false";
+            }
+
+            datos[2] = antecedentes; //Antecedentes
+            datos[3] = ff_añosE.getText(); //AñosExperiencia
+            datos[4] = convertirAString(datosTablaComboBoxs(jl_certificacionesAñadidas)); //Certificaciones
+            datos[5] = convertirAString(datosTablaComboBoxs(jl_idiomasAñadidos)); //Idiomas
+            datos[5] = cb_nivelEducativo.getSelectedItem().toString(); //Nivel Educativo
+            datos[6] = tf_empleo.getText(); //Nombre Empleo
+            datos[7] = convertirAString(datosTablaComboBoxs(jl_puestosAñadidos)); //Puestos
+            datos[8] = ta_RP.getText(); //Requisitos
+            datos[9] = tf_tipoEmpleo.getText();//Tipo
+
+            //String modalidad = cb_modalidad.getSelectedItem().toString();
+            admin.createEmpleo(datos, 0);
+
+        } catch (Exception e) {
+        }
+    }
+
+    public String[] datosTablaComboBoxs(JList lista) {
+        String[] datos = new String[lista.getModel().getSize()];
+        try {
+            for (int i = 0; i < lista.getModel().getSize(); i++) {
+                datos[i] = (String) lista.getModel().getElementAt(i);
+            }
+
+        } catch (Exception e) {
+        }
+        return datos;
+    }
+
+    public void crearPuesto() {
+        try {
+            String nombrePuesto = tf_puesto.getText();
+            String tipoPuesto = tf_tipoPuesto.getText();
+            String sueldo = tf_sueldo.getText();
+            String puestosNumber = numeroRandom();
+
+
+            String[] datos = new String[5];
+            datos[0] = puestosNumber;
+            datos[1] = tf_puesto.getText();
+            datos[2] = tf_tipoPuesto.getText();
+            datos[3] = tf_sueldo.getText();
+
+            cb_puestos.addItem(convertirAString(datos));
+            admin.createPuesto(Integer.parseInt(puestosNumber), nombrePuesto, tipoPuesto, Double.parseDouble(sueldo));
+        } catch (Exception e) {
+        }
+    }
+
+    public void vaciarPuesto() {
+        tf_puesto.setText("");
+        tf_tipoPuesto.setText("");
+        tf_sueldo.setText("");
+    }
+
+    public String convertirAString(String[] arr) {
+        String cadena = "";
+        for (int i = 0; i < arr.length; i++) {
+            if (arr.length == i + 1) {
+                cadena += arr[i];
+            } else {
+                cadena += arr[i] + ",";
+            }
+        }
+        return cadena;
+    }
+
+    public String numeroRandom() {
+        String strNumero = "";
+        Random rand = new Random();
+        for (int i = 0; i < 8; i++) {
+            strNumero += rand.nextInt(9);
+        }
+        
+        return strNumero;
+    }
+
+    public void vaciarEmpleo() {
+        rb_si.setSelected(false);
+        rb_no.setSelected(false);
+
+        jl_certificacionesAñadidas.setModel(new DefaultListModel());
+        jl_idiomasAñadidos.setModel(new DefaultListModel());
+        jl_puestosAñadidos.setModel(new DefaultListModel());
+
+        cb_nivelEducativo.setSelectedIndex(0);
+        cb_modalidad.setSelectedIndex(0);
+
+        tf_empleo.setText("");
+        ff_añosE.setText("");
+        ta_RP.setText("");
+        tf_tipoEmpleo.setText("");
+    }
+
+    public void setearModifEmpresa() {
+        String[] datos = admin.getEmpresa(userid);
+
+        tf_CIF.setText(datos[1]); //Cif
+        tf_correoE.setText(datos[2]); //Correo
+        tf_direccionD.setText(datos[3]); //Dirección
+        tf_director.setText(datos[4]); //Director
+        tf_NombreE.setText(datos[5]); //Nombre
+        ff_telefonoP1.setText(datos[6]); //Teléfono
     }
 
     public void LlenarTabla(String datos, JTable table, int flag) {
