@@ -70,7 +70,6 @@ public class Main extends javax.swing.JFrame {
         LlenarAtributos();
     }
 
-   
     
     public void llenarDatosPostulante() {
         System.out.println("UserID: " + userid);
@@ -252,7 +251,7 @@ public class Main extends javax.swing.JFrame {
 
     public void loadPreviousJobs() {
         int i = 1;
-        String trabajos = "";
+        String trabajos = "<html>";
         /*
         orden: Empleador, Rango (ignorar), (ignorar), Titulo
          */
@@ -263,9 +262,10 @@ public class Main extends javax.swing.JFrame {
             pJobNumber++;
 
             String[] datos = admin.getPreviousJob(userid, "pJob_" + Integer.toString(i));
-            trabajos += "Titulo: " + datos[3] + "   Empleador: " + datos[0] + "\n";
+            trabajos += "Titulo: " + datos[3] + "   Empleador: " + datos[0] + "<br>";
             i++;
         }
+        trabajos+= "</html>";
         lb_EcivilP2.setText(trabajos);
     }
 
@@ -2805,6 +2805,10 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_EPostuladosMouseClicked
 
     private void bt_MiPerfilEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_MiPerfilEMouseClicked
+        try {
+            cargarPuesto();
+        } catch (Exception e) {
+        }
         AbrirJD(jd_crearEmpleo);
     }//GEN-LAST:event_bt_MiPerfilEMouseClicked
 
@@ -3146,7 +3150,7 @@ public class Main extends javax.swing.JFrame {
     private void bt_eliminarPerfilEMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_eliminarPerfilEMouseClicked
         int r = JOptionPane.showConfirmDialog(Reclutador, "Desea eliminar su cuenta?", "Eliminar Cuenta", YES_NO_OPTION);
         if (r == 0) {
-            admin.deleteUser("emp_" + user, pass, userid);
+            admin.deleteUser("usr_" + user, pass, userid);
             admin.delete(userid);
             JOptionPane.showMessageDialog(this, "¡Cuenta Eliminada con Éxito!");
             LimpiarSesion();
@@ -3169,6 +3173,7 @@ public class Main extends javax.swing.JFrame {
         } else {
             // el botón modifica el perfil de la empresa
             modificarEmpresa();
+            llenarDatosEmpresa();
         }
         vaciarEmpresa();
     }//GEN-LAST:event_bt_guardarEMouseClicked
@@ -3215,6 +3220,7 @@ public class Main extends javax.swing.JFrame {
 
     private void bt_guardarPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_guardarPMouseClicked
         crearPersona();
+        JOptionPane.showMessageDialog(this, "Persona y usuario creado con éxito");
         vaciarPersona();
     }//GEN-LAST:event_bt_guardarPMouseClicked
 
@@ -3454,11 +3460,6 @@ public class Main extends javax.swing.JFrame {
         jl_telE.setText(businessData[3]);
         jl_Director.setText(businessData[4]);
         jl_direccionE.setText(businessData[6]);
-        /*for (int i = 0; i < businessData.length; i++) {
-            System.out.print("i:"
-                    + i);
-            System.out.println("[" + businessData[i] + "]");
-        }*/
         llenarEmpleos();
     }
 
@@ -3501,14 +3502,18 @@ public class Main extends javax.swing.JFrame {
             String username = tf_Cusuario.getText();
             String contra = tf_contraseña.getText();
             String cuenta = ff_noCuenta.getText().replace(",", "");
+            String pedo = "";
 
             System.out.println("cuenta: " + cuenta);
             if (bt_empresa.isSelected()) {
                 rol = "empresa";
+                pedo = "emp_";
             } else if (bt_persona.isSelected()) {
                 rol = "usuario";
+                pedo = "user_";
             }
-            return admin.createUser(username, contra, "user_" + cuenta, rol);
+            userid = cuenta;
+            return admin.createUser(username, contra, pedo + cuenta, rol);
         } catch (Exception e) {
             return false;
         }
@@ -3517,16 +3522,17 @@ public class Main extends javax.swing.JFrame {
     public void crearEmpresa() {
         try {
             String[] datos = new String[7];
-
-            datos[0] = "emp_" + ff_noCuenta.getText().replace(",", "");
+            
+            datos[0] = "emp_"+userid;
             datos[1] = tf_CIF.getText(); //Cif
-            datos[2] = tf_correoE.getText(); //Correo
+            datos[2] = ff_telefonoP1.getText(); //Teléfono
             datos[3] = tf_direccionD.getText(); //Dirección
             datos[4] = tf_director.getText(); //Director
-            datos[5] = tf_NombreE.getText(); //Nombre
-            datos[6] = ff_telefonoP1.getText(); //Teléfono
+            datos[5] = tf_correoE.getText(); //Correo       
+            datos[6] = tf_NombreE.getText(); //Nombre
 
             admin.createEmpresa(datos, 0);
+            JOptionPane.showMessageDialog(this, "Empresa y usuario creado con éxito");
         } catch (Exception e) {
         }
     }
@@ -3535,15 +3541,14 @@ public class Main extends javax.swing.JFrame {
         try {
             String datos[] = new String[7];
 
-            String[] data = admin.getEmpresa(userid);
-
-            datos[0] = data[0];
+            datos[0] = userid;
             datos[1] = tf_CIF.getText(); //Cif
-            datos[2] = tf_correoE.getText(); //Correo
+            datos[2] = ff_telefonoP1.getText(); //Teléfono
             datos[3] = tf_direccionD.getText(); //Dirección
             datos[4] = tf_director.getText(); //Director
-            datos[5] = tf_NombreE.getText(); //Nombre
-            datos[6] = ff_telefonoP1.getText(); //Teléfono
+            datos[5] = tf_correoE.getText(); //Correo       
+            datos[6] = tf_NombreE.getText(); //Nombre
+            
 
             admin.createEmpresa(datos, 1);
         } catch (Exception e) {
@@ -3552,7 +3557,6 @@ public class Main extends javax.swing.JFrame {
 
     public void crearEmpleo() {
         try {
-
             String[] datos = new String[11];
 
             String antecedentes = "";
@@ -3561,20 +3565,25 @@ public class Main extends javax.swing.JFrame {
             } else if (rb_no.isSelected()) {
                 antecedentes = "false";
             }
-
+            datos[0] = userid; //PK
+            datos[1] = "empleo_"+tf_idEmpleo.getText();//SK
             datos[2] = antecedentes; //Antecedentes
             datos[3] = ff_añosE.getText(); //AñosExperiencia
             datos[4] = convertirAString(datosTablaComboBoxs(jl_certificacionesAñadidas)); //Certificaciones
             datos[5] = convertirAString(datosTablaComboBoxs(jl_idiomasAñadidos)); //Idiomas
-            datos[5] = cb_nivelEducativo.getSelectedItem().toString(); //Nivel Educativo
-            datos[6] = tf_empleo.getText(); //Nombre Empleo
-            datos[7] = convertirAString(datosTablaComboBoxs(jl_puestosAñadidos)); //Puestos
-            datos[8] = ta_RP.getText(); //Requisitos
-            datos[9] = tf_tipoEmpleo.getText();//Tipo
+            datos[6] = cb_nivelEducativo.getSelectedItem().toString(); //Nivel Educativo
+            datos[7] = tf_empleo.getText(); //Nombre Empleo
+            datos[8] = convertirAString(datosTablaComboBoxs(jl_puestosAñadidos)); //Puestos
+            datos[9] = ta_RP.getText(); //Requisitos
+            datos[10] = tf_tipoEmpleo.getText();//Tipo
+            for (int i = 0; i < datos.length; i++) {
+                System.out.print("i: " + i + " ");
+                System.out.println(datos[i]);
+            }
 
             //String modalidad = cb_modalidad.getSelectedItem().toString();
             admin.createEmpleo(datos, 0);
-
+            JOptionPane.showMessageDialog(this, "Empleo creado con éxito");
         } catch (Exception e) {
         }
     }
@@ -3591,7 +3600,6 @@ public class Main extends javax.swing.JFrame {
         return datos;
     }
 
-    
 
     public String convertirAString(String[] arr) {
         String cadena = "";
@@ -3629,6 +3637,7 @@ public class Main extends javax.swing.JFrame {
         ff_añosE.setText("");
         ta_RP.setText("");
         tf_tipoEmpleo.setText("");
+        tf_idEmpleo.setText("");
     }
 
     public void vaciarPersona() {
@@ -3652,13 +3661,13 @@ public class Main extends javax.swing.JFrame {
 
     public void setearModifEmpresa() {
         String[] datos = admin.getEmpresa(userid);
-
-        tf_CIF.setText(datos[1]); //Cif
-        tf_correoE.setText(datos[2]); //Correo
-        tf_direccionD.setText(datos[3]); //Dirección
-        tf_director.setText(datos[4]); //Director
-        tf_NombreE.setText(datos[5]); //Nombre
-        ff_telefonoP1.setText(datos[6]); //Teléfono
+        
+        tf_NombreE.setText(datos[0]);//Nombre
+        tf_correoE.setText(datos[1]); //Correo
+        tf_CIF.setText(datos[2]); //Cif
+        ff_telefonoP1.setText(datos[3]);//Teléfono
+        tf_director.setText(datos[4]);//Director
+        tf_direccionD.setText(datos[6]); //Dirección  
     }
 
     public boolean crearPersona() {
@@ -3666,7 +3675,7 @@ public class Main extends javax.swing.JFrame {
         try {
             String[] values = new String[8];
 
-            values[0] = "user_" + ff_noCuenta.getText().replace(",", "");
+            values[0] = "user_" + userid;
             values[1] = tf_apellido.getText();
             values[2] = tf_correoP.getText();
             values[3] = ff_Edad.getText();
@@ -3680,18 +3689,12 @@ public class Main extends javax.swing.JFrame {
             }
             values[6] = genero;
             values[7] = ff_telefonoP.getText();
-
+            
             return admin.createPersonal_pf(values, 0);
         } catch (Exception e) {
             return false;
         }
     }
-
-    
-
-    
-
-    
 
     public void crearPuesto() {
         try {
@@ -3701,25 +3704,32 @@ public class Main extends javax.swing.JFrame {
             String puestosNumber = numeroRandom();
 
 
-            String[] datos = new String[5];
+            String[] datos = new String[4];
             datos[0] = puestosNumber;
             datos[1] = tf_puesto.getText();
             datos[2] = tf_tipoPuesto.getText();
             datos[3] = tf_sueldo.getText();
 
             cb_puestos.addItem(convertirAString(datos));
-            admin.createPuesto(Integer.parseInt(puestosNumber), nombrePuesto, tipoPuesto, Double.parseDouble(sueldo));
+            admin.createPuesto(Integer.parseInt(puestosNumber), nombrePuesto, tipoPuesto, Double.valueOf(sueldo));
+            JOptionPane.showMessageDialog(this, "Puesto creado con éxito");
         } catch (Exception e) {
         }
     }
-
+    
+    public void cargarPuesto(){
+        ArrayList puestos =  admin.getPuestos();
+        
+        for (int i = 0; i < puestos.size(); i++) {
+            cb_puestos.addItem(puestos.get(i).toString());
+        }
+    }
     public void vaciarPuesto() {
         tf_puesto.setText("");
         tf_tipoPuesto.setText("");
         tf_sueldo.setText("");
     }
 
-    
 
     public String numeroRandom() {
         String strNumero = "";
@@ -3730,11 +3740,6 @@ public class Main extends javax.swing.JFrame {
         
         return strNumero;
     }
-
-    
-     
-
-    
 
     public void LlenarTabla(String datos, JTable table, int flag) {
         boolean addrow = true;

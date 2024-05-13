@@ -74,14 +74,15 @@ public class Admin {
             if(this.getPersonal_pf(user_id) != null){
                 return false;
             }
-        }else{
+        }else {
             if(this.getEmpresa(user_id) != null){
                 return false;
             }
         }
+        
         HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
         values.put("PK", new AttributeValue("usr_" + username));
-        values.put("SK", new AttributeValue(username));
+        values.put("SK", new AttributeValue(password));
         values.put("Nombre", new AttributeValue(user_id));
         values.put("Obj", new AttributeValue(obj));
         try {
@@ -359,7 +360,7 @@ public class Admin {
             return false;
         }
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
-        String[] keys = {"PK", "CIF", "Telefono", "Direccion", "Director", "Nombre"};
+        String[] keys = {"PK", "CIF", "Telefono", "Direccion", "Director", "Correo","Nombre"};
         keyValues.put("SK", new AttributeValue("perfil"));
 
         for (int i = 0; i < keys.length; i++) {
@@ -386,17 +387,13 @@ public class Admin {
         String[] keys = {"PK", "SK", "Antecedentes", "AñosExperiencia", "Certificaciones", "Idiomas", "Nivel Educativo", "Nombre", "Puestos", "Requisitos_Personales", "Tipo"};
 
         for (int i = 0; i < keys.length; i++) {
-            if (i == 1) {
-                keyValues.put(keys[i], (new AttributeValue()).withBOOL((Boolean) values[i]));
-            } else if (i == 3 || i == 4 || i == 7 || i == 8) {
-                keyValues.put(keys[i], new AttributeValue((ArrayList<String>) values[i]));
-
-            } else {
+            if (i == 2) {
+                keyValues.put(keys[i], new AttributeValue("true"));
+            }  else {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
             }
         }
         keyValues.put("Obj", new AttributeValue("empleo"));
-
         //ejecutar el create
         try {
             Item item = new Item();
@@ -868,7 +865,9 @@ public class Admin {
        
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
-
+        if (results == null) {
+            return null;
+        }
         String[] datos = new String[results.size()];
         int i = 0;
 
