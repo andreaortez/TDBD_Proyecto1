@@ -3324,7 +3324,6 @@ public class Main extends javax.swing.JFrame {
             datosPersona.get(26),
             StringtoArray(datosPersona.get(27)),
             StringtoArray(datosPersona.get(28)),
-            
             datosPersona.get(24),
             datosPersona.get(25)};
         admin.createSolicitud(st, 1);
