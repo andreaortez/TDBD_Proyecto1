@@ -59,15 +59,7 @@ public class Admin {
         client = AmazonDynamoDBClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
         client = AmazonDynamoDBClientBuilder.defaultClient();
 
-
-        /* ArrayList<String> puestosA = new ArrayList<>();
-        puestosA.add("puesto_1");
-        ArrayList<String> puestosI = new ArrayList<>();
-        puestosI.add("puesto_2");
-        Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
-        System.out.println(createSolicitud(values));*/
-        //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
-        print(getCurrentJob("user_12241006"));
+    
     }
 
     //CREATES
@@ -354,7 +346,7 @@ public class Admin {
             client.putItem("Centro_De_Empleo", keyValues);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+       
             return false;
         }
     }
@@ -475,7 +467,7 @@ public class Admin {
             client.putItem("Centro_De_Empleo", keyValues);
             return jobNumber;
         } catch (Exception e) {
-            e.printStackTrace();
+           
             return -1;
         }
     }
@@ -487,7 +479,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("personal_pf"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+       
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
             return null;
@@ -555,7 +547,8 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("legal_pf"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+       
+        
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -605,7 +598,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("sanitary_pf"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+      
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -655,7 +648,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("profesional_pf"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -756,7 +749,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("solicitud"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+     
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -841,7 +834,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(postulante));
         queue.put("SK", new AttributeValue(jobNumber));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+        
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -872,7 +865,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("perfil"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+       
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
 
@@ -899,7 +892,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(empresa));
         queue.put("SK", new AttributeValue(empId));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+     
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -955,7 +948,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("descripcion"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+      
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
 
@@ -987,8 +980,7 @@ public class Admin {
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results != null) {
-            //System.out.println(results.get(results.keySet().toArray()[0]).getS());
-
+        
             return results.get(results.keySet().toArray()[0]).getS();
         } else {
             return null;
@@ -1007,8 +999,7 @@ public class Admin {
 
         try {
             for (Item result : results) {
-                System.out.print(result.getJSON("PK") + " ");
-                System.out.println(result.getJSON("SK"));
+                
                 HashMap<String, AttributeValue> map = new HashMap<>();
                 map.put("PK", new AttributeValue(par));
                 map.put("SK", new AttributeValue(result.getJSON("SK").replace("\"", "")));
@@ -1028,7 +1019,7 @@ public class Admin {
 
             return true;
         } catch (Exception E) {
-            E.printStackTrace();
+    
             return false;
         }
     }
@@ -1042,8 +1033,7 @@ public class Admin {
 
         try {
             for (Item result : results) {
-                System.out.print(result.getJSON("PK") + " ");
-                System.out.println(result.getJSON("SK"));
+          
                 HashMap<String, AttributeValue> map = new HashMap<>();
                 map.put("PK", new AttributeValue(par));
                 map.put("SK", new AttributeValue(result.getJSON("SK").replace("\"", "")));
@@ -1053,7 +1043,7 @@ public class Admin {
 
             return true;
         } catch (Exception E) {
-            E.printStackTrace();
+        
             return false;
         }
     }
@@ -1070,7 +1060,7 @@ public class Admin {
 
             return true;
         } catch (Exception E) {
-            E.printStackTrace();
+         
             return false;
         }
     }
@@ -1089,11 +1079,28 @@ public class Admin {
 
             return empleos;
         } catch (Exception E) {
-            E.printStackTrace();
+         
             return null;
         }
     }
+    
+    public ArrayList<String> getContratados(String par) {
+        ScanSpec query = new ScanSpec().withFilterExpression("SK = :v_id AND empleo_id = :id").withValueMap(new ValueMap().withString(":v_id", "emp_actual").withString(":id", par));
 
+        Table table = new Table(client, "Centro_De_Empleo");
+        ItemCollection<ScanOutcome> results = table.scan(query);
+        ArrayList<String> empleos = new ArrayList<>();
+        try {
+            for (Item result : results) {
+                empleos.add(result.toJSON());
+            }
+
+            return empleos;
+        } catch (Exception E) {
+
+            return null;
+        }
+    }
     public ArrayList<String> getEmpleos() {
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
      
@@ -1108,7 +1115,7 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
+           return null;
 
         }
 
@@ -1130,11 +1137,13 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
+      
         }
 
         return respuesta;
     }
+    
+    
 
     public ArrayList<String> getPuestos() {
 
@@ -1153,7 +1162,7 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
+      
         }
 
         return respuesta;
@@ -1175,7 +1184,7 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
+        
 
         }
 
@@ -1198,7 +1207,7 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
+     
 
         }
 
@@ -1221,7 +1230,7 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
+           
 
         }
 
@@ -1244,7 +1253,6 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
 
         }
 
@@ -1267,7 +1275,6 @@ public class Admin {
             }
 
         } catch (Exception E) {
-            E.printStackTrace();
 
         }
 
@@ -1318,8 +1325,7 @@ public class Admin {
             }
             return respuesta;
         } catch (Exception E) {
-            System.out.println("llegue");
-            E.printStackTrace();
+            
             return null;
         }
     }
