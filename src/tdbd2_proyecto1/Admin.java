@@ -41,6 +41,8 @@ import com.amazonaws.services.securitytoken.model.Credentials;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -64,30 +66,40 @@ public class Admin {
         puestosI.add("puesto_2");
         Object[] values = {"user_12247420", puestosA, puestosI, "3221.3", "Fijo", "Administrativo"};
         System.out.println(createSolicitud(values));*/
-
-       
         //print(this.solicitarEmpleo("user_12241006", "empleo_xyz"));
-
+        print(getCurrentJob("user_12241006"));
     }
 
     //CREATES
     //x == 0 -> crear
     //x == otro numero -> modificar
     //creates de postulante
-    public boolean createUser(String username, String password, String user_id, String obj){
+    public boolean createUser(String username, String password, String user_id, String obj) {
+        if(this.login(user_id, password) != null){
+            return false;
+        }
+        if(obj.equals("usuario")){
+            if(this.getPersonal_pf(user_id) != null){
+                return false;
+            }
+        }else{
+            if(this.getEmpresa(user_id) != null){
+                return false;
+            }
+        }
         HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
-        values.put("PK", new AttributeValue("usr_"+username));
+        values.put("PK", new AttributeValue("usr_" + username));
         values.put("SK", new AttributeValue(username));
-        values.put("Nombre", new AttributeValue(username));
+        values.put("Nombre", new AttributeValue(user_id));
         values.put("Obj", new AttributeValue(obj));
-        try{
+        try {
             client.putItem("Centro_De_Empleo", values);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
-    
+
     public boolean createPersonal_pf(String[] values, int x) {
         //ejemplo de formato
         //String[] values = {"user_12247420", "Andino", "dmafgames@gmail.com", "19","Aleman", "Diego", "Hombre", "(504) 9999-3221"};
@@ -404,7 +416,7 @@ public class Admin {
     }
 
     //otros creates 
-    public int createPuesto(int puestosNumber, String name, String type) {
+    public int createPuesto(int puestosNumber, String name, String type, Double sueldo) {
         puestosNumber++;
         String pk = "puesto_" + puestosNumber;
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
@@ -413,6 +425,7 @@ public class Admin {
         keyValues.put("SK", new AttributeValue("descripcion"));
         keyValues.put("Obj", new AttributeValue("puesto"));
         keyValues.put("Nombre", new AttributeValue(name));
+        keyValues.put("Sueldo", new AttributeValue(Double.toString(sueldo)));
         keyValues.put("Tipo", new AttributeValue(type));
         //ejecutar el create
 
@@ -422,6 +435,7 @@ public class Admin {
 
     //UPDATE
     //este funciona como create si es su primer trabajo, y un create de trabajos anteriores
+    //el jobNumber es (pJobNumber+1)
     public int updateJob(String user, int jobNumber, Object[] values) {
         HashMap<String, AttributeValue> keyValues;
         String[] array = getCurrentJob(user);
@@ -431,11 +445,11 @@ public class Admin {
             keyValues.put("PK", new AttributeValue(user));
             jobNumber++;
             keyValues.put("SK", new AttributeValue("pJob_" + Integer.toString(jobNumber)));
-            keyValues.put("Rango", new AttributeValue(array[3] + "-" + Integer.toString((int) values[3])));
-            System.out.println(array[4]);
-            System.out.println(array[0]);
-            String[] array2 = getEmpleo(array[4], array[0]);
-            keyValues.put("Titulo", new AttributeValue(array2[0]));
+            keyValues.put("Rango", new AttributeValue(array[3] + "-" + Integer.toString((int) values[2])));
+            ArrayList<String> empleo = getEmpleo(array[0]);
+             JSONArray ar = new JSONArray(empleo.toString());
+            
+            keyValues.put("Titulo", new AttributeValue(ar.getJSONObject(0).getString("Nombre")));
             client.putItem("Centro_De_Empleo", keyValues);
         }
         /*
@@ -448,7 +462,7 @@ public class Admin {
         deletion.put("PK", new AttributeValue((String) values[0]));
         deletion.put("SK", new AttributeValue((String) values[1]));
         for (int i = 0; i < keys.length; i++) {
-            if (i != 3) {
+            if (i != 2) {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
             } else {
                 keyValues.put(keys[i], new AttributeValue(Integer.toString((int) values[i])));
@@ -691,7 +705,7 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("academic_pf"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
+      
 
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
         if (results == null) {
@@ -797,9 +811,12 @@ public class Admin {
         HashMap<String, AttributeValue> queue = new HashMap<String, AttributeValue>();
         queue.put("PK", new AttributeValue(par));
         queue.put("SK", new AttributeValue("emp_actual"));
-        System.out.println(client.getItem("Centro_De_Empleo", queue).getItem());
-
+  
         Map<String, AttributeValue> results = client.getItem("Centro_De_Empleo", queue).getItem();
+        
+        if (results == null) {
+            return null;
+        }
 
         String[] datos = new String[results.size()];
         int i = 0;
@@ -813,7 +830,7 @@ public class Admin {
         }
 
         /*
-        orden: empleo (el id), (ignorar), (ignorar), año inicial, 
+        orden: empleo (el id), (ignorar), año inicial, 
          */
         return datos;
 
@@ -950,6 +967,9 @@ public class Admin {
             String data = results.get(key).getS();
 
             datos[i] = data;
+            if(key.equals("Sueldo")){
+                datos[i] = results.get(key).getN();
+            }
             i++;
         }
 
@@ -1046,7 +1066,7 @@ public class Admin {
 
         try {
             client.deleteItem("Centro_De_Empleo", map);
-            deletePostulante(userid);
+            //deletePostulante(userid);
 
             return true;
         } catch (Exception E) {
@@ -1057,7 +1077,7 @@ public class Admin {
 
     //OTROS METODOS
     public ArrayList<String> getEmpleos(String par) {
-        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id").withValueMap(new ValueMap().withString(":v_id", par));
+        QuerySpec query = new QuerySpec().withKeyConditionExpression("PK= :v_id AND Obj = empleo").withValueMap(new ValueMap().withString(":v_id", par));
 
         Table table = new Table(client, "Centro_De_Empleo");
         ItemCollection<QueryOutcome> results = table.query(query);
@@ -1073,11 +1093,10 @@ public class Admin {
             return null;
         }
     }
-   
+
     public ArrayList<String> getEmpleos() {
-
         ScanSpec query2 = new ScanSpec().withFilterExpression("Obj = :v_id").withValueMap(new ValueMap().withString(":v_id", "empleo"));
-
+     
         Table table = new Table(client, "Centro_De_Empleo");
 
         ItemCollection<ScanOutcome> results2 = table.scan(query2);
@@ -1085,14 +1104,33 @@ public class Admin {
         try {
 
             for (Item result : results2) {
-
                 respuesta.add(result.toJSON());
-
             }
 
         } catch (Exception E) {
             E.printStackTrace();
 
+        }
+
+        return respuesta;
+    }
+
+    public ArrayList<String> getEmpleo(String empleoid) {
+//este busca un empleo por medio de su id
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", empleoid).withString(":v_id", "empleo"));
+        
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+                respuesta.add(result.toJSON());
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
         }
 
         return respuesta;
@@ -1168,7 +1206,30 @@ public class Admin {
     }
 
     public ArrayList<String> getSolicitudes(String empleoId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id",empleoId).withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("SK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", empleoId).withString(":v_id", "solicitud"));
+
+        Table table = new Table(client, "Centro_De_Empleo");
+
+        ItemCollection<ScanOutcome> results2 = table.scan(query2);
+        ArrayList<String> respuesta = new ArrayList<>();
+        try {
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+
+        } catch (Exception E) {
+            E.printStackTrace();
+
+        }
+
+        return respuesta;
+    }
+
+    public ArrayList<String> getSolicitudesDeUsuario(String userid) {
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", userid).withString(":v_id", "solicitud"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
@@ -1191,7 +1252,7 @@ public class Admin {
     }
 
     public ArrayList<String> getFalimiares(String userId) {
-        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Obj = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "usuario"));
+        ScanSpec query2 = new ScanSpec().withFilterExpression("PK = :id AND Tipo = :v_id").withValueMap(new ValueMap().withString(":id", userId).withString(":v_id", "familia"));
 
         Table table = new Table(client, "Centro_De_Empleo");
 
@@ -1213,19 +1274,20 @@ public class Admin {
         return respuesta;
     }
 
-    public boolean solicitarEmpleo(String user_id, String empleo_id){
-        HashMap<String, AttributeValue> values = new HashMap<String,AttributeValue>();
+    public boolean solicitarEmpleo(String user_id, String empleo_id) {
+        HashMap<String, AttributeValue> values = new HashMap<String, AttributeValue>();
         values.put("PK", new AttributeValue(user_id));
         values.put("SK", new AttributeValue(empleo_id));
         values.put("Obj", new AttributeValue("solicitud"));
-        try{
+        try {
             client.putItem("Centro_De_Empleo", values);
             return true;
-        }catch(Exception e){
+        } catch (Exception e) {
             return false;
         }
-        
+
     }
+
     public boolean añadirFamiliar(String user1, String user2) {
         HashMap<String, AttributeValue> datos = new HashMap<String, AttributeValue>();
         datos.put("PK", new AttributeValue(user1));
@@ -1239,6 +1301,28 @@ public class Admin {
         }
     }
 
+    public ArrayList<String> filtroEmpleados(String queue, ValueMap valores, HashMap names) {
+        try {
+
+            ScanSpec query2 = new ScanSpec().withFilterExpression(queue).withValueMap(valores).withNameMap(names);
+
+            Table table = new Table(client, "Centro_De_Empleo");
+
+            ItemCollection<ScanOutcome> results2 = table.scan(query2);
+            ArrayList<String> respuesta = new ArrayList<>();
+
+            for (Item result : results2) {
+
+                respuesta.add(result.toJSON());
+
+            }
+            return respuesta;
+        } catch (Exception E) {
+            System.out.println("llegue");
+            E.printStackTrace();
+            return null;
+        }
+    }
 
     //metodo print solo para pruebas
     public void print(String[] arr) {
