@@ -167,10 +167,10 @@ public class Admin {
             return false;
         }
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
-        String[] keys = {"PK", "Antecedentes", "Servicio Militar", "SSN"};
+        String[] keys = {"PK", "Antecedentes", "Servicio_Militar", "SSN"};
         keyValues.put("SK", new AttributeValue("legal_pf"));
         Object[] a = new Object[4];
-
+        
         for (int i = 0; i < keys.length; i++) {
             if (i == 1) {
                 keyValues.put(keys[i], new AttributeValue((ArrayList<String>) values[i]));
@@ -180,7 +180,8 @@ public class Admin {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
             }
         }
-
+       print(keys);
+       print(values);
         //ejecutar el create
         try {
             Item item = new Item();
@@ -209,13 +210,8 @@ public class Admin {
 
         keyValues.put("SK", new AttributeValue("sanitary_pf"));
 
-        for (int i = 0; i < keys.length; i++) {
-            if (i == 1) {
-                keyValues.put(keys[i], new AttributeValue((ArrayList<String>) values[i]));
-            } else {
-                keyValues.put(keys[i], new AttributeValue((String) values[i]));
-            }
-        }
+        print(keys);
+        print(values);
 
         //ejecutar el create
         try {
@@ -248,7 +244,7 @@ public class Admin {
             return false;
         }
         HashMap<String, AttributeValue> keyValues = new HashMap<String, AttributeValue>();
-        String[] keys = {"PK", "Años", "Certificaciones", "Conocimientos_Especificos", "Idiomas", "Logros_Profesionales"};
+        String[] keys = {"PK", "Años", "Certificaciones", "Conocimientos_Especificas", "Idiomas", "Logros_Profesionales"};
         keyValues.put("SK", new AttributeValue("profesional_pf"));
         Object[] a = new Object[4];
 
@@ -260,6 +256,8 @@ public class Admin {
                 keyValues.put(keys[i], new AttributeValue((String) values[i]));
             }
         }
+        print(keys);
+        print(values);
 
         //ejecutar el create
         try {
@@ -333,15 +331,17 @@ public class Admin {
 
         for (int i = 0; i < keys.length; i++) {
             if (i == 1 || i == 2) {
-                keyValues.put(keys[i], new AttributeValue((ArrayList<String>) values[i]));
-
-            } else {
-                keyValues.put(keys[i], new AttributeValue((String) values[i]));
+                keyValues.put(keys[i], new AttributeValue(((ArrayList<String>) values[i])));
+            } 
+            else{
+                keyValues.put(keys[i], new AttributeValue((String)values[i]));
             }
         }
 
         //ejecutar el create
         try {
+            print(keys);
+            print(values);
 
             client.putItem("Centro_De_Empleo", keyValues);
             return true;
@@ -386,9 +386,9 @@ public class Admin {
         String[] keys = {"PK", "SK", "Antecedentes", "AñosExperiencia", "Certificaciones", "Idiomas", "Nivel Educativo", "Nombre", "Puestos", "Requisitos_Personales", "Tipo"};
 
         for (int i = 0; i < keys.length; i++) {
-            if (i == 1) {
+            if (i == 2) {
                 keyValues.put(keys[i], (new AttributeValue()).withBOOL((Boolean) values[i]));
-            } else if (i == 3 || i == 4 || i == 7 || i == 8) {
+            } else if (i == 4 || i == 5 || i == 8) {
                 keyValues.put(keys[i], new AttributeValue((ArrayList<String>) values[i]));
 
             } else {
@@ -1331,16 +1331,26 @@ public class Admin {
     }
 
     //metodo print solo para pruebas
+    public void print(Object[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+            
+        }
+        System.out.println("");
+    }
     public void print(String[] arr) {
         for (int i = 0; i < arr.length; i++) {
-            System.out.println(arr[i]);
+            System.out.print(arr[i] + " ");
+            
         }
+        System.out.println("");
     }
 
     public void print(ArrayList<String> arr) {
         for (int i = 0; i < arr.size(); i++) {
-            System.out.println(arr.get(i));
+            System.out.println(arr.get(i) + " ");
         }
+        System.out.println("");
     }
 
 }
