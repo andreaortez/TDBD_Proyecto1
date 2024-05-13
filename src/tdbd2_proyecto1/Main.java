@@ -3277,7 +3277,13 @@ public class Main extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_PostularActionPerformed
-
+    public void print(Object[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println("");
+    }
+    
     private void bt_modificarPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_modificarPMouseClicked
         DefaultTableModel model = (DefaultTableModel) tb_modificarP.getModel();
         
@@ -3298,11 +3304,12 @@ public class Main extends javax.swing.JFrame {
         String[]dp = {userid,nomCompleto[1],datosPersona.get(1),datosPersona.get(0),jl_nation.getText(),
             nomCompleto[0],jl_gender.getText(),datosPersona.get(2)};
         admin.createPersonal_pf(dp, 1);
-        //String[] keys = {"PK", "Correos_de_Dependientes", "Direccion", "Estado_Civil", "Hijos"};
+       
+        String[] keys = {"PK", "Correos_de_Dependientes", "Direccion", "Estado_Civil", "Hijos"};
         Object[]df = {userid,StringtoArray(datosPersona.get(4)),datosPersona.get(6),datosPersona.get(3),
             datosPersona.get(5)};
         admin.createFamiliar_pf(df, 1);
-        
+       
         //{"PK", "Alergias", "Historial_Medico", "Info_Meds", "Resultado_pruebas"};
         Object[]ds = {userid,StringtoArray(datosPersona.get(8)),datosPersona.get(9),datosPersona.get(7),
             datosPersona.get(10)};
@@ -3311,7 +3318,7 @@ public class Main extends javax.swing.JFrame {
         //{"PK", "Antecedentes", "Servicio Militar", "SSN"};
         Object[]dl={userid,StringtoArray(datosPersona.get(11)),StringtoBool(datosPersona.get(12)),datosPersona.get(13)};
         admin.createLegal_pf(dl, 1);
-        
+    
         //{"PK", "Estudios_Realizados", "Institución egresada", "Nivel_Estudio", "Titulos"};
         Object[]da = {userid,StringtoArray(datosPersona.get(16)),datosPersona.get(14),
             datosPersona.get(15),StringtoArray(datosPersona.get(17))};
@@ -3321,15 +3328,15 @@ public class Main extends javax.swing.JFrame {
         Object[]dlp = {userid,datosPersona.get(18),StringtoArray(datosPersona.get(21)),StringtoArray(datosPersona.get(22)),
             StringtoArray(datosPersona.get(20)),StringtoArray(datosPersona.get(19))};
         admin.createProfessional_pf(dlp, 1);
-
+  
         admin.añadirFamiliar(userid, datosPersona.get(23));
         
         //{"PK", "Puestos_Aceptables", "Puestos_Inaceptables", "Salario", "Tipo_Contrato", "Tipo_trabajo"}
         //tipo de trabajo, inaceptable, aceptable, salario, user,Tipo de COntrato
         Object[]st = {userid,
-            datosPersona.get(26),
+            StringtoArray(datosPersona.get(26)),
             StringtoArray(datosPersona.get(27)),
-            StringtoArray(datosPersona.get(28)),
+            datosPersona.get(28),
             datosPersona.get(24),
             datosPersona.get(25)};
         admin.createSolicitud(st, 1);
